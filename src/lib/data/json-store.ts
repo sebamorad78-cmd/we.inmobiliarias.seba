@@ -2,15 +2,18 @@ import "server-only";
 import { promises as fs } from "node:fs";
 import path from "node:path";
 import { randomUUID } from "node:crypto";
-import type { Lead, Property, TeamUser } from "../types";
+import type { CrmCollection, CrmTypes, Lead, Property, TeamUser } from "../types";
 import type { Repository } from "./repository";
 import { seedProperties, seedUsers } from "./seed";
+import { seedCrm } from "./seed-crm";
 
-interface Db {
+type Db = {
   properties: Property[];
   users: TeamUser[];
   leads: Lead[];
-}
+} & { [C in CrmCollection]: CrmTypes[C][] };
+
+const CRM: CrmCollection[] = ["contacts", "tasks", "deals", "activities", "contracts"];
 
 const DB_PATH = path.join(process.cwd(), "data", "db.json");
 const UPLOAD_DIR = path.join(process.cwd(), "public", "uploads");
@@ -26,7 +29,14 @@ async function load(): Promise<Db> {
     cache = JSON.parse(await fs.readFile(DB_PATH, "utf8")) as Db;
   } catch (err) {
     if ((err as NodeJS.ErrnoException).code !== "ENOENT") throw err;
-    cache = { properties: seedProperties(), users: seedUsers(), leads: [] };
+    const properties = seedProperties();
+    cache = { properties, users: seedUsers(), leads: [], ...seedCrm(properties) };
+    await persist(cache);
+  }
+  // Bases creadas antes del CRM: se completan con datos de demostración una sola vez.
+  if (CRM.some((c) => !Array.isArray(cache![c]))) {
+    const demo = seedCrm(cache.properties);
+    for (const c of CRM) if (!Array.isArray(cache[c])) (cache as Record<string, unknown>)[c] = demo[c];
     await persist(cache);
   }
   return cache;
@@ -106,6 +116,19 @@ export const jsonRepository: Repository = {
     return clone((await load()).leads.find((l) => l.id === id) ?? null);
   },
   saveLead: (l) => mutate((db) => (upsert(db.leads, l), clone(l))),
+
+  async list(c) {
+    return clone((await load())[c] as never);
+  },
+  async get(c, id) {
+    const arr = (await load())[c] as { id: string }[];
+    return clone((arr.find((x) => x.id === id) ?? null) as never);
+  },
+  put: (c, item) => mutate((db) => (upsert(db[c] as { id: string }[], item), clone(item))),
+  remove: (c, id) =>
+    mutate((db) => {
+      (db as Record<string, unknown>)[c] = (db[c] as { id: string }[]).filter((x) => x.id !== id);
+    }),
 
   async uploadImage(file, folder) {
     const ext = (file.type.split("/")[1] ?? "jpg").replace("jpeg", "jpg");

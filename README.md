@@ -15,12 +15,18 @@ Sitio público + panel interno para una inmobiliaria. Next.js 16, TypeScript y C
 - SEO: metadatos por página, Open Graph, sitemap, robots y datos estructurados (RealEstateListing, RealEstateAgent, Breadcrumbs).
 - Accesibilidad: navegación por teclado, foco visible, etiquetas, "saltar al contenido" y respeto por "reducir movimiento".
 
-**Para el equipo (`/panel`)**
-- Resumen: publicadas, reservadas, consultas nuevas, propiedades más consultadas y avisos de publicaciones incompletas.
-- Propiedades: alta y edición con fotos (arrastrar y soltar, compresión automática, reordenar, portada, descripción de cada foto), ubicación en mapa con búsqueda de dirección, comodidades, estado y asesor a cargo. Cambio de estado desde la tabla.
-- Consultas: bandeja con estados, asignación, notas internas, historial del cliente, respuesta por WhatsApp o email y exportación a CSV (Excel / Sheets).
-- Equipo: usuarios con rol administrador o agente; un agente ve sus consultas y las sin asignar.
-- Seguridad: contraseñas con scrypt, sesiones firmadas (HttpOnly), límite de intentos de ingreso, protección anti-spam en formularios (campo trampa, tiempo mínimo y límite por IP) y cabeceras de seguridad.
+**Para el equipo (`/panel`): centro de gestión del martillero**
+- **Hoy:** agenda del día, tareas vencidas, consultas sin responder con su tiempo de espera, alertas (autorizaciones y contratos por vencer, ajustes de alquiler, clientes sin seguimiento), embudo de negocios con honorarios proyectados y coincidencias nuevas entre clientes y propiedades.
+- **Agenda:** calendario semanal con visitas, llamados, tasaciones, firmas y reuniones. Clic en un horario libre para agendar; al terminar se registra el resultado y, si hace falta, el seguimiento.
+- **Contactos (CRM):** compradores, propietarios, inquilinos e inversores con historial completo, búsqueda guardada y **cruce automático** con la cartera. Mensajes de WhatsApp listos que quedan registrados.
+- **Oportunidades:** tablero por etapa (interesado → visitó → oferta → reserva → boleto → escriturada) con valor, honorarios y días en cada etapa. Se mueven arrastrando.
+- **Propiedades:** carga con fotos y mapa, más datos internos: propietario, autorización (exclusiva/compartida, vencimiento, honorarios), clientes que la buscan y actividad.
+- **Alquileres:** contratos administrados con próxima actualización (ICL, IPC, Casa Propia), vencimientos y cobros de la semana.
+- **Consultas:** cada consulta de la web crea o actualiza el contacto, deja constancia en su historial y agenda la tarea de respuesta.
+- **Reportes:** embudo de conversión, consultas por semana, origen de los contactos, rendimiento por asesor y días en el mercado de cada propiedad.
+- **Búsqueda global (Ctrl K)** y botón **Nuevo** desde cualquier pantalla. En el celular, barra inferior tipo app.
+- **Equipo:** roles administrador y asesor; un asesor ve lo suyo y lo que no tiene responsable.
+- **Seguridad:** contraseñas con scrypt, sesiones firmadas, límite de intentos, anti-spam y datos internos que nunca llegan al sitio público.
 
 ## Puesta en marcha local
 

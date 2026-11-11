@@ -8,7 +8,11 @@ import type { Property, PropertyFilters, PublicAgent, TeamUser } from "./types";
 const VISIBLE = new Set<Property["status"]>(["publicada", "reservada"]);
 
 /** Nunca exponer la dirección exacta si el agente no lo habilitó. */
-function publicView(p: Property): Property {
+function publicView(full: Property): Property {
+  // Datos internos (propietario, autorización y honorarios) nunca salen del panel.
+  const { ownerContactId: _o, mandate: _m, ...p } = full;
+  void _o;
+  void _m;
   if (p.showExactLocation) return p;
   return {
     ...p,

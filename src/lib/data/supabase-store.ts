@@ -69,6 +69,29 @@ export const supabaseRepository: Repository = {
   getLead: (id) => one<Lead>("leads", "id", id),
   saveLead: (l) => save("leads", l),
 
+  // CRM: una tabla genérica (colección, id, datos en JSON). Simple de mantener y de migrar.
+  async list(c) {
+    const { data, error } = await db().from("crm_records").select("data").eq("collection", c).order("updated_at", { ascending: false });
+    if (error) throw new Error(`[supabase] crm ${c}: ${error.message}`);
+    return (data ?? []).map((r) => r.data);
+  },
+  async get(c, id) {
+    const { data, error } = await db().from("crm_records").select("data").eq("collection", c).eq("id", id).maybeSingle();
+    if (error) throw new Error(`[supabase] crm ${c}: ${error.message}`);
+    return data ? data.data : null;
+  },
+  async put(c, item) {
+    const { error } = await db()
+      .from("crm_records")
+      .upsert({ collection: c, id: (item as { id: string }).id, data: item, updated_at: new Date().toISOString() });
+    if (error) throw new Error(`[supabase] crm ${c}: ${error.message}`);
+    return item;
+  },
+  async remove(c, id) {
+    const { error } = await db().from("crm_records").delete().eq("collection", c).eq("id", id);
+    if (error) throw new Error(`[supabase] crm ${c}: ${error.message}`);
+  },
+
   async uploadImage(file, folder) {
     const bucket = process.env.SUPABASE_STORAGE_BUCKET || "propiedades";
     const ext = (file.type.split("/")[1] ?? "jpg").replace("jpeg", "jpg");

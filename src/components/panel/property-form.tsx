@@ -13,11 +13,13 @@ export function PropertyForm({
   agents,
   neighborhoods,
   canChooseAgent,
+  owners = [],
 }: {
   property: Property | null;
   agents: PublicAgent[];
   neighborhoods: string[];
   canChooseAgent: boolean;
+  owners?: { id: string; label: string }[];
 }) {
   const [state, action, pending] = useActionState<ActionState, FormData>(saveProperty, { ok: false, message: "" });
   const [dirty, setDirty] = useState(false);
@@ -186,7 +188,42 @@ export function PropertyForm({
         <ImageManager initial={p?.images ?? []} defaultAlt={p?.title ?? ""} error={err.images} />
       </Section>
 
-      <Section title="Video y recorrido virtual" n="08">
+      <Section title="Propietario y autorización (uso interno)" n="08">
+        <div className="form-grid form-grid--2">
+          <label className="field">
+            <span>Propietario</span>
+            <select className="select" name="ownerContactId" defaultValue={p?.ownerContactId ?? ""}>
+              <option value="">Sin vincular</option>
+              {owners.map((o) => (
+                <option key={o.id} value={o.id}>
+                  {o.label}
+                </option>
+              ))}
+            </select>
+          </label>
+          <label className="field">
+            <span>Autorización</span>
+            <select className="select" name="mandateKind" defaultValue={p?.mandate?.kind ?? "sin firma"}>
+              <option value="sin firma">Sin autorización firmada</option>
+              <option value="exclusiva">Exclusiva</option>
+              <option value="compartida">Compartida</option>
+            </select>
+          </label>
+        </div>
+        <div className="form-grid form-grid--2">
+          <label className="field">
+            <span>Vence</span>
+            <input className="input" type="date" name="mandateExpires" defaultValue={p?.mandate?.expires ?? ""} />
+          </label>
+          <label className="field">
+            <span>Honorarios %</span>
+            <input className="input" name="mandateCommission" inputMode="decimal" defaultValue={p?.mandate?.commissionPct ?? ""} placeholder="3" />
+          </label>
+        </div>
+        <p className="tiny muted">Estos datos no se muestran en el sitio. El panel avisa 30 días antes del vencimiento.</p>
+      </Section>
+
+      <Section title="Video y recorrido virtual" n="09">
         <div className="form-grid form-grid--2">
           <label className="field">
             <span>Video de YouTube</span>

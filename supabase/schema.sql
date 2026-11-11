@@ -75,11 +75,26 @@ create table if not exists public.leads (
 );
 create index if not exists leads_created_idx on public.leads (created_at desc);
 
+-- Datos internos de cada propiedad (propietario y autorización de venta).
+alter table public.properties add column if not exists owner_contact_id text;
+alter table public.properties add column if not exists mandate jsonb;
+
+-- CRM: contactos, agenda, oportunidades, actividad y contratos.
+create table if not exists public.crm_records (
+  collection text not null,
+  id         text not null,
+  data       jsonb not null,
+  updated_at timestamptz not null default now(),
+  primary key (collection, id)
+);
+create index if not exists crm_records_collection_idx on public.crm_records (collection, updated_at desc);
+
 -- La app accede solo desde el servidor con la service role key.
 -- Activar RLS sin políticas bloquea cualquier acceso directo con la clave pública.
 alter table public.team_users enable row level security;
 alter table public.properties enable row level security;
 alter table public.leads      enable row level security;
+alter table public.crm_records enable row level security;
 
 -- Bucket público de imágenes (lectura pública, escritura solo desde el servidor).
 insert into storage.buckets (id, name, public)

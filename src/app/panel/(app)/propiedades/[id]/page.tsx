@@ -8,6 +8,9 @@ import { deleteProperty } from "../../../actions";
 import { ConfirmButton } from "@/components/panel/confirm-button";
 import { Icon } from "@/components/icon";
 import { PropertyForm } from "@/components/panel/property-form";
+import { TaskItem } from "@/components/panel/crm-ui";
+import { DealButton, TaskButton } from "@/components/panel/shell/dialogs";
+import { arDayKey, canSee, daysBetween, interestedIn } from "@/lib/crm";
 
 export const metadata = { title: "Editar propiedad" };
 
@@ -15,8 +18,27 @@ export default async function EditProperty({ params, searchParams }: { params: P
   const user = await requireUser();
   const { id } = await params;
   const { creada } = await searchParams;
-  const [p, users, props, leads] = await Promise.all([repo.getProperty(id), repo.listUsers(), repo.listProperties(), repo.listLeads()]);
+  const [p, users, props, leads, contacts, tasks, activities, deals] = await Promise.all([
+    repo.getProperty(id),
+    repo.listUsers(),
+    repo.listProperties(),
+    repo.listLeads(),
+    repo.list("contacts"),
+    repo.list("tasks"),
+    repo.list("activities"),
+    repo.list("deals"),
+  ]);
   if (!p) notFound();
+  const visibleContacts = contacts.filter((c) => canSee(user, c.assignedTo));
+  const interested = interestedIn(p, visibleContacts, 6);
+  const cById = new Map(contacts.map((c) => [c.id, c]));
+  const uById = new Map(users.map((u) => [u.id, u]));
+  const nextVisits = tasks.filter((t) => t.propertyId === p.id && t.status === "pendiente").sort((a, b) => a.dueAt.localeCompare(b.dueAt)).slice(0, 4);
+  const doneVisits = tasks.filter((t) => t.propertyId === p.id && t.type === "visita" && t.status === "hecha");
+  const history = activities.filter((a) => a.propertyId === p.id).sort((a, b) => b.at.localeCompare(a.at)).slice(0, 6);
+  const openDeals = deals.filter((d) => d.propertyId === p.id && d.stage !== "cerrada" && d.stage !== "perdida");
+  const owner = p.ownerContactId ? cById.get(p.ownerContactId) : null;
+  const mandateDays = p.mandate?.expires ? daysBetween(arDayKey(), p.mandate.expires) : null;
   const leadCount = leads.filter((l) => l.propertyId === p.id).length;
   const visible = p.status === "publicada" || p.status === "reservada";
 
@@ -39,11 +61,107 @@ export default async function EditProperty({ params, searchParams }: { params: P
         </div>
       </header>
       {creada && <p className="notice notice--ok" style={{ marginBottom: 24 }}>Propiedad creada. Podés seguir completándola.</p>}
+
+      <div className="pstrip">
+        <div className="pstrip__item">
+          <span className="pstrip__l">Consultas</span>
+          <span className="pstrip__v num">{leadCount}</span>
+        </div>
+        <div className="pstrip__item">
+          <span className="pstrip__l">Visitas hechas</span>
+          <span className="pstrip__v num">{doneVisits.length}</span>
+        </div>
+        <div className="pstrip__item">
+          <span className="pstrip__l">Negocios abiertos</span>
+          <span className="pstrip__v num">{openDeals.length}</span>
+        </div>
+        <div className="pstrip__item">
+          <span className="pstrip__l">Autorización</span>
+          <span className={`pstrip__v ${mandateDays != null && mandateDays <= 30 ? "is-late" : ""}`}>
+            {!p.mandate ? "Sin firmar" : mandateDays == null ? p.mandate.kind : mandateDays < 0 ? `Vencida (${-mandateDays} d)` : `${p.mandate.kind} · ${mandateDays} d`}
+          </span>
+        </div>
+        <div className="pstrip__item">
+          <span className="pstrip__l">Propietario</span>
+          <span className="pstrip__v">{owner ? <Link href={`/panel/contactos/${owner.id}`}>{owner.name}</Link> : "Sin vincular"}</span>
+        </div>
+        <div className="pstrip__actions">
+          <TaskButton prefill={{ type: "visita", propertyId: p.id }} className="btn btn--s">
+            <Icon name="calendar" size={16} /> Agendar visita
+          </TaskButton>
+          <DealButton prefill={{ propertyId: p.id }} className="btn btn--ghost btn--s">
+            Oportunidad
+          </DealButton>
+        </div>
+      </div>
+
+      <div className="pgrid2 pgrid2--prop">
+        <section className="pcard2">
+          <header className="pcard2__head">
+            <h2 className="pcard2__title">Clientes que la están buscando</h2>
+          </header>
+          {interested.length ? (
+            <ul className="plist2">
+              {interested.map(({ c, score }) => (
+                <li key={c.id}>
+                  <Link href={`/panel/contactos/${c.id}`} className="plist2__row">
+                    <span className="score num">{score}%</span>
+                    <span className="plist2__main">
+                      <strong>{c.name}</strong>
+                      <span>{c.search?.notes || c.phone}</span>
+                    </span>
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          ) : (
+            <p className="pempty">Ningún contacto con búsqueda activa coincide con esta propiedad.</p>
+          )}
+        </section>
+        <section className="pcard2">
+          <header className="pcard2__head">
+            <h2 className="pcard2__title">Agenda y actividad</h2>
+          </header>
+          {nextVisits.length > 0 && (
+            <ol className="tlist tlist--compact">
+              {nextVisits.map((t) => (
+                <TaskItem key={t.id} t={t} showDay contact={t.contactId ? cById.get(t.contactId) : null} users={uById} />
+              ))}
+            </ol>
+          )}
+          {history.length ? (
+            <ol className="timeline timeline--compact">
+              {history.map((a) => (
+                <li key={a.id} className="timeline__item">
+                  <span className="timeline__icon">
+                    <Icon name="note" size={13} />
+                  </span>
+                  <div>
+                    <p className="timeline__text">{a.text}</p>
+                    <p className="timeline__meta">
+                      {formatDate(a.at)}
+                      {a.contactId && cById.get(a.contactId) && (
+                        <>
+                          {" · "}
+                          <Link href={`/panel/contactos/${a.contactId}`}>{cById.get(a.contactId)!.name}</Link>
+                        </>
+                      )}
+                    </p>
+                  </div>
+                </li>
+              ))}
+            </ol>
+          ) : (
+            !nextVisits.length && <p className="pempty">Sin actividad registrada todavía.</p>
+          )}
+        </section>
+      </div>
       <PropertyForm
         property={p}
         agents={users.filter((u) => u.active).map(toPublicAgent)}
         neighborhoods={[...new Set(props.map((x) => x.neighborhood))].sort()}
         canChooseAgent={user.role === "admin"}
+        owners={contacts.filter((c) => c.kinds.includes("propietario")).sort((a, b) => a.name.localeCompare(b.name, "es")).map((c) => ({ id: c.id, label: c.name }))}
       />
       {user.role === "admin" && (
         <form action={deleteProperty} className="danger-zone">

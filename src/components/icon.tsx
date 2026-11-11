@@ -50,6 +50,13 @@ const paths = {
   eye: <><path d="M2.5 12S6 5.5 12 5.5 21.5 12 21.5 12 18 18.5 12 18.5 2.5 12 2.5 12z" /><circle cx="12" cy="12" r="2.8" /></>,
   upload: <><path d="M12 15V4M7.5 8.5L12 4l4.5 4.5" /><path d="M4.5 15v3.5a1.5 1.5 0 0 0 1.5 1.5h12a1.5 1.5 0 0 0 1.5-1.5V15" /></>,
   star: <path d="M12 4l2.4 5 5.4.6-4 3.7 1.1 5.4L12 16l-4.9 2.7 1.1-5.4-4-3.7 5.4-.6z" />,
+  today: <><rect x="4" y="5.5" width="16" height="14.5" rx="1.5" /><path d="M4 10h16M8.5 3.5v4M15.5 3.5v4" /><path d="M9.5 15l1.8 1.8L15 13" /></>,
+  kanban: <><rect x="3.5" y="4.5" width="5" height="15" rx="1" /><rect x="10" y="4.5" width="5" height="10" rx="1" /><rect x="16.5" y="4.5" width="4" height="6.5" rx="1" /></>,
+  contact: <><rect x="3.5" y="4.5" width="17" height="15" rx="1.5" /><circle cx="9.5" cy="11" r="2.3" /><path d="M6 16.5a3.6 3.6 0 0 1 7 0M15 9.5h3M15 12.5h3" /></>,
+  building: <><path d="M5 20.5V5.5a1 1 0 0 1 1-1h8a1 1 0 0 1 1 1v15M15 9.5h3a1 1 0 0 1 1 1v10M3.5 20.5h17" /><path d="M8 8h1.5M11 8h1.5M8 11.5h1.5M11 11.5h1.5M8 15h1.5M11 15h1.5" /></>,
+  clock: <><circle cx="12" cy="12" r="8.5" /><path d="M12 7.5V12l3 2" /></>,
+  bell: <><path d="M6.5 16.5V11a5.5 5.5 0 0 1 11 0v5.5l1.5 2h-14z" /><path d="M10 20.5a2 2 0 0 0 4 0" /></>,
+  note: <><path d="M5 4.5h14v11l-4 4H5z" /><path d="M15 19.5v-4h4M8.5 9h7M8.5 12.5h5" /></>,
   external: <><path d="M14 4.5h5.5V10M19.5 4.5L11 13" /><path d="M17 14v4.5a1 1 0 0 1-1 1H5.5a1 1 0 0 1-1-1V8a1 1 0 0 1 1-1H10" /></>,
 } as const;
 

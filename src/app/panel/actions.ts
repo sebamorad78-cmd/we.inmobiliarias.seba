@@ -159,6 +159,18 @@ export async function saveProperty(_: ActionState, fd: FormData): Promise<Action
     amenities,
     images,
     agentId: d.agentId ?? (user.role === "agente" ? user.id : null),
+    ownerContactId: String(fd.get("ownerContactId") ?? "") || null,
+    mandate: (() => {
+      const kind = String(fd.get("mandateKind") ?? "");
+      if (kind !== "exclusiva" && kind !== "compartida") return null;
+      const expires = String(fd.get("mandateExpires") ?? "");
+      const pct = Number(String(fd.get("mandateCommission") ?? "").replace(",", "."));
+      return {
+        kind,
+        expires: /^\d{4}-\d{2}-\d{2}$/.test(expires) ? expires : null,
+        commissionPct: Number.isFinite(pct) && pct > 0 ? pct : null,
+      };
+    })(),
     createdAt: existing?.createdAt ?? now,
     updatedAt: now,
   };

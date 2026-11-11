@@ -9,7 +9,7 @@ export const metadata = { title: "Nueva propiedad" };
 
 export default async function NewProperty() {
   const user = await requireUser();
-  const [users, props] = await Promise.all([repo.listUsers(), repo.listProperties()]);
+  const [users, props, contacts] = await Promise.all([repo.listUsers(), repo.listProperties(), repo.list("contacts")]);
   return (
     <div className="pmain pmain--form">
       <Link href="/panel/propiedades" className="back"><Icon name="arrowLeft" size={16} /> Propiedades</Link>
@@ -19,6 +19,7 @@ export default async function NewProperty() {
         agents={users.filter((u) => u.active).map(toPublicAgent)}
         neighborhoods={[...new Set(props.map((p) => p.neighborhood))].sort()}
         canChooseAgent={user.role === "admin"}
+        owners={contacts.filter((c) => c.kinds.includes("propietario")).map((c) => ({ id: c.id, label: c.name }))}
       />
     </div>
   );

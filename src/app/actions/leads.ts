@@ -4,6 +4,7 @@ import { randomUUID } from "node:crypto";
 import { z } from "zod";
 import { repo } from "@/lib/data";
 import { notifyNewLead } from "@/lib/notify";
+import { contactFromLead } from "@/lib/crm-server";
 import { clientIp, rateLimit } from "@/lib/rate-limit";
 import { LEAD_KINDS, type Lead } from "@/lib/types";
 
@@ -98,6 +99,13 @@ export async function submitLead(_prev: FormState, formData: FormData): Promise<
   } catch (err) {
     console.error("[leads] error al guardar", err);
     return { ok: false, message: "No pudimos enviar tu mensaje. Probá de nuevo o escribinos por WhatsApp." };
+  }
+
+  // Entra al CRM: contacto, historial y tarea de respuesta. Un fallo acá nunca afecta al cliente.
+  try {
+    await contactFromLead(lead, property);
+  } catch (err) {
+    console.error("[leads] no se pudo registrar en el CRM", err);
   }
 
   await notifyNewLead(lead, property);

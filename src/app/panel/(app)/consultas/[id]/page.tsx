@@ -7,6 +7,8 @@ import { formatDate, formatPrice, whatsappLink } from "@/lib/format";
 import { leadKindLabel } from "@/lib/labels";
 import { Icon } from "@/components/icon";
 import { LeadEditor } from "@/components/panel/lead-editor";
+import { TaskButton } from "@/components/panel/shell/dialogs";
+import { convertLead } from "../../../crm-actions";
 
 export const metadata = { title: "Consulta" };
 
@@ -34,6 +36,15 @@ export default async function LeadDetail({ params }: { params: Promise<{ id: str
           <p className="tiny muted">Recibida el {formatDate(lead.createdAt, { dateStyle: "full", timeStyle: "short" })}</p>
         </div>
         <div className="row" style={{ flexWrap: "wrap" }}>
+          <form action={convertLead}>
+            <input type="hidden" name="id" value={lead.id} />
+            <button className="btn btn--s">
+              <Icon name="contact" size={16} /> Abrir en contactos
+            </button>
+          </form>
+          <TaskButton className="btn btn--ghost btn--s" prefill={{ type: "visita", propertyId: lead.propertyId, title: `Visita con ${lead.name}`, notes: lead.preferredDate ? `Día preferido: ${lead.preferredDate}` : "" }}>
+            <Icon name="calendar" size={16} /> Agendar
+          </TaskButton>
           {lead.phone && (
             <a className="btn btn--wa btn--s" href={whatsappLink(lead.phone.replace(/^0/, "54"), waText)} target="_blank" rel="noopener"><Icon name="whatsapp" size={16} /> Responder por WhatsApp</a>
           )}

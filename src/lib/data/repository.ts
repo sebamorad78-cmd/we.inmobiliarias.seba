@@ -1,4 +1,4 @@
-import type { Lead, Property, TeamUser } from "../types";
+import type { CrmCollection, CrmTypes, Lead, Property, TeamUser } from "../types";
 
 /**
  * Contrato único de acceso a datos. El sitio nunca habla directo con la base:
@@ -19,6 +19,12 @@ export interface Repository {
   listLeads(): Promise<Lead[]>;
   getLead(id: string): Promise<Lead | null>;
   saveLead(l: Lead): Promise<Lead>;
+
+  /** Colecciones del CRM (contactos, agenda, oportunidades, actividad, contratos). */
+  list<C extends CrmCollection>(c: C): Promise<CrmTypes[C][]>;
+  get<C extends CrmCollection>(c: C, id: string): Promise<CrmTypes[C] | null>;
+  put<C extends CrmCollection>(c: C, item: CrmTypes[C]): Promise<CrmTypes[C]>;
+  remove(c: CrmCollection, id: string): Promise<void>;
 
   /** Guarda una imagen y devuelve su URL pública. */
   uploadImage(file: File, folder: string): Promise<string>;

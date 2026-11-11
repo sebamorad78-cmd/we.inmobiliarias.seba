@@ -1,137 +1,312 @@
 import Link from "next/link";
 import { requireUser } from "@/lib/auth";
+import {
+  addDays,
+  arDayKey,
+  arWall,
+  canSee,
+  contractAlerts,
+  daysBetween,
+  dealStageLabel,
+  fmtAr,
+  isOverdue,
+  matchScore,
+  stageProbability,
+} from "@/lib/crm";
 import { repo } from "@/lib/data";
-import { formatRelative } from "@/lib/format";
-import { leadKindLabel, leadStatusLabel, operationLabel } from "@/lib/labels";
+import { formatMoney, formatRelative } from "@/lib/format";
+import { leadKindLabel } from "@/lib/labels";
+import { DEAL_STAGES } from "@/lib/types";
 import { Icon } from "@/components/icon";
+import { Card, Empty, TaskItem } from "@/components/panel/crm-ui";
+import { TaskButton } from "@/components/panel/shell/dialogs";
 
-export const metadata = { title: "Resumen" };
+export const metadata = { title: "Hoy" };
 
-export default async function Dashboard() {
+export default async function Today() {
   const user = await requireUser();
-  const [props, leads] = await Promise.all([repo.listProperties(), repo.listLeads()]);
-  const mine = (l: (typeof leads)[number]) => user.role === "admin" || !l.assignedTo || l.assignedTo === user.id;
-  const myLeads = leads.filter(mine).sort((a, b) => b.createdAt.localeCompare(a.createdAt));
-  const weekAgo = Date.now() - 7 * 86400000;
-  const propById = new Map(props.map((p) => [p.id, p]));
+  const [tasks, contacts, properties, leads, deals, contracts, users] = await Promise.all([
+    repo.list("tasks"),
+    repo.list("contacts"),
+    repo.listProperties(),
+    repo.listLeads(),
+    repo.list("deals"),
+    repo.list("contracts"),
+    repo.listUsers(),
+  ]);
+  const cById = new Map(contacts.map((c) => [c.id, c]));
+  const pById = new Map(properties.map((p) => [p.id, p]));
+  const uById = new Map(users.map((u) => [u.id, u]));
+  const today = arDayKey();
+  const now = Date.now();
 
-  const kpis = [
-    { label: "Publicadas", value: props.filter((p) => p.status === "publicada").length, href: "/panel/propiedades?estado=publicada" },
-    { label: "Reservadas", value: props.filter((p) => p.status === "reservada").length, href: "/panel/propiedades?estado=reservada" },
-    { label: "Consultas nuevas", value: myLeads.filter((l) => l.status === "nuevo").length, href: "/panel/consultas?estado=nuevo", accent: true },
-    { label: "Consultas (7 días)", value: myLeads.filter((l) => new Date(l.createdAt).getTime() > weekAgo).length, href: "/panel/consultas" },
-  ];
+  const mine = tasks.filter((t) => canSee(user, t.assignedTo));
+  const todays = mine.filter((t) => arDayKey(t.dueAt) === today && t.status !== "cancelada").sort((a, b) => a.dueAt.localeCompare(b.dueAt));
+  const overdue = mine.filter((t) => isOverdue(t) && arDayKey(t.dueAt) < today).sort((a, b) => a.dueAt.localeCompare(b.dueAt));
+  const upcoming = mine
+    .filter((t) => t.status === "pendiente" && arDayKey(t.dueAt) > today && arDayKey(t.dueAt) <= addDays(today, 4))
+    .sort((a, b) => a.dueAt.localeCompare(b.dueAt));
+  const pendingToday = todays.filter((t) => t.status === "pendiente").length;
 
-  // Propiedades con más consultas: muestra qué se mueve y qué no.
-  const counts = new Map<string, number>();
-  for (const l of leads) if (l.propertyId) counts.set(l.propertyId, (counts.get(l.propertyId) ?? 0) + 1);
-  const top = [...counts.entries()].sort((a, b) => b[1] - a[1]).slice(0, 5).map(([id, n]) => ({ p: propById.get(id), n })).filter((x) => x.p);
+  const unanswered = leads
+    .filter((l) => l.status === "nuevo" && canSee(user, l.assignedTo))
+    .sort((a, b) => a.createdAt.localeCompare(b.createdAt));
 
-  // Avisos de calidad: lo que le falta a cada publicación para rendir mejor.
-  const issues = props
-    .filter((p) => p.status === "publicada")
-    .map((p) => ({
-      p,
-      missing: [
-        p.images.length < 5 && "menos de 5 fotos",
-        p.lat == null && "sin ubicación en mapa",
-        p.description.length < 300 && "descripción corta",
-        p.price == null && "sin precio",
-      ].filter(Boolean) as string[],
-    }))
-    .filter((x) => x.missing.length);
+  // Embudo
+  const openDeals = deals.filter((d) => canSee(user, d.assignedTo) && d.stage !== "cerrada" && d.stage !== "perdida");
+  const fee = (d: (typeof deals)[number]) => ((d.value ?? 0) * d.commissionPct) / 100;
+  const weightedUsd = openDeals.filter((d) => d.currency === "USD").reduce((s, d) => s + fee(d) * stageProbability[d.stage], 0);
+  const monthStart = today.slice(0, 8) + "01";
+  const wonMonthUsd = deals
+    .filter((d) => d.stage === "cerrada" && d.currency === "USD" && arDayKey(d.updatedAt) >= monthStart && canSee(user, d.assignedTo))
+    .reduce((s, d) => s + fee(d), 0);
+  const stages = DEAL_STAGES.filter((s) => s !== "cerrada" && s !== "perdida").map((s) => ({
+    s,
+    n: openDeals.filter((d) => d.stage === s).length,
+  }));
+  const maxN = Math.max(1, ...stages.map((x) => x.n));
+
+  // Alertas
+  type Alert = { tone: "red" | "amber"; text: string; href: string };
+  const alerts: Alert[] = [];
+  for (const p of properties) {
+    if (!p.mandate?.expires || p.status === "vendida") continue;
+    const d = daysBetween(today, p.mandate.expires);
+    if (d < 0) alerts.push({ tone: "red", text: `Autorización vencida hace ${-d} días · ${p.code}`, href: `/panel/propiedades/${p.id}` });
+    else if (d <= 30) alerts.push({ tone: "amber", text: `Autorización vence en ${d} días · ${p.code}`, href: `/panel/propiedades/${p.id}` });
+  }
+  for (const c of contracts) {
+    const a = contractAlerts(c);
+    if (a.expired) alerts.push({ tone: "red", text: `Contrato vencido · ${c.propertyLabel}`, href: `/panel/alquileres/${c.id}` });
+    else if (a.endingSoon) alerts.push({ tone: "amber", text: `Contrato vence en ${a.toEnd} días · ${c.propertyLabel}`, href: `/panel/alquileres/${c.id}` });
+    if (a.adjustSoon && a.adjustment)
+      alerts.push({
+        tone: a.toAdjustment! <= 7 ? "red" : "amber",
+        text: `Actualización ${c.adjustIndex} el ${fmtAr(a.adjustment + "T15:00:00Z", { day: "numeric", month: "short" })} · ${c.propertyLabel}`,
+        href: `/panel/alquileres/${c.id}`,
+      });
+  }
+  for (const d of openDeals) {
+    const c = d.contactId ? cById.get(d.contactId) : null;
+    if (!c) continue;
+    const last = c.lastContactAt ?? c.createdAt;
+    const days = Math.floor((now - new Date(last).getTime()) / 86400000);
+    if (days >= 7) alerts.push({ tone: "amber", text: `${c.name} sin contacto hace ${days} días (${dealStageLabel[d.stage]})`, href: `/panel/contactos/${c.id}` });
+  }
+
+  // Coincidencias: propiedades de los últimos 14 días que sirven a clientes con búsqueda.
+  const fresh = properties.filter((p) => now - new Date(p.createdAt).getTime() < 14 * 86400000);
+  const matches = fresh
+    .flatMap((p) =>
+      contacts
+        .filter((c) => c.search && canSee(user, c.assignedTo))
+        .map((c) => ({ c, p, score: matchScore(c.search!, p) }))
+        .filter((m) => m.score != null),
+    )
+    .sort((a, b) => b.score! - a.score!)
+    .slice(0, 5);
+
+  const hour = arWall().getUTCHours();
+  const hello = hour < 12 ? "Buen día" : hour < 20 ? "Buenas tardes" : "Buenas noches";
+  const summary = [
+    pendingToday ? `${pendingToday} ${pendingToday === 1 ? "pendiente" : "pendientes"} para hoy` : "nada pendiente para hoy",
+    overdue.length ? `${overdue.length} ${overdue.length === 1 ? "vencida" : "vencidas"}` : null,
+    unanswered.length ? `${unanswered.length} ${unanswered.length === 1 ? "consulta sin responder" : "consultas sin responder"}` : null,
+  ].filter(Boolean);
 
   return (
     <div className="pmain">
-      <header className="pmain__head">
+      <header className="phero">
         <div>
-          <p className="eyebrow">Hola, {user.name.split(" ")[0]}</p>
-          <h1 className="h2">Resumen</h1>
+          <p className="eyebrow">Hoy</p>
+          <h1 className="phero__title">
+            {hello}, {user.name.split(" ")[0]}.
+          </h1>
+          <p className="phero__sub">Tenés {summary.join(", ").replace(/, ([^,]*)$/, " y $1")}.</p>
         </div>
-        <Link href="/panel/propiedades/nueva" className="btn"><Icon name="plus" size={18} /> Nueva propiedad</Link>
+        <div className="phero__actions">
+          <TaskButton prefill={{ type: "visita" }} className="btn btn--s">
+            Agendar visita
+          </TaskButton>
+          <TaskButton prefill={{ type: "llamado" }} className="btn btn--ghost btn--s">
+            Agendar llamado
+          </TaskButton>
+        </div>
       </header>
 
-      <div className="kpis">
-        {kpis.map((k) => (
-          <Link key={k.label} href={k.href} className={`kpi ${k.accent && k.value ? "kpi--accent" : ""}`}>
-            <span className="kpi__v num">{k.value}</span>
-            <span className="kpi__l">{k.label}</span>
-          </Link>
-        ))}
+      <div className="pkpis">
+        <Link href="/panel/agenda" className="pkpi">
+          <span className="pkpi__v num">{todays.length}</span>
+          <span className="pkpi__l">Eventos hoy</span>
+        </Link>
+        <Link href="/panel/consultas?estado=nuevo" className={`pkpi ${unanswered.length ? "pkpi--alert" : ""}`}>
+          <span className="pkpi__v num">{unanswered.length}</span>
+          <span className="pkpi__l">Consultas sin responder</span>
+        </Link>
+        <Link href="/panel/oportunidades" className="pkpi">
+          <span className="pkpi__v num">{openDeals.length}</span>
+          <span className="pkpi__l">Negocios en curso</span>
+        </Link>
+        <Link href="/panel/reportes" className="pkpi">
+          <span className="pkpi__v num">{formatMoney(Math.round(weightedUsd), "USD")}</span>
+          <span className="pkpi__l">Honorarios proyectados</span>
+        </Link>
       </div>
 
-      <div className="pgrid">
-        <section className="pcardbox">
-          <div className="pcardbox__head">
-            <h2 className="h3">Últimas consultas</h2>
-            <Link href="/panel/consultas" className="link small">Ver todas</Link>
-          </div>
-          {myLeads.length === 0 ? (
-            <p className="muted small">Todavía no hay consultas. Llegan acá apenas un cliente completa un formulario en el sitio.</p>
-          ) : (
-            <ul className="plist">
-              {myLeads.slice(0, 8).map((l) => {
-                const p = l.propertyId ? propById.get(l.propertyId) : null;
-                return (
-                  <li key={l.id}>
-                    <Link href={`/panel/consultas/${l.id}`} className="plist__row">
-                      <span className={`dot dot--${l.status === "nuevo" ? "new" : "seen"}`} aria-hidden="true" />
-                      <span className="plist__main">
-                        <strong>{l.name}</strong>
-                        <span className="tiny muted">{leadKindLabel[l.kind]}{p ? ` · ${p.code}` : ""}</span>
-                      </span>
-                      <span className="tiny muted">{formatRelative(l.createdAt)}</span>
-                      <span className={`status status--${l.status.replace(/\s/g, "-")}`}>{leadStatusLabel[l.status]}</span>
-                    </Link>
-                  </li>
-                );
-              })}
-            </ul>
+      <div className="pgrid2">
+        <div className="pstack">
+          <Card
+            title="Agenda de hoy"
+            action={
+              <Link href="/panel/agenda" className="plink">
+                Ver semana
+              </Link>
+            }
+          >
+            {todays.length ? (
+              <ol className="tlist">
+                {todays.map((t) => (
+                  <TaskItem key={t.id} t={t} contact={t.contactId ? cById.get(t.contactId) : null} property={t.propertyId ? pById.get(t.propertyId) : null} users={uById} />
+                ))}
+              </ol>
+            ) : (
+              <Empty>No tenés nada agendado para hoy.</Empty>
+            )}
+          </Card>
+
+          {overdue.length > 0 && (
+            <Card title={`Vencidas (${overdue.length})`} className="pcard2--alert">
+              <ol className="tlist">
+                {overdue.map((t) => (
+                  <TaskItem key={t.id} t={t} showDay contact={t.contactId ? cById.get(t.contactId) : null} property={t.propertyId ? pById.get(t.propertyId) : null} users={uById} />
+                ))}
+              </ol>
+            </Card>
           )}
-        </section>
+
+          <Card title="Próximos días">
+            {upcoming.length ? (
+              <ol className="tlist tlist--compact">
+                {upcoming.map((t) => (
+                  <TaskItem key={t.id} t={t} showDay contact={t.contactId ? cById.get(t.contactId) : null} property={t.propertyId ? pById.get(t.propertyId) : null} users={uById} />
+                ))}
+              </ol>
+            ) : (
+              <Empty>Sin eventos en los próximos días.</Empty>
+            )}
+          </Card>
+        </div>
 
         <div className="pstack">
-          <section className="pcardbox">
-            <div className="pcardbox__head"><h2 className="h3">Más consultadas</h2></div>
-            {top.length === 0 ? (
-              <p className="muted small">Sin datos todavía.</p>
+          <Card
+            title="Consultas sin responder"
+            action={
+              <Link href="/panel/consultas" className="plink">
+                Todas
+              </Link>
+            }
+          >
+            {unanswered.length ? (
+              <ul className="plist2">
+                {unanswered.slice(0, 6).map((l) => {
+                  const hours = (now - new Date(l.createdAt).getTime()) / 3600000;
+                  const p = l.propertyId ? pById.get(l.propertyId) : null;
+                  return (
+                    <li key={l.id}>
+                      <Link href={`/panel/consultas/${l.id}`} className="plist2__row">
+                        <span className={`sla ${hours > 2 ? "sla--late" : ""}`} title="Tiempo sin responder">
+                          {formatRelative(l.createdAt).replace("hace ", "")}
+                        </span>
+                        <span className="plist2__main">
+                          <strong>{l.name}</strong>
+                          <span>
+                            {leadKindLabel[l.kind]}
+                            {p ? ` · ${p.code}` : ""}
+                          </span>
+                        </span>
+                        <Icon name="chevronRight" size={16} />
+                      </Link>
+                    </li>
+                  );
+                })}
+              </ul>
             ) : (
-              <ol className="plist plist--ranked">
-                {top.map(({ p, n }) => (
-                  <li key={p!.id}>
-                    <Link href={`/panel/propiedades/${p!.id}`} className="plist__row">
-                      <span className="plist__main">
-                        <strong>{p!.title}</strong>
-                        <span className="tiny muted">{p!.code} · {operationLabel[p!.operation]}</span>
-                      </span>
-                      <span className="num">{n}</span>
+              <Empty>Todas las consultas están respondidas.</Empty>
+            )}
+          </Card>
+
+          <Card title="Alertas">
+            {alerts.length ? (
+              <ul className="alerts">
+                {alerts.slice(0, 8).map((a, i) => (
+                  <li key={i}>
+                    <Link href={a.href} className={`alert alert--${a.tone}`}>
+                      <Icon name="bell" size={15} />
+                      <span>{a.text}</span>
                     </Link>
                   </li>
                 ))}
-              </ol>
-            )}
-          </section>
-
-          <section className="pcardbox">
-            <div className="pcardbox__head"><h2 className="h3">Para mejorar</h2></div>
-            {issues.length === 0 ? (
-              <p className="muted small">Todas las publicaciones están completas.</p>
+              </ul>
             ) : (
-              <ul className="plist">
-                {issues.slice(0, 6).map(({ p, missing }) => (
-                  <li key={p.id}>
-                    <Link href={`/panel/propiedades/${p.id}`} className="plist__row">
-                      <span className="plist__main">
-                        <strong>{p.code}</strong>
-                        <span className="tiny muted">{missing.join(" · ")}</span>
+              <Empty>Sin alertas. Autorizaciones y contratos al día.</Empty>
+            )}
+          </Card>
+
+          <Card
+            title="Embudo de negocios"
+            action={
+              <Link href="/panel/oportunidades" className="plink">
+                Tablero
+              </Link>
+            }
+          >
+            <ul className="funnel">
+              {stages.map(({ s, n }) => (
+                <li key={s}>
+                  <span className="funnel__label">{dealStageLabel[s]}</span>
+                  <span className="funnel__bar">
+                    <span style={{ width: `${(n / maxN) * 100}%` }} />
+                  </span>
+                  <span className="funnel__n num">{n}</span>
+                </li>
+              ))}
+            </ul>
+            <dl className="mini-stats">
+              <div>
+                <dt>Ponderado por etapa</dt>
+                <dd className="num">{formatMoney(Math.round(weightedUsd), "USD")}</dd>
+              </div>
+              <div>
+                <dt>Cobrado este mes</dt>
+                <dd className="num">{formatMoney(Math.round(wonMonthUsd), "USD")}</dd>
+              </div>
+            </dl>
+          </Card>
+
+          <Card title="Coincidencias nuevas">
+            {matches.length ? (
+              <ul className="plist2">
+                {matches.map(({ c, p, score }) => (
+                  <li key={c.id + p.id}>
+                    <Link href={`/panel/contactos/${c.id}`} className="plist2__row">
+                      <span className="score num" title="Coincidencia con su búsqueda">
+                        {score}%
+                      </span>
+                      <span className="plist2__main">
+                        <strong>{c.name}</strong>
+                        <span>
+                          {p.code} · {p.title}
+                        </span>
                       </span>
                       <Icon name="chevronRight" size={16} />
                     </Link>
                   </li>
                 ))}
               </ul>
+            ) : (
+              <Empty>Cuando ingrese una propiedad que sirva a un cliente, aparece acá.</Empty>
             )}
-          </section>
+          </Card>
         </div>
       </div>
     </div>
