@@ -3639,11 +3639,14 @@ a.svc__row:hover .svc__title {
 /* ============================================================
    Listado · filtros sobrios y sin desbordes
    ============================================================ */
-.listing__body {
-  grid-template-columns: 300px minmax(0, 1fr);
-}
-.filters {
-  padding-right: 16px;
+/* Solo escritorio: en celular los filtros van en un panel aparte y la grilla es de una columna. */
+@media (min-width: 1001px) {
+  .listing__body {
+    grid-template-columns: 300px minmax(0, 1fr);
+  }
+  .filters {
+    padding-right: 16px;
+  }
 }
 .fgroup legend,
 .fgroup summary {

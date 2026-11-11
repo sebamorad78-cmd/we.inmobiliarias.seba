@@ -9,7 +9,8 @@
     "typecheck": "tsc --noEmit",
     "hash-password": "node scripts/hash-password.mjs",
     "preview:cf": "opennextjs-cloudflare build && opennextjs-cloudflare preview",
-    "deploy": "opennextjs-cloudflare build && opennextjs-cloudflare deploy"
+    "deploy": "opennextjs-cloudflare build && opennextjs-cloudflare deploy",
+    "audit:mobile": "node scripts/mobile-audit.cjs"
   },
   "dependencies": {
     "@opennextjs/cloudflare": "^1.20.16",
