@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import { site } from "@/site.config";
 import { whatsappLink } from "@/lib/format";
-import { Icon } from "@/components/icon";
 import { LeadForm } from "@/components/lead-form";
 import { PropertyMap } from "@/components/map/property-map";
 
@@ -27,39 +26,40 @@ export default async function ContactPage({ searchParams }: { searchParams: Prom
     <section className="wrap page-pad split">
       <div className="split__text">
         <p className="eyebrow">Contacto</p>
-        <h1 className="h1">Hablemos de tu próxima propiedad</h1>
+        <h1 className="h1">Contacto</h1>
         <p className="lead">Respondemos todas las consultas dentro del mismo día hábil.</p>
-        <ul className="contact-list">
-          <li>
-            <Icon name="whatsapp" size={22} />
-            <div>
-              <p className="label">WhatsApp</p>
-              <a href={whatsappLink(site.whatsapp, `Hola ${site.name}, quisiera hacer una consulta.`)} target="_blank" rel="noopener">Escribinos ahora</a>
-            </div>
-          </li>
-          <li>
-            <Icon name="phone" size={22} />
-            <div>
-              <p className="label">Teléfono</p>
+        <dl className="plainlist plainlist--big">
+          <div>
+            <dt>WhatsApp</dt>
+            <dd>
+              <a href={whatsappLink(site.whatsapp, `Hola ${site.name}, quisiera hacer una consulta.`)} target="_blank" rel="noopener">
+                Escribir un mensaje
+              </a>
+            </dd>
+          </div>
+          <div>
+            <dt>Teléfono</dt>
+            <dd>
               <a href={`tel:${site.phone.replace(/[^\d+]/g, "")}`}>{site.phone}</a>
-            </div>
-          </li>
-          <li>
-            <Icon name="mail" size={22} />
-            <div>
-              <p className="label">Email</p>
+            </dd>
+          </div>
+          <div>
+            <dt>Email</dt>
+            <dd>
               <a href={`mailto:${site.email}`}>{site.email}</a>
-            </div>
-          </li>
-          <li>
-            <Icon name="pin" size={22} />
-            <div>
-              <p className="label">Oficina</p>
-              <p>{site.address.street}, {site.address.city}</p>
-              <p className="small muted">{site.hours}</p>
-            </div>
-          </li>
-        </ul>
+            </dd>
+          </div>
+          <div>
+            <dt>Oficina</dt>
+            <dd>
+              {site.address.street}, {site.address.city}
+            </dd>
+          </div>
+          <div>
+            <dt>Horario</dt>
+            <dd>{site.hours}</dd>
+          </div>
+        </dl>
         <PropertyMap single className="pmap--contact" zoom={16} points={[{ id: "office", lat: site.geo.lat, lng: site.geo.lng, label: site.name, title: site.name, href: "#" }]} />
       </div>
       <div className="panel-card">

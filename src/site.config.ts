@@ -26,13 +26,6 @@ export const site = {
   hours: "Lunes a viernes de 9 a 19 h · Sábados de 10 a 14 h",
   /** Matrícula del corredor responsable (obligatoria en CABA, Ley 2340). */
   license: "Corredor responsable: Mat. CUCICBA N.º 0000",
-  /** Cifras de la home. Usar solo datos reales y verificables. */
-  stats: [
-    { value: "22", label: "años en el mercado" },
-    { value: "1.800+", label: "operaciones cerradas" },
-    { value: "74", label: "días promedio de venta" },
-    { value: "48 h", label: "para entregar una tasación" },
-  ],
   /**
    * Valores de referencia (USD por m² cubierto, departamentos usados en buen estado)
    * para el tasador instantáneo de la portada. Actualizarlos cada trimestre.

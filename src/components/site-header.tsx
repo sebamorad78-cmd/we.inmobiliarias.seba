@@ -108,7 +108,7 @@ export function SiteHeader() {
             rel="noopener"
           >
             <Icon name="whatsapp" size={18} />
-            Hablemos
+            WhatsApp
           </a>
           <button
             type="button"

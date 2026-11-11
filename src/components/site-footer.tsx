@@ -12,7 +12,7 @@ export function SiteFooter() {
           <div className="footer__brand">
             <Logo light />
             <p className="footer__claim">
-              Propiedades elegidas una por una, y gente que sabe venderlas.
+              Venta, alquiler, tasación y administración de propiedades en Buenos Aires y Zona Norte.
             </p>
           </div>
           <div className="footer__cols">
@@ -62,7 +62,6 @@ export function SiteFooter() {
             </div>
           </div>
         </div>
-        <p className="footer__mark" aria-hidden="true">{site.name}</p>
         <div className="footer__legal">
           <p>
             © {year} {site.legalName}. {site.license}.

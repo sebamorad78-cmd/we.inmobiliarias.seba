@@ -68,7 +68,7 @@ export function InstantValuation({ image, listingsByHood }: { image: string; lis
       </div>
 
       <div className="valuer__body">
-        <p className="eyebrow">04 — Para propietarios</p>
+        <p className="eyebrow">Para propietarios</p>
         <h2 id="valuer-title" className="h1 valuer__title">¿Cuánto vale hoy tu propiedad?</h2>
 
         <p className="valuer__sentence">

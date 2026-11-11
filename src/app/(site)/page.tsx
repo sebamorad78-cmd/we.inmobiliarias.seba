@@ -6,7 +6,6 @@ import { HoodIndex } from "@/components/home/hood-index";
 import { InstantValuation } from "@/components/home/instant-valuation";
 import { formatArea, formatMoney, formatPrice } from "@/lib/format";
 import { typeLabel } from "@/lib/labels";
-import { Icon } from "@/components/icon";
 import { Photo } from "@/components/photo";
 import { PropertyCard } from "@/components/property-card";
 import { Reveal } from "@/components/reveal";
@@ -17,32 +16,24 @@ const HERO_IMAGE = "https://images.unsplash.com/photo-1600585154340-be6161a56a0c
 
 const SERVICES = [
   {
-    n: "01",
-    title: "Comprar",
-    text: "Filtramos el mercado por vos. Te mostramos solo lo que vale la pena visitar y te acompañamos en la negociación y la escritura.",
-    href: "/propiedades?operacion=venta",
-    cta: "Ver propiedades en venta",
-  },
-  {
-    n: "02",
-    title: "Vender",
-    text: "Tasación con datos de cierre reales, fotografía profesional, difusión en los principales portales y reportes semanales de cada visita.",
+    title: "Venta",
+    text: "Tasación, fotografía, publicación en portales, visitas acompañadas, reserva, boleto y escritura.",
     href: "/tasaciones#vender",
-    cta: "Cómo vendemos",
   },
   {
-    n: "03",
-    title: "Alquilar",
-    text: "Contratos claros según la normativa vigente, verificación de garantías y propiedades listas para entrar a vivir.",
+    title: "Alquiler",
+    text: "Contratos según la ley vigente, verificación de garantías e inventario firmado en la entrega.",
     href: "/propiedades?operacion=alquiler",
-    cta: "Ver alquileres",
   },
   {
-    n: "04",
-    title: "Administrar",
-    text: "Cobro, liquidación, mantenimiento y renovaciones. El propietario recibe su renta y un informe mensual, sin ocuparse de nada.",
+    title: "Tasación",
+    text: "Visita de un corredor matriculado e informe escrito con comparables de la zona en 48 h hábiles.",
+    href: "/tasaciones",
+  },
+  {
+    title: "Administración",
+    text: "Cobro de alquileres, liquidación mensual al propietario, mantenimiento y renovaciones.",
     href: "/contacto?motivo=administracion",
-    cta: "Consultar",
   },
 ];
 
@@ -78,13 +69,11 @@ export default async function HomePage() {
         <div className="wrap">
           <div className="section-head">
             <div>
-              <p className="eyebrow">01 — Selección</p>
-              <h2 className="h1">
-                Recién ingresadas
-              </h2>
+              <p className="eyebrow">Propiedades</p>
+              <h2 className="h1">Recién ingresadas</h2>
             </div>
             <Link href="/propiedades" className="link">
-              Ver las {all.length} propiedades
+              Ver todas ({all.length})
             </Link>
           </div>
 
@@ -125,29 +114,15 @@ export default async function HomePage() {
         </div>
       </section>
 
-      {/* ── Cifras ── */}
-      <section className="stats" aria-label="Ribera en números">
-        <div className="wrap stats__inner">
-          {site.stats.map((s) => (
-            <div key={s.label} className="stats__item">
-              <p className="stats__value num">{s.value}</p>
-              <p className="stats__label">{s.label}</p>
-            </div>
-          ))}
-        </div>
-      </section>
-
       {/* ── Barrios ── */}
       <section className="section">
         <div className="wrap">
           <div className="section-head">
             <div>
-              <p className="eyebrow">02 — Dónde trabajamos</p>
-              <h2 className="h1">
-                Conocemos cada barrio
-              </h2>
+              <p className="eyebrow">Zonas</p>
+              <h2 className="h1">Barrios</h2>
               <p className="lead">
-                Precios por metro reales, colegios, accesos, ruidos y proyectos en camino. Lo que no aparece en un aviso.
+                Propiedades en cartera por zona. El valor indicado es el precio más bajo en venta publicado hoy.
               </p>
             </div>
           </div>
@@ -163,54 +138,67 @@ export default async function HomePage() {
         </div>
       </section>
 
-      {/* ── Servicios ── */}
-      <section className="section section--surface">
-        <div className="wrap">
-          <div className="section-head">
-            <div>
-              <p className="eyebrow">03 — Servicios</p>
-              <h2 className="h1">
-                Todo lo que pasa entre
-                <br />
-                la búsqueda y las llaves
-              </h2>
-            </div>
-          </div>
-          <ol className="services">
-            {SERVICES.map((s) => (
-              <Reveal as="li" key={s.n} className="service">
-                <span className="service__n num">{s.n}</span>
-                <h3 className="h2 service__title">{s.title}</h3>
-                <p className="service__text">{s.text}</p>
-                <Link href={s.href} className="link service__cta">
-                  {s.cta}
-                </Link>
-              </Reveal>
-            ))}
-          </ol>
-        </div>
-      </section>
-
       {/* ── Tasador instantáneo ── */}
       <InstantValuation image={VALUER_IMAGE} listingsByHood={Object.fromEntries(hoods.map((h) => [h.name, h.count]))} />
 
-      {/* ── Contacto ── */}
-      <section className="section--tight">
-        <div className="wrap closing">
-          <h2 className="h2">
-            ¿Buscás algo que no está publicado? Preguntanos.
-          </h2>
-          <p className="muted">
-            Muchas de nuestras mejores operaciones se cierran antes de salir a los portales.
-          </p>
-          <div className="row" style={{ flexWrap: "wrap", justifyContent: "center" }}>
-            <Link href="/contacto" className="btn">
-              Contarnos qué buscás
-            </Link>
-            <a href={`tel:${site.phone.replace(/[^\d+]/g, "")}`} className="btn btn--ghost">
-              <Icon name="phone" size={18} /> {site.phone}
-            </a>
+      {/* ── Servicios ── */}
+      <section className="section">
+        <div className="wrap svc">
+          <div className="svc__head">
+            <p className="eyebrow">Servicios</p>
+            <h2 className="h1">Qué hacemos</h2>
           </div>
+          <ul className="svc__list">
+            {SERVICES.map((s) => (
+              <li key={s.title}>
+                <Link href={s.href} className="svc__row">
+                  <span className="svc__title">{s.title}</span>
+                  <span className="svc__text">{s.text}</span>
+                  <span className="svc__more">Más información</span>
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </section>
+
+      {/* ── Oficina ── */}
+      <section className="office">
+        <div className="wrap office__inner">
+          <div>
+            <p className="eyebrow">Oficina</p>
+            <p className="office__addr">
+              {site.address.street}
+              <br />
+              {site.address.city}
+            </p>
+          </div>
+          <dl className="office__data">
+            <div>
+              <dt>Teléfono</dt>
+              <dd>
+                <a href={`tel:${site.phone.replace(/[^\d+]/g, "")}`}>{site.phone}</a>
+              </dd>
+            </div>
+            <div>
+              <dt>WhatsApp</dt>
+              <dd>
+                <a href={`https://wa.me/${site.whatsapp}`} target="_blank" rel="noopener">
+                  Escribir
+                </a>
+              </dd>
+            </div>
+            <div>
+              <dt>Email</dt>
+              <dd>
+                <a href={`mailto:${site.email}`}>{site.email}</a>
+              </dd>
+            </div>
+            <div>
+              <dt>Horario</dt>
+              <dd>{site.hours}</dd>
+            </div>
+          </dl>
         </div>
       </section>
     </>

@@ -143,10 +143,11 @@ export function HeroReel({ slides }: { slides: ReelSlide[] }) {
 
       <div className="wrap reel__body">
         <div className="reel__intro">
+          <p className="reel__kicker">Venta, alquiler y tasación de propiedades</p>
           <h1 className="reel__claim">
-            Propiedades
+            Buenos Aires
             <br />
-            con criterio.
+            y Zona Norte
           </h1>
           <button type="button" className="reel__search" onClick={openSearch}>
             <Icon name="search" size={18} />

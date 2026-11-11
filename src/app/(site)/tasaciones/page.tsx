@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import { LeadForm } from "@/components/lead-form";
-import { Icon, type IconName } from "@/components/icon";
 import { PROPERTY_TYPES } from "@/lib/types";
 import { typeLabel } from "@/lib/labels";
 
@@ -10,13 +9,13 @@ export const metadata: Metadata = {
   alternates: { canonical: "/tasaciones" },
 };
 
-const INCLUDES: { icon: IconName; title: string; text: string }[] = [
-  { icon: "chart", title: "Valor con datos reales", text: "Comparamos con operaciones cerradas, no con precios de aviso. Te mostramos el rango y cómo se llega a él." },
-  { icon: "photos", title: "Producción profesional", text: "Fotografía en alta definición, video, plano y recorrido 360° para que la propiedad destaque desde el primer día." },
-  { icon: "users", title: "Compradores calificados", text: "Base propia de compradores con búsqueda activa y difusión en los principales portales del país." },
-  { icon: "doc", title: "Documentación en orden", text: "Revisamos títulos, planos y deudas antes de publicar. Sin sorpresas el día de la firma." },
-  { icon: "shield", title: "Visitas acompañadas", text: "Cada visita la hace un asesor. Filtramos interesados y te enviamos un reporte con la devolución." },
-  { icon: "key", title: "Hasta la escritura", text: "Negociación, reserva, boleto y escritura. Coordinamos escribanía y entrega de llaves." },
+const STEPS = [
+  { title: "Tasación", text: "Visitamos la propiedad, revisamos la documentación y entregamos un informe escrito con comparables y un rango de precio." },
+  { title: "Preparación", text: "Fotografía profesional, video, plano y, si suma, recorrido 360°. Sugerencias concretas de arreglos menores antes de publicar." },
+  { title: "Publicación", text: "Aviso en los principales portales y envío directo a compradores de nuestra base con búsqueda activa en la zona." },
+  { title: "Visitas", text: "Las hace siempre un asesor. Después de cada una recibís la devolución del interesado por escrito." },
+  { title: "Negociación", text: "Analizamos cada oferta con vos, con datos de operaciones cerradas recientes. Reserva con seña documentada." },
+  { title: "Escritura", text: "Coordinamos escribanía, certificados, boleto y escritura hasta la entrega de llaves." },
 ];
 
 const TYPE_FROM_QUERY: Record<string, string> = { departamento: "Departamento", casa: "Casa", ph: "PH", oficina: "Oficina" };
@@ -31,18 +30,16 @@ export default async function ValuationPage({ searchParams }: { searchParams: Pr
       <section className="wrap page-pad split">
         <div className="split__text">
           <p className="eyebrow">Tasaciones</p>
-          <h1 className="h1">
-            Sabé cuánto vale tu propiedad hoy
-          </h1>
+          <h1 className="h1">Tasación de propiedades</h1>
           <p className="lead">
-            Un tasador matriculado visita la propiedad y en 48 horas hábiles te entrega un informe escrito con el valor de
-            mercado y una estrategia de venta. Sin cargo y sin compromiso de exclusividad.
+            Un corredor matriculado visita la propiedad y en 48 horas hábiles te entrega un informe escrito con el valor
+            de mercado. La tasación no tiene costo y no te obliga a vender con nosotros.
           </p>
-          <ul className="checklist">
-            <li><Icon name="check" size={18} /> Informe con comparables de la zona</li>
-            <li><Icon name="check" size={18} /> Rango de precio y tiempo estimado de venta</li>
-            <li><Icon name="check" size={18} /> Recomendaciones para vender mejor</li>
-          </ul>
+          <dl className="plainlist">
+            <div><dt>Incluye</dt><dd>Comparables de la zona, rango de precio y plazo estimado de venta</dd></div>
+            <div><dt>Plazo</dt><dd>48 horas hábiles desde la visita</dd></div>
+            <div><dt>Costo</dt><dd>Sin cargo</dd></div>
+          </dl>
         </div>
         <div className="panel-card">
           <h2 className="h3" style={{ marginBottom: 20 }}>Pedí tu tasación</h2>
@@ -96,22 +93,21 @@ export default async function ValuationPage({ searchParams }: { searchParams: Pr
       </section>
 
       <section className="section section--surface" id="vender">
-        <div className="wrap">
-          <div className="section-head">
-            <div>
-              <p className="eyebrow">Vender con nosotros</p>
-              <h2 className="h1">Un plan, no solo un aviso</h2>
-            </div>
+        <div className="wrap svc">
+          <div className="svc__head">
+            <p className="eyebrow">Vender con nosotros</p>
+            <h2 className="h1">Cómo trabajamos una venta</h2>
           </div>
-          <ul className="includes">
-            {INCLUDES.map((i) => (
-              <li key={i.title}>
-                <Icon name={i.icon} size={28} />
-                <h3 className="h3">{i.title}</h3>
-                <p className="muted">{i.text}</p>
+          <ol className="svc__list svc__list--steps">
+            {STEPS.map((st, i) => (
+              <li key={st.title} className="svc__row">
+                <span className="svc__title">
+                  <span className="svc__n num">{i + 1}.</span> {st.title}
+                </span>
+                <span className="svc__text">{st.text}</span>
               </li>
             ))}
-          </ul>
+          </ol>
         </div>
       </section>
     </>
