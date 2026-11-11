@@ -9,7 +9,10 @@ export const site = {
   tagline: "Bienes raíces",
   description:
     "Compra, venta y alquiler de propiedades seleccionadas en Buenos Aires. Tasaciones profesionales, asesoramiento legal y acompañamiento de principio a fin.",
-  url: process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000",
+  /** Dirección pública del sitio. En producción se puede reemplazar con NEXT_PUBLIC_SITE_URL (dominio propio). */
+  url:
+    process.env.NEXT_PUBLIC_SITE_URL ??
+    (process.env.NODE_ENV === "production" ? "https://inmobiliaria-web.sebamorad78.workers.dev" : "http://localhost:3000"),
   locale: "es-AR",
   phone: "+54 11 4000-0000",
   /** Solo dígitos, con código de país. Se usa para wa.me */
