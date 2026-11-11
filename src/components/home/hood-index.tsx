@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useEffect, useRef, useState } from "react";
+import { useState } from "react";
 
 interface HoodRow {
   name: string;
@@ -12,69 +12,78 @@ interface HoodRow {
   from: string | null;
 }
 
+const hoodHref = (name: string) => `/propiedades?barrio=${encodeURIComponent(name)}`;
+
 /**
- * Índice de barrios: lista tipográfica grande. En escritorio, la foto del barrio
- * sigue al cursor con inercia (interpolación por cuadro, sin librerías).
+ * Guía de barrios: lista a la izquierda y un panel fijo a la derecha con la foto
+ * y los datos del barrio seleccionado (hover o foco con teclado). Nada se superpone al texto.
  */
 export function HoodIndex({ hoods }: { hoods: HoodRow[] }) {
-  const [active, setActive] = useState<number | null>(null);
-  const float = useRef<HTMLDivElement>(null);
-  const target = useRef({ x: 0, y: 0 });
-  const pos = useRef({ x: 0, y: 0 });
-
-  useEffect(() => {
-    if (active == null) return;
-    let raf = 0;
-    const loop = () => {
-      pos.current.x += (target.current.x - pos.current.x) * 0.16;
-      pos.current.y += (target.current.y - pos.current.y) * 0.16;
-      if (float.current) float.current.style.transform = `translate3d(${pos.current.x}px, ${pos.current.y}px, 0) translate(-50%, -50%)`;
-      raf = requestAnimationFrame(loop);
-    };
-    raf = requestAnimationFrame(loop);
-    return () => cancelAnimationFrame(raf);
-  }, [active]);
+  const [active, setActive] = useState(0);
+  const cur = hoods[active];
+  if (!cur) return null;
 
   return (
-    <div
-      className="hindex"
-      onPointerMove={(e) => {
-        target.current = { x: e.clientX, y: e.clientY };
-      }}
-      onPointerLeave={() => setActive(null)}
-    >
-      <ol className="hindex__list">
+    <div className="hguide">
+      <ol className="hguide__list">
         {hoods.map((h, k) => (
           <li key={h.name}>
             <Link
-              href={`/propiedades?barrio=${encodeURIComponent(h.name)}`}
-              className={`hindex__row ${active != null && active !== k ? "is-dim" : ""}`}
-              onPointerEnter={(e) => {
-                if (e.pointerType !== "mouse") return;
-                if (active == null) pos.current = { x: e.clientX, y: e.clientY };
-                target.current = { x: e.clientX, y: e.clientY };
-                setActive(k);
-              }}
-              onFocus={() => setActive(null)}
+              href={hoodHref(h.name)}
+              className="hguide__row"
+              aria-current={k === active ? "true" : undefined}
+              onPointerEnter={() => setActive(k)}
+              onFocus={() => setActive(k)}
             >
-              <span className="hindex__n num">{String(k + 1).padStart(2, "0")}</span>
-              <span className="hindex__name">{h.name}</span>
-              <span className="hindex__city">{h.city}</span>
-              <span className="hindex__count num">
-                {h.count} {h.count === 1 ? "propiedad" : "propiedades"}
-              </span>
-              <span className="hindex__from num">{h.from ? `desde ${h.from}` : ""}</span>
+              <span className="hguide__name">{h.name}</span>
+              <span className="hguide__city">{h.city}</span>
+              <span className="hguide__count num">{h.count}</span>
             </Link>
           </li>
         ))}
       </ol>
-      <div ref={float} className={`hindex__float ${active != null ? "is-on" : ""}`} aria-hidden="true">
-        {hoods.map((h, k) =>
-          h.image ? (
-            <Image key={h.name} src={h.image} alt="" fill sizes="340px" quality={70} className={k === active ? "is-on" : ""} />
-          ) : null,
-        )}
-      </div>
+
+      <aside className="hguide__panel" aria-live="polite">
+        <div className="hguide__media">
+          {hoods.map((h, k) =>
+            h.image ? (
+              <Image
+                key={h.name}
+                src={h.image}
+                alt=""
+                fill
+                sizes="(max-width: 900px) 0px, 40vw"
+                quality={80}
+                className={k === active ? "is-on" : ""}
+              />
+            ) : null,
+          )}
+        </div>
+        <div className="hguide__info">
+          <p className="hguide__title">{cur.name}</p>
+          <dl className="hguide__data">
+            <div>
+              <dt>Zona</dt>
+              <dd>{cur.city}</dd>
+            </div>
+            <div>
+              <dt>En cartera</dt>
+              <dd className="num">
+                {cur.count} {cur.count === 1 ? "propiedad" : "propiedades"}
+              </dd>
+            </div>
+            {cur.from && (
+              <div>
+                <dt>Venta desde</dt>
+                <dd className="num">{cur.from}</dd>
+              </div>
+            )}
+          </dl>
+          <Link href={hoodHref(cur.name)} className="link">
+            Ver propiedades en {cur.name}
+          </Link>
+        </div>
+      </aside>
     </div>
   );
 }
