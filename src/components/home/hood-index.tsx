@@ -71,7 +71,7 @@ export function HoodIndex({ hoods }: { hoods: HoodRow[] }) {
       <div ref={float} className={`hindex__float ${active != null ? "is-on" : ""}`} aria-hidden="true">
         {hoods.map((h, k) =>
           h.image ? (
-            <Image key={h.name} src={h.image} alt="" fill sizes="340px" quality={75} className={k === active ? "is-on" : ""} />
+            <Image key={h.name} src={h.image} alt="" fill sizes="340px" quality={70} className={k === active ? "is-on" : ""} />
           ) : null,
         )}
       </div>

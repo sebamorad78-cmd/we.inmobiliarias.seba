@@ -98,7 +98,7 @@ export default async function HomePage() {
                     alt={lead.images[0]?.alt ?? lead.title}
                     fill
                     sizes="(max-width: 1000px) 100vw, 60vw"
-                    quality={85}
+                    quality={80}
                   />
                   <div className="feature__lead-info">
                     <span className="tag tag--dark">{lead.code}</span>
