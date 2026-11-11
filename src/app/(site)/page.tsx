@@ -3,6 +3,7 @@ import { site } from "@/site.config";
 import { getFeatured, getNeighborhoodStats, getPublishedProperties } from "@/lib/catalog";
 import { HeroReel, type ReelSlide } from "@/components/home/hero-reel";
 import { HoodIndex } from "@/components/home/hood-index";
+import { InstantValuation } from "@/components/home/instant-valuation";
 import { formatArea, formatMoney, formatPrice } from "@/lib/format";
 import { typeLabel } from "@/lib/labels";
 import { Icon } from "@/components/icon";
@@ -45,12 +46,7 @@ const SERVICES = [
   },
 ];
 
-const PROCESS = [
-  ["Escuchamos", "Una primera reunión para entender qué buscás, en qué plazos y con qué presupuesto real."],
-  ["Seleccionamos", "Visitamos antes que vos. Te llegan pocas opciones, todas con informe y documentación revisada."],
-  ["Negociamos", "Precio, plazos y condiciones. Con datos de operaciones cerradas, no de avisos publicados."],
-  ["Escrituramos", "Coordinamos escribanía, certificados y entrega de llaves. Seguimos ahí después de la firma."],
-];
+const VALUER_IMAGE = "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=1800&q=85";
 
 export default async function HomePage() {
   const [featured, hoods, all] = await Promise.all([getFeatured(5), getNeighborhoodStats(), getPublishedProperties()]);
@@ -195,42 +191,8 @@ export default async function HomePage() {
         </div>
       </section>
 
-      {/* ── Vender ── */}
-      <section className="section section--ink sell">
-        <div className="wrap sell__inner">
-          <div className="sell__text">
-            <p className="eyebrow">04 — Para propietarios</p>
-            <h2 className="h1">
-              ¿Cuánto vale hoy
-              <br />
-              tu propiedad?
-            </h2>
-            <p className="lead" style={{ color: "rgb(230 237 232 / 0.8)" }}>
-              Un tasador matriculado visita la propiedad y en 48 horas te entrega un informe con comparables de
-              operaciones cerradas en la zona. Sin costo y sin compromiso.
-            </p>
-            <div className="row" style={{ flexWrap: "wrap", marginTop: 32 }}>
-              <Link href="/tasaciones" className="btn btn--clay">
-                Pedir tasación
-              </Link>
-              <Link href="/tasaciones#vender" className="btn btn--outline-light">
-                Cómo vendemos
-              </Link>
-            </div>
-          </div>
-          <ol className="process">
-            {PROCESS.map(([t, d], i) => (
-              <li key={t}>
-                <span className="process__n num">{String(i + 1).padStart(2, "0")}</span>
-                <div>
-                  <h3 className="h3">{t}</h3>
-                  <p>{d}</p>
-                </div>
-              </li>
-            ))}
-          </ol>
-        </div>
-      </section>
+      {/* ── Tasador instantáneo ── */}
+      <InstantValuation image={VALUER_IMAGE} listingsByHood={Object.fromEntries(hoods.map((h) => [h.name, h.count]))} />
 
       {/* ── Contacto ── */}
       <section className="section--tight">

@@ -19,7 +19,13 @@ const INCLUDES: { icon: IconName; title: string; text: string }[] = [
   { icon: "key", title: "Hasta la escritura", text: "Negociación, reserva, boleto y escritura. Coordinamos escribanía y entrega de llaves." },
 ];
 
-export default function ValuationPage() {
+const TYPE_FROM_QUERY: Record<string, string> = { departamento: "Departamento", casa: "Casa", ph: "PH", oficina: "Oficina" };
+
+export default async function ValuationPage({ searchParams }: { searchParams: Promise<{ tipo?: string; m2?: string; barrio?: string }> }) {
+  const sp = await searchParams;
+  const preType = (sp.tipo && TYPE_FROM_QUERY[sp.tipo]) || "Departamento";
+  const preArea = sp.m2 && /^\d{1,5}$/.test(sp.m2) ? sp.m2 : "";
+  const preHood = sp.barrio?.slice(0, 60) ?? "";
   return (
     <>
       <section className="wrap page-pad split">
@@ -49,7 +55,7 @@ export default function ValuationPage() {
                 <div className="form-grid form-grid--2">
                   <label className="field">
                     <span>Tipo de propiedad</span>
-                    <select className="select" name="propertyType" defaultValue="Departamento">
+                    <select className="select" name="propertyType" defaultValue={preType}>
                       {PROPERTY_TYPES.map((t) => <option key={t}>{typeLabel[t]}</option>)}
                     </select>
                   </label>
@@ -63,14 +69,20 @@ export default function ValuationPage() {
                     </select>
                   </label>
                 </div>
-                <label className="field">
-                  <span>Dirección</span>
-                  <input className="input" name="address" autoComplete="street-address" placeholder="Calle, altura y barrio" />
-                </label>
+                <div className="form-grid form-grid--2">
+                  <label className="field">
+                    <span>Dirección</span>
+                    <input className="input" name="address" autoComplete="street-address" placeholder="Calle y altura" />
+                  </label>
+                  <label className="field">
+                    <span>Barrio</span>
+                    <input className="input" name="neighborhood" defaultValue={preHood} />
+                  </label>
+                </div>
                 <div className="form-grid form-grid--2">
                   <label className="field">
                     <span>Superficie aprox. (m²)</span>
-                    <input className="input" name="area" inputMode="numeric" />
+                    <input className="input" name="area" inputMode="numeric" defaultValue={preArea} />
                   </label>
                   <label className="field">
                     <span>Ambientes</span>

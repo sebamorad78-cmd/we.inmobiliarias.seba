@@ -33,6 +33,31 @@ export const site = {
     { value: "74", label: "días promedio de venta" },
     { value: "48 h", label: "para entregar una tasación" },
   ],
+  /**
+   * Valores de referencia (USD por m² cubierto, departamentos usados en buen estado)
+   * para el tasador instantáneo de la portada. Actualizarlos cada trimestre.
+   */
+  valuation: {
+    usdPerM2: {
+      "Puerto Madero": 5600,
+      Recoleta: 3100,
+      Palermo: 3050,
+      Belgrano: 2950,
+      Núñez: 2950,
+      Colegiales: 2750,
+      "San Telmo": 2150,
+      Retiro: 2900,
+      "San Isidro": 2650,
+      Martínez: 2550,
+      "Vicente López": 2700,
+      Nordelta: 2600,
+      Pilar: 1900,
+    } as Record<string, number>,
+    /** Ajuste por tipo de propiedad sobre el valor de departamento. */
+    typeFactor: { departamento: 1, casa: 0.88, ph: 0.86, oficina: 0.95 } as Record<string, number>,
+    /** Amplitud del rango mostrado (±). */
+    spread: 0.08,
+  },
   social: {
     instagram: "https://instagram.com/",
     linkedin: "https://linkedin.com/",
