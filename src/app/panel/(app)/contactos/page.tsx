@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { requireUser } from "@/lib/auth";
-import { canSee, contactKindLabel, initials, waNumber } from "@/lib/crm";
+import { canSee, contactKindLabel, waNumber } from "@/lib/crm";
 import { repo } from "@/lib/data";
 import { formatMoney, formatRelative } from "@/lib/format";
 import { operationLabel, typeLabel } from "@/lib/labels";
@@ -8,6 +8,14 @@ import { CONTACT_KINDS, type Contact, type ContactKind } from "@/lib/types";
 import { Icon } from "@/components/icon";
 
 export const metadata = { title: "Contactos" };
+
+const PLURAL: Record<ContactKind, string> = {
+  comprador: "Compradores",
+  propietario: "Propietarios",
+  inquilino: "Inquilinos",
+  inversor: "Inversores",
+  otro: "Otros",
+};
 
 type SP = { q?: string; tipo?: string; orden?: string };
 
@@ -79,7 +87,7 @@ export default async function Contacts({ searchParams }: { searchParams: Promise
           </Link>
           {CONTACT_KINDS.map((k) => (
             <Link key={k} href={link({ tipo: k })} aria-current={tipo === k ? "page" : undefined}>
-              {contactKindLabel[k]}s <span className="num">{visible.filter((c) => c.kinds.includes(k)).length}</span>
+              {PLURAL[k]} <span className="num">{visible.filter((c) => c.kinds.includes(k)).length}</span>
             </Link>
           ))}
         </nav>
@@ -113,7 +121,6 @@ export default async function Contacts({ searchParams }: { searchParams: Promise
             return (
               <li key={c.id} className="clist__row">
                 <Link href={`/panel/contactos/${c.id}`} className="clist__main">
-                  <span className="avatar avatar--s">{initials(c.name)}</span>
                   <span className="clist__who">
                     <strong>{c.name}</strong>
                     <span className="clist__kinds">

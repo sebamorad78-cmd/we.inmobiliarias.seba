@@ -85,7 +85,7 @@ export function Topbar({ index, today }: { index: SearchItem[]; today: string })
   let lastGroup = "";
   return (
     <div className="ptop">
-      <p className="ptop__date">{today}</p>
+      <p className="ptop__date" aria-hidden={!today}>{today}</p>
       <button type="button" className="ptop__search" onClick={() => setOpen(true)}>
         <Icon name="search" size={17} />
         <span>Buscar contacto, propiedad o código</span>

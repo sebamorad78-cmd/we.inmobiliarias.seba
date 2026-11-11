@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { requireUser } from "@/lib/auth";
-import { canSee, contractAlerts, fmtAr, initials, isOverdue } from "@/lib/crm";
+import { canSee, contractAlerts, fmtAr, isOverdue } from "@/lib/crm";
 import { repo } from "@/lib/data";
 import { logout } from "../actions";
 import { Icon } from "@/components/icon";
@@ -73,7 +73,6 @@ export default async function PanelLayout({ children }: { children: React.ReactN
         </Link>
         <PanelNav isAdmin={user.role === "admin"} newLeads={newLeads} overdue={overdue} alerts={alerts} />
         <div className="panel__me">
-          <span className="avatar">{initials(user.name)}</span>
           <div style={{ minWidth: 0 }}>
             <p className="panel__me-name">{user.name}</p>
             <p className="tiny">{user.role === "admin" ? "Administrador" : "Asesor"}</p>

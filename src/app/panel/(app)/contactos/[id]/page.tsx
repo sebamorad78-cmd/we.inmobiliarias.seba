@@ -2,7 +2,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { site } from "@/site.config";
 import { requireUser } from "@/lib/auth";
-import { canSee, contactKindLabel, dealStageLabel, fmtAr, initials, matchesFor, waNumber } from "@/lib/crm";
+import { canSee, contactKindLabel, dealStageLabel, fmtAr, matchesFor, waNumber } from "@/lib/crm";
 import { repo } from "@/lib/data";
 import { formatPrice, formatRelative } from "@/lib/format";
 import type { Activity, Task } from "@/lib/types";
@@ -115,7 +115,6 @@ export default async function ContactPage({ params }: { params: Promise<{ id: st
       </Link>
 
       <header className="chead">
-        <span className="avatar avatar--l2">{initials(c.name)}</span>
         <div className="chead__main">
           <h1 className="h2">{c.name}</h1>
           <p className="chead__meta">

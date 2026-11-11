@@ -3,7 +3,6 @@ import { requireUser } from "@/lib/auth";
 import {
   addDays,
   arDayKey,
-  arWall,
   canSee,
   contractAlerts,
   daysBetween,
@@ -106,10 +105,12 @@ export default async function Today() {
     .sort((a, b) => b.score! - a.score!)
     .slice(0, 5);
 
-  const hour = arWall().getUTCHours();
-  const hello = hour < 12 ? "Buen día" : hour < 20 ? "Buenas tardes" : "Buenas noches";
+  const dateTitle = (() => {
+    const t = fmtAr(new Date().toISOString(), { weekday: "long", day: "numeric", month: "long" });
+    return t.charAt(0).toUpperCase() + t.slice(1);
+  })();
   const summary = [
-    pendingToday ? `${pendingToday} ${pendingToday === 1 ? "pendiente" : "pendientes"} para hoy` : "nada pendiente para hoy",
+    pendingToday ? `${pendingToday} ${pendingToday === 1 ? "pendiente" : "pendientes"} hoy` : "Sin pendientes hoy",
     overdue.length ? `${overdue.length} ${overdue.length === 1 ? "vencida" : "vencidas"}` : null,
     unanswered.length ? `${unanswered.length} ${unanswered.length === 1 ? "consulta sin responder" : "consultas sin responder"}` : null,
   ].filter(Boolean);
@@ -118,11 +119,9 @@ export default async function Today() {
     <div className="pmain">
       <header className="phero">
         <div>
-          <p className="eyebrow">Hoy</p>
-          <h1 className="phero__title">
-            {hello}, {user.name.split(" ")[0]}.
-          </h1>
-          <p className="phero__sub">Tenés {summary.join(", ").replace(/, ([^,]*)$/, " y $1")}.</p>
+          <p className="phero__kicker">{user.name}</p>
+          <h1 className="phero__title">{dateTitle}</h1>
+          <p className="phero__sub">{summary.join(" · ")}</p>
         </div>
         <div className="phero__actions">
           <TaskButton prefill={{ type: "visita" }} className="btn btn--s">
