@@ -27,7 +27,7 @@ export default async function ContactPage({ searchParams }: { searchParams: Prom
     <section className="wrap page-pad split">
       <div className="split__text">
         <p className="eyebrow">Contacto</p>
-        <h1 className="h1">Hablemos <em>de tu próxima propiedad</em></h1>
+        <h1 className="h1">Hablemos de tu próxima propiedad</h1>
         <p className="lead">Respondemos todas las consultas dentro del mismo día hábil.</p>
         <ul className="contact-list">
           <li>

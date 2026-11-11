@@ -173,7 +173,6 @@ export default async function PropertyPage({ params }: Props) {
             <ul className="keyfacts">
               {facts(p).map((f) => (
                 <li key={f.label}>
-                  <Icon name={f.icon} size={22} />
                   <span className="keyfacts__v num">{f.value}</span>
                   <span className="keyfacts__l">{f.label}</span>
                 </li>
@@ -262,7 +261,7 @@ export default async function PropertyPage({ params }: Props) {
                 <h2 className="h2">Propiedades similares</h2>
               </div>
               <Link className="link" href={`/propiedades?operacion=${p.operation}&tipo=${p.type}`}>
-                Ver más <Icon name="arrowRight" size={18} />
+                Ver más
               </Link>
             </div>
             <ul className="grid-cards">

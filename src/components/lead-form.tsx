@@ -109,7 +109,6 @@ export function LeadForm({
 
       <button type="submit" className="btn btn--block" disabled={pending}>
         {pending ? "Enviando…" : submitLabel}
-        {!pending && <Icon name="arrowRight" size={18} />}
       </button>
       <p className="tiny muted">
         Usamos tus datos solo para responder esta consulta. No los compartimos con terceros.

@@ -73,7 +73,7 @@ export default async function HomePage() {
           <h1 className="display hero__title">
             Propiedades
             <br />
-            <em>con criterio.</em>
+            con criterio.
           </h1>
           <p className="hero__sub">
             Una cartera chica, elegida a mano. Asesores que conocen cada cuadra y responden en el día.
@@ -95,11 +95,11 @@ export default async function HomePage() {
             <div>
               <p className="eyebrow">Selección</p>
               <h2 className="h1">
-                Esta semana, <em>en cartera</em>
+                Esta semana, en cartera
               </h2>
             </div>
             <Link href="/propiedades" className="link">
-              Ver las {all.length} propiedades <Icon name="arrowRight" size={18} />
+              Ver las {all.length} propiedades
             </Link>
           </div>
 
@@ -123,7 +123,7 @@ export default async function HomePage() {
                       {lead.bedrooms ? `${lead.bedrooms} dormitorios` : ""}
                     </p>
                     <span className="link">
-                      Ver propiedad <Icon name="arrowRight" size={18} />
+                      Ver propiedad
                     </span>
                   </div>
                 </Link>
@@ -159,7 +159,7 @@ export default async function HomePage() {
             <div>
               <p className="eyebrow">Dónde trabajamos</p>
               <h2 className="h1">
-                Conocemos cada <em>barrio</em>
+                Conocemos cada barrio
               </h2>
               <p className="lead">
                 Precios por metro reales, colegios, accesos, ruidos y proyectos en camino. Lo que no aparece en un aviso.
@@ -180,7 +180,6 @@ export default async function HomePage() {
                       {h.count} {h.count === 1 ? "propiedad" : "propiedades"}
                     </span>
                   </span>
-                  <Icon name="arrowUpRight" className="hood__arrow" size={22} />
                 </Link>
               </Reveal>
             ))}
@@ -197,7 +196,7 @@ export default async function HomePage() {
               <h2 className="h1">
                 Todo lo que pasa entre
                 <br />
-                <em>la búsqueda y las llaves</em>
+                la búsqueda y las llaves
               </h2>
             </div>
           </div>
@@ -208,7 +207,7 @@ export default async function HomePage() {
                 <h3 className="h2 service__title">{s.title}</h3>
                 <p className="service__text">{s.text}</p>
                 <Link href={s.href} className="link service__cta">
-                  {s.cta} <Icon name="arrowRight" size={18} />
+                  {s.cta}
                 </Link>
               </Reveal>
             ))}
@@ -224,7 +223,7 @@ export default async function HomePage() {
             <h2 className="h1">
               ¿Cuánto vale hoy
               <br />
-              <em>tu propiedad?</em>
+              tu propiedad?
             </h2>
             <p className="lead" style={{ color: "rgb(230 237 232 / 0.8)" }}>
               Un tasador matriculado visita la propiedad y en 48 horas te entrega un informe con comparables de
@@ -232,7 +231,7 @@ export default async function HomePage() {
             </p>
             <div className="row" style={{ flexWrap: "wrap", marginTop: 32 }}>
               <Link href="/tasaciones" className="btn btn--clay">
-                Pedir tasación <Icon name="arrowRight" size={18} />
+                Pedir tasación
               </Link>
               <Link href="/tasaciones#vender" className="btn btn--outline-light">
                 Cómo vendemos
@@ -257,7 +256,7 @@ export default async function HomePage() {
       <section className="section--tight">
         <div className="wrap closing">
           <h2 className="h2">
-            ¿Buscás algo que no está publicado? <em>Preguntanos.</em>
+            ¿Buscás algo que no está publicado? Preguntanos.
           </h2>
           <p className="muted">
             Muchas de nuestras mejores operaciones se cierran antes de salir a los portales.

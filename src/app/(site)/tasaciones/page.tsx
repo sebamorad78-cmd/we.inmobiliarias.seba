@@ -26,7 +26,7 @@ export default function ValuationPage() {
         <div className="split__text">
           <p className="eyebrow">Tasaciones</p>
           <h1 className="h1">
-            Sabé cuánto vale <em>tu propiedad hoy</em>
+            Sabé cuánto vale tu propiedad hoy
           </h1>
           <p className="lead">
             Un tasador matriculado visita la propiedad y en 48 horas hábiles te entrega un informe escrito con el valor de
@@ -88,7 +88,7 @@ export default function ValuationPage() {
           <div className="section-head">
             <div>
               <p className="eyebrow">Vender con nosotros</p>
-              <h2 className="h1">Un plan, <em>no solo un aviso</em></h2>
+              <h2 className="h1">Un plan, no solo un aviso</h2>
             </div>
           </div>
           <ul className="includes">

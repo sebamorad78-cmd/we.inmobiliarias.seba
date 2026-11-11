@@ -12,7 +12,7 @@ export function SiteFooter() {
           <div className="footer__brand">
             <Logo light />
             <p className="footer__claim">
-              Propiedades elegidas una por una, <em>y gente que sabe venderlas.</em>
+              Propiedades elegidas una por una, y gente que sabe venderlas.
             </p>
           </div>
           <div className="footer__cols">

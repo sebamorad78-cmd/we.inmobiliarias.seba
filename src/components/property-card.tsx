@@ -46,28 +46,15 @@ export function PropertyCard({
           <h3 className="pcard__title">{p.title}</h3>
           <ul className="pcard__facts" aria-label="Características">
             {area && (
-              <li>
-                <Icon name="area" size={16} /> {area}
+              <li>{area}
               </li>
             )}
             {p.rooms ? (
-              <li>
-                <Icon name="rooms" size={16} /> {p.rooms} amb.
+              <li>{p.rooms} amb.
               </li>
             ) : null}
             {p.bedrooms ? (
-              <li>
-                <Icon name="bed" size={16} /> {p.bedrooms} dorm.
-              </li>
-            ) : null}
-            {p.bathrooms ? (
-              <li>
-                <Icon name="bath" size={16} /> {p.bathrooms}
-              </li>
-            ) : null}
-            {p.garages ? (
-              <li>
-                <Icon name="car" size={16} /> {p.garages}
+              <li>{p.bedrooms} dorm.
               </li>
             ) : null}
           </ul>

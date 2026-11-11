@@ -1,18 +1,24 @@
 import type { Metadata, Viewport } from "next";
-import { Hanken_Grotesk, Instrument_Serif } from "next/font/google";
+import { Jost, Libre_Caslon_Display, Libre_Caslon_Text } from "next/font/google";
 import { site } from "@/site.config";
 import "@/styles/base.css";
 import "@/styles/site.css";
 
-const display = Instrument_Serif({
+const display = Libre_Caslon_Display({
   weight: "400",
-  style: ["normal", "italic"],
   subsets: ["latin", "latin-ext"],
   variable: "--font-display",
   display: "swap",
 });
 
-const text = Hanken_Grotesk({
+const serifText = Libre_Caslon_Text({
+  weight: ["400", "700"],
+  subsets: ["latin", "latin-ext"],
+  variable: "--font-caslon",
+  display: "swap",
+});
+
+const text = Jost({
   subsets: ["latin", "latin-ext"],
   variable: "--font-text",
   display: "swap",
@@ -44,7 +50,7 @@ export const viewport: Viewport = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="es-AR" className={`${display.variable} ${text.variable}`}>
+    <html lang="es-AR" className={`${display.variable} ${serifText.variable} ${text.variable}`}>
       <body>{children}</body>
     </html>
   );

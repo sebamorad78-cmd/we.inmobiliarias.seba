@@ -27,7 +27,7 @@ export default async function AboutPage() {
         <header className="page-head page-head--wide">
           <p className="eyebrow">Nosotros</p>
           <h1 className="display" style={{ fontSize: "clamp(44px, 6vw, 88px)" }}>
-            Una inmobiliaria <em>de barrio</em>,<br />con estándar internacional.
+            Una inmobiliaria de barrio,<br />con estándar internacional.
           </h1>
           <p className="lead">
             Desde nuestra oficina en {site.address.city} acompañamos a familias, inversores y empresas en la compra, venta y
@@ -50,7 +50,7 @@ export default async function AboutPage() {
           <div className="section-head">
             <div>
               <p className="eyebrow">Equipo</p>
-              <h2 className="h1">Las personas <em>detrás de cada operación</em></h2>
+              <h2 className="h1">Las personas detrás de cada operación</h2>
             </div>
           </div>
           <ul className="team">
