@@ -45,18 +45,33 @@ npm run dev
 
 Sin base de datos configurada, los datos se guardan en `data/db.json` (se crea solo, con propiedades de ejemplo) y las fotos en `public/uploads/`.
 
-## Producción
+## Publicar en Cloudflare
 
-1. Crear un proyecto en [Supabase](https://supabase.com) y ejecutar `supabase/schema.sql` en el SQL Editor (crea tablas, seguridad y el bucket de fotos).
-2. Desplegar en Vercel (o Netlify) y cargar las variables de `.env.example`:
-   - `NEXT_PUBLIC_SITE_URL`: el dominio definitivo.
-   - `SESSION_SECRET`: clave aleatoria de 32+ caracteres (el panel no arranca sin ella).
-   - `ADMIN_EMAIL`, `ADMIN_PASSWORD`: primer administrador.
-   - `NEXT_PUBLIC_SUPABASE_URL`, `SUPABASE_SERVICE_ROLE_KEY`: datos de Supabase (Settings → API).
-   - Opcional: `RESEND_API_KEY`, `LEADS_NOTIFY_EMAIL`, `LEADS_FROM_EMAIL` para recibir cada consulta por email.
-3. Ingresar al panel, crear los usuarios del equipo y cargar las propiedades reales.
+El proyecto ya está preparado para Cloudflare Workers (adaptador OpenNext, `wrangler.jsonc`).
 
-> En producción el archivo local no sirve (los servidores de Vercel/Netlify no guardan archivos): Supabase es obligatorio ahí.
+**Opción A: desde el panel de Cloudflare (recomendada)**
+1. Cloudflare → *Workers & Pages* → *Create* → *Import a repository* → elegir este repositorio de GitHub.
+2. Comando de build: `npx opennextjs-cloudflare build`. Comando de deploy: `npx opennextjs-cloudflare deploy`.
+3. En *Settings → Variables and Secrets* cargar `SESSION_SECRET`, `ADMIN_EMAIL`, `ADMIN_PASSWORD` y `NEXT_PUBLIC_SITE_URL`.
+4. Cada vez que se sube un cambio a la rama elegida, Cloudflare publica solo.
+
+**Opción B: desde la terminal**
+
+```bash
+npx wrangler login
+```
+
+```bash
+npm run deploy
+```
+
+Sin base de datos, el sitio publicado funciona en **modo demostración**: se ve y se navega completo, pero las consultas y propiedades nuevas se guardan en memoria y se pierden al reiniciarse. Para uso real:
+
+1. Crear un proyecto en [Supabase](https://supabase.com) y ejecutar `supabase/schema.sql` en el SQL Editor.
+2. Agregar `NEXT_PUBLIC_SUPABASE_URL` y `SUPABASE_SERVICE_ROLE_KEY` a las variables del sitio.
+3. Opcional: `RESEND_API_KEY`, `LEADS_NOTIFY_EMAIL`, `LEADS_FROM_EMAIL` para recibir cada consulta por email.
+
+Probar localmente igual que en Cloudflare: `npm run preview:cf` (las variables van en `.dev.vars`).
 
 ## Personalizar la marca
 

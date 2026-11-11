@@ -17,6 +17,8 @@ const UPLOAD_DIR = path.join(process.cwd(), "public", "uploads");
 
 let cache: Db | null = null;
 let queue: Promise<unknown> = Promise.resolve();
+/** En hostings sin disco escribible (Netlify, Vercel) el modo local queda en memoria: sirve para una demo. */
+let readOnly = false;
 
 async function load(): Promise<Db> {
   if (cache) return cache;
@@ -31,6 +33,18 @@ async function load(): Promise<Db> {
 }
 
 async function persist(db: Db) {
+  if (readOnly) return;
+  try {
+    await write(db);
+  } catch (err) {
+    const code = (err as NodeJS.ErrnoException).code;
+    if (code !== "EROFS" && code !== "EACCES" && code !== "EPERM" && code !== "ENOENT") throw err;
+    readOnly = true;
+    console.warn("[datos] disco de solo lectura: modo demostración en memoria. Configurá Supabase para producción.");
+  }
+}
+
+async function write(db: Db) {
   await fs.mkdir(path.dirname(DB_PATH), { recursive: true });
   const tmp = `${DB_PATH}.${process.pid}.tmp`;
   await fs.writeFile(tmp, JSON.stringify(db, null, 2));

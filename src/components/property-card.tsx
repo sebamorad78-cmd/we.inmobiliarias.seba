@@ -20,7 +20,7 @@ export function PropertyCard({
   const isNew = Date.now() - new Date(p.createdAt).getTime() < 7 * 86400000;
 
   return (
-    <article className="pcard">
+    <article className="pcard" data-op={p.operation} data-type={p.type} data-hood={p.neighborhood} data-price={p.price ?? ""} data-rooms={p.rooms ?? ""}>
       <Link href={`/propiedades/${p.slug}`} className="pcard__link" aria-label={`${p.title}, ${p.neighborhood}`}>
         <div className="pcard__media">
           {cover ? (

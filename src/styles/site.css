@@ -124,8 +124,12 @@
 }
 
 .mnav {
+  /* Altura explícita: el encabezado usa backdrop-filter y pasa a ser el bloque contenedor. */
   position: fixed;
-  inset: var(--header-h) 0 0 0;
+  top: var(--header-h);
+  left: 0;
+  right: 0;
+  height: calc(100dvh - var(--header-h));
   background: var(--paper);
   color: var(--ink);
   overflow-y: auto;
