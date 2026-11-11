@@ -2867,3 +2867,37 @@
   white-space: nowrap;
   overflow: hidden;
 }
+
+@media (max-width: 640px) {
+  .reel__coord,
+  .reel__arrows,
+  .reel__facts {
+    display: none;
+  }
+  .reel__top {
+    padding-top: calc(var(--header-h) + 8px);
+  }
+  .reel__claim {
+    font-size: clamp(40px, 12vw, 56px);
+  }
+  .reel__search {
+    margin-top: 22px;
+    height: 52px;
+  }
+  .reel__card {
+    padding: 16px 18px;
+  }
+  .reel__index {
+    margin-bottom: 8px;
+  }
+  .reel__title {
+    font-size: 19px;
+  }
+  .reel__row {
+    margin-top: 12px;
+    padding-top: 12px;
+  }
+  .reel__nav {
+    padding-right: 84px; /* deja lugar al botón de WhatsApp */
+  }
+}

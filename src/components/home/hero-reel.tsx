@@ -52,6 +52,7 @@ export function HeroReel({ slides }: { slides: ReelSlide[] }) {
   const [reduced, setReduced] = useState(false);
   const [seen, setSeen] = useState<Set<number>>(() => new Set([0, 1]));
   const progress = useRef<HTMLSpanElement[]>([]);
+  const touchX = useRef<number | null>(null);
   const elapsed = useRef(0);
   const time = useBaTime();
   const n = slides.length;
@@ -113,6 +114,13 @@ export function HeroReel({ slides }: { slides: ReelSlide[] }) {
       aria-label="Propiedades destacadas"
       onMouseEnter={() => setPaused(true)}
       onMouseLeave={() => setPaused(false)}
+      onTouchStart={(e) => (touchX.current = e.touches[0].clientX)}
+      onTouchEnd={(e) => {
+        if (touchX.current == null) return;
+        const dx = e.changedTouches[0].clientX - touchX.current;
+        if (Math.abs(dx) > 45) go(i + (dx < 0 ? 1 : -1));
+        touchX.current = null;
+      }}
     >
       <div className="reel__stage">
         {slides.map((sl, k) =>
@@ -127,8 +135,8 @@ export function HeroReel({ slides }: { slides: ReelSlide[] }) {
 
       <div className="wrap reel__top">
         <p className="reel__meta">
-          <span>{toDMS(site.geo.lat, "N", "S")}</span>
-          <span>{toDMS(site.geo.lng, "E", "O")}</span>
+          <span className="reel__coord">{toDMS(site.geo.lat, "N", "S")}</span>
+          <span className="reel__coord">{toDMS(site.geo.lng, "E", "O")}</span>
           <span suppressHydrationWarning>{time ? `Buenos Aires ${time}` : "Buenos Aires"}</span>
         </p>
       </div>
