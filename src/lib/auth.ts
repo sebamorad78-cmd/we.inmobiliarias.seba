@@ -1,5 +1,5 @@
 import "server-only";
-import { createHmac, randomBytes, randomUUID, scrypt as scryptCb, timingSafeEqual } from "node:crypto";
+import { createHmac, randomBytes, scrypt as scryptCb, timingSafeEqual } from "node:crypto";
 import { promisify } from "node:util";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
@@ -54,6 +54,28 @@ export async function destroySession() {
   (await cookies()).delete(COOKIE);
 }
 
+/** Usuario administrador definido por variables de entorno (ADMIN_EMAIL / ADMIN_PASSWORD). */
+export const ENV_ADMIN_ID = "usr_admin";
+
+function envAdmin(): TeamUser | null {
+  const email = process.env.ADMIN_EMAIL?.trim().toLowerCase();
+  if (!email || !process.env.ADMIN_PASSWORD) return null;
+  return {
+    id: ENV_ADMIN_ID,
+    name: "Administración",
+    email,
+    phone: "",
+    role: "admin",
+    title: "Administración",
+    license: null,
+    bio: "",
+    active: true,
+    public: false,
+    passwordHash: "",
+    createdAt: new Date(0).toISOString(),
+  };
+}
+
 export async function currentUser(): Promise<TeamUser | null> {
   const raw = (await cookies()).get(COOKIE)?.value;
   if (!raw) return null;
@@ -66,7 +88,11 @@ export async function currentUser(): Promise<TeamUser | null> {
     const { uid, exp } = JSON.parse(Buffer.from(payload, "base64url").toString()) as { uid: string; exp: number };
     if (Date.now() > exp) return null;
     const user = await repo.getUser(uid);
-    return user?.active ? user : null;
+    if (user) return user.active ? user : null;
+    // El administrador de las variables de entorno existe aunque el almacenamiento todavía no lo tenga
+    // (por ejemplo, en servidores que no comparten memoria).
+    if (uid === ENV_ADMIN_ID) return envAdmin();
+    return null;
   } catch {
     return null;
   }
@@ -86,34 +112,30 @@ export async function requireUser(role?: "admin"): Promise<TeamUser> {
  */
 export async function authenticate(email: string, password: string): Promise<TeamUser | null> {
   const normalized = email.trim().toLowerCase();
-  const users = await repo.listUsers();
-  const noAccounts = !users.some((u) => u.passwordHash);
-  const adminEmail = process.env.ADMIN_EMAIL?.trim().toLowerCase();
-  const adminPassword = process.env.ADMIN_PASSWORD;
+  const admin = envAdmin();
 
-  if (noAccounts && adminEmail && adminPassword && normalized === adminEmail) {
-    if (password !== adminPassword) return null;
-    const existing = users.find((u) => u.email.toLowerCase() === adminEmail);
-    return repo.saveUser({
-      ...(existing ?? {
-        id: `usr_${randomUUID().slice(0, 8)}`,
-        name: "Administración",
-        phone: "",
-        title: "Administración",
-        license: null,
-        bio: "",
-        public: false,
-        createdAt: new Date().toISOString(),
-      }),
-      email: adminEmail,
-      role: "admin",
-      active: true,
-      passwordHash: await hashPassword(password),
-    });
+  // Administrador de las variables de entorno: siempre puede ingresar (también sirve de acceso de recuperación).
+  if (admin && normalized === admin.email) {
+    const ok = timingSafeEqualStr(password, process.env.ADMIN_PASSWORD!);
+    if (ok) {
+      const stored = await repo.getUser(ENV_ADMIN_ID);
+      if (stored) return stored.active ? stored : null;
+      try {
+        return await repo.saveUser({ ...admin, passwordHash: await hashPassword(password), createdAt: new Date().toISOString() });
+      } catch {
+        return admin;
+      }
+    }
   }
 
   const user = await repo.getUserByEmail(normalized);
   // Siempre se calcula un hash, exista o no el email: el tiempo de respuesta no revela nada.
   const ok = await verifyPassword(password, user?.passwordHash || DUMMY_HASH);
   return ok && user?.active ? user : null;
+}
+
+function timingSafeEqualStr(a: string, b: string): boolean {
+  const ha = createHmac("sha256", "cmp").update(a).digest();
+  const hb = createHmac("sha256", "cmp").update(b).digest();
+  return timingSafeEqual(ha, hb);
 }
