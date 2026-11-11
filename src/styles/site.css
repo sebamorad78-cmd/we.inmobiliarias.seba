@@ -3800,3 +3800,22 @@ a.svc__row:hover .svc__title {
     padding-top: 22px;
   }
 }
+
+/* Simulador dentro de la ficha: siempre en una columna */
+.pblock .calc {
+  grid-template-columns: 1fr;
+}
+.pblock .calc__result {
+  padding-left: 0;
+  border-left: 0;
+  border-top: 1px solid var(--line);
+  padding-top: 22px;
+}
+.pblock .calc__dl {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px 32px;
+}
+.pblock .calc__dl div {
+  flex-direction: column;
+  gap: 2px;
+}
