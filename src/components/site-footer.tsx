@@ -64,7 +64,7 @@ export function SiteFooter() {
         </div>
         <div className="footer__legal">
           <p>
-            © {year} {site.legalName}. {site.license}.
+            © {year} {site.legalName.replace(/\.$/, "")}. {site.license}.
           </p>
           <p>
             Las medidas, superficies y valores publicados son aproximados y no constituyen oferta. Sujetos a verificación y
