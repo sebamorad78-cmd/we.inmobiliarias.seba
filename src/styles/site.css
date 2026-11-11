@@ -2901,3 +2901,14 @@
     padding-right: 84px; /* deja lugar al botón de WhatsApp */
   }
 }
+
+.wa-float {
+  transition:
+    transform 0.45s var(--ease),
+    opacity 0.3s;
+}
+.wa-float.is-away {
+  opacity: 0;
+  transform: translateY(24px) scale(0.9);
+  pointer-events: none;
+}
