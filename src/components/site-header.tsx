@@ -7,6 +7,7 @@ import { site } from "@/site.config";
 import { useList } from "@/lib/shortlist";
 import { whatsappLink } from "@/lib/format";
 import { Icon } from "./icon";
+import { openSearch } from "./search/command-search";
 
 const NAV = [
   { href: "/propiedades?operacion=venta", label: "Comprar", match: "venta" },
@@ -36,12 +37,22 @@ export function SiteHeader() {
   const pathname = usePathname();
   const overlay = pathname === "/";
   const [scrolled, setScrolled] = useState(false);
+  const [hidden, setHidden] = useState(false);
   const [open, setOpen] = useState(false);
   const op = useSearchParams().get("operacion");
   const favs = useList("favorites");
 
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 24);
+    let lastY = window.scrollY;
+    const onScroll = () => {
+      const y = window.scrollY;
+      setScrolled(y > 24);
+      // Se oculta al bajar y reaparece apenas el usuario sube: más pantalla para las fotos.
+      if (Math.abs(y - lastY) > 6) {
+        setHidden(y > lastY && y > 320);
+        lastY = y;
+      }
+    };
     onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
@@ -67,7 +78,7 @@ export function SiteHeader() {
     item.match ? pathname.startsWith("/propiedades") && op === item.match : pathname.startsWith(item.href);
 
   return (
-    <header className={`header ${solid ? "header--solid" : "header--overlay"}`}>
+    <header className={`header ${solid ? "header--solid" : "header--overlay"} ${hidden && !open ? "is-hidden" : ""}`}>
       <div className="wrap header__inner">
         <Link href="/" className="header__logo" aria-label={`${site.name}, inicio`}>
           <Logo light={!solid} />
@@ -82,6 +93,10 @@ export function SiteHeader() {
         </nav>
 
         <div className="header__tools">
+          <button type="button" className="header__search" onClick={openSearch} aria-label="Buscar (Ctrl K)">
+            <Icon name="search" size={19} />
+            <span>Buscar</span>
+          </button>
           <Link href="/favoritos" className="header__fav" aria-label={`Favoritos (${favs.length})`}>
             <Icon name="heart" size={20} />
             {favs.length > 0 && <span className="header__badge num">{favs.length}</span>}

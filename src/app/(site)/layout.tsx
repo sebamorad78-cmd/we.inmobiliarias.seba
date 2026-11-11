@@ -4,6 +4,7 @@ import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
 import { WhatsAppFloat } from "@/components/whatsapp-float";
 import { CompareTray } from "@/components/compare-tray";
+import { CommandSearch } from "@/components/search/command-search";
 
 const orgJsonLd = {
   "@context": "https://schema.org",
@@ -36,6 +37,7 @@ export default function SiteLayout({ children }: { children: React.ReactNode }) 
       </Suspense>
       <main id="contenido">{children}</main>
       <SiteFooter />
+      <CommandSearch />
       <CompareTray />
       <WhatsAppFloat />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(orgJsonLd) }} />

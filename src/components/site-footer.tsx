@@ -62,6 +62,7 @@ export function SiteFooter() {
             </div>
           </div>
         </div>
+        <p className="footer__mark" aria-hidden="true">{site.name}</p>
         <div className="footer__legal">
           <p>
             © {year} {site.legalName}. {site.license}.

@@ -1,7 +1,10 @@
 import Link from "next/link";
 import { site } from "@/site.config";
 import { getFeatured, getNeighborhoodStats, getPublishedProperties } from "@/lib/catalog";
-import { HeroSearch } from "@/components/home/hero-search";
+import { HeroReel, type ReelSlide } from "@/components/home/hero-reel";
+import { HoodIndex } from "@/components/home/hood-index";
+import { formatArea, formatMoney, formatPrice } from "@/lib/format";
+import { typeLabel } from "@/lib/labels";
 import { Icon } from "@/components/icon";
 import { Photo } from "@/components/photo";
 import { PropertyCard } from "@/components/property-card";
@@ -51,51 +54,37 @@ const PROCESS = [
 
 export default async function HomePage() {
   const [featured, hoods, all] = await Promise.all([getFeatured(5), getNeighborhoodStats(), getPublishedProperties()]);
-  const [lead, ...rest] = featured;
+  // "Selección" muestra lo recién ingresado; la portada ya recorre las destacadas.
+  const shownInReel = new Set(featured.map((p) => p.id));
+  const fresh = all.filter((p) => !shownInReel.has(p.id) && p.status === "publicada");
+  const [lead, ...rest] = fresh.length >= 3 ? fresh : all;
+
+  const slides: ReelSlide[] = (featured.length ? featured : all.slice(0, 5)).map((p) => ({
+    href: `/propiedades/${p.slug}`,
+    image: p.images[0]?.url ?? HERO_IMAGE,
+    alt: p.images[0]?.alt ?? p.title,
+    title: p.title,
+    hood: p.neighborhood,
+    facts: [typeLabel[p.type], formatArea(p.coveredArea ?? p.totalArea), p.bedrooms ? `${p.bedrooms} dormitorios` : null]
+      .filter(Boolean)
+      .join(" · "),
+    price: formatPrice(p),
+    code: p.code,
+  }));
 
   return (
     <>
-      {/* ── Hero ── */}
-      <section className="hero">
-        <Photo
-          className="hero__bg"
-          src={HERO_IMAGE}
-          alt="Casa contemporánea con jardín y pileta al atardecer"
-          fill
-          priority
-          sizes="100vw"
-          quality={90}
-          label=""
-        />
-        <div className="hero__shade" />
-        <div className="wrap hero__content">
-          <p className="eyebrow hero__eyebrow">Buenos Aires · Zona Norte</p>
-          <h1 className="display hero__title">
-            Propiedades
-            <br />
-            con criterio.
-          </h1>
-          <p className="hero__sub">
-            Una cartera chica, elegida a mano. Asesores que conocen cada cuadra y responden en el día.
-          </p>
-          <HeroSearch neighborhoods={hoods.map((h) => h.name)} />
-          <p className="hero__quick">
-            <span>Búsquedas frecuentes:</span>
-            <Link href="/propiedades?operacion=venta&tipo=casa&barrio=San%20Isidro">Casas en San Isidro</Link>
-            <Link href="/propiedades?operacion=venta&credito=1">Apto crédito</Link>
-            <Link href="/propiedades?operacion=alquiler&barrio=Palermo">Alquiler en Palermo</Link>
-          </p>
-        </div>
-      </section>
+      {/* ── Portada ── */}
+      <HeroReel slides={slides} />
 
       {/* ── Selección ── */}
       <section className="section">
         <div className="wrap">
           <div className="section-head">
             <div>
-              <p className="eyebrow">Selección</p>
+              <p className="eyebrow">01 — Selección</p>
               <h2 className="h1">
-                Esta semana, en cartera
+                Recién ingresadas
               </h2>
             </div>
             <Link href="/propiedades" className="link">
@@ -157,7 +146,7 @@ export default async function HomePage() {
         <div className="wrap">
           <div className="section-head">
             <div>
-              <p className="eyebrow">Dónde trabajamos</p>
+              <p className="eyebrow">02 — Dónde trabajamos</p>
               <h2 className="h1">
                 Conocemos cada barrio
               </h2>
@@ -166,24 +155,15 @@ export default async function HomePage() {
               </p>
             </div>
           </div>
-          <ul className="hoods">
-            {hoods.slice(0, 7).map((h, i) => (
-              <Reveal as="li" key={h.name} delay={(i % 4) * 70}>
-                <Link href={`/propiedades?barrio=${encodeURIComponent(h.name)}`} className="hood">
-                  {h.image && (
-                    <Photo className="hood__media" src={h.image} alt="" fill sizes="(max-width: 700px) 50vw, 25vw" quality={70} label={h.name} />
-                  )}
-                  <span className="hood__shade" />
-                  <span className="hood__text">
-                    <span className="hood__name">{h.name}</span>
-                    <span className="hood__count">
-                      {h.count} {h.count === 1 ? "propiedad" : "propiedades"}
-                    </span>
-                  </span>
-                </Link>
-              </Reveal>
-            ))}
-          </ul>
+          <HoodIndex
+            hoods={hoods.slice(0, 8).map((h) => ({
+              name: h.name,
+              city: h.city,
+              count: h.count,
+              image: h.image,
+              from: h.minSaleUsd ? formatMoney(h.minSaleUsd, "USD") : null,
+            }))}
+          />
         </div>
       </section>
 
@@ -192,7 +172,7 @@ export default async function HomePage() {
         <div className="wrap">
           <div className="section-head">
             <div>
-              <p className="eyebrow">Servicios</p>
+              <p className="eyebrow">03 — Servicios</p>
               <h2 className="h1">
                 Todo lo que pasa entre
                 <br />
@@ -219,7 +199,7 @@ export default async function HomePage() {
       <section className="section section--ink sell">
         <div className="wrap sell__inner">
           <div className="sell__text">
-            <p className="eyebrow">Para propietarios</p>
+            <p className="eyebrow">04 — Para propietarios</p>
             <h2 className="h1">
               ¿Cuánto vale hoy
               <br />

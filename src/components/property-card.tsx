@@ -3,7 +3,7 @@ import type { Property } from "@/lib/types";
 import { formatArea, formatPrice } from "@/lib/format";
 import { operationLabel, typeLabel } from "@/lib/labels";
 import { Icon } from "./icon";
-import { Photo } from "./photo";
+import { CardMedia } from "./card-media";
 import { CompareButton, FavoriteButton } from "./shortlist-buttons";
 
 export function PropertyCard({
@@ -15,7 +15,6 @@ export function PropertyCard({
   priority?: boolean;
   sizes?: string;
 }) {
-  const cover = p.images[0];
   const area = formatArea(p.coveredArea ?? p.totalArea);
   const isNew = Date.now() - new Date(p.createdAt).getTime() < 7 * 86400000;
 
@@ -23,13 +22,7 @@ export function PropertyCard({
     <article className="pcard" data-op={p.operation} data-type={p.type} data-hood={p.neighborhood} data-price={p.price ?? ""} data-rooms={p.rooms ?? ""}>
       <Link href={`/propiedades/${p.slug}`} className="pcard__link" aria-label={`${p.title}, ${p.neighborhood}`}>
         <div className="pcard__media">
-          {cover ? (
-            <Photo src={cover.url} alt={cover.alt} fill sizes={sizes} priority={priority} quality={80} label={p.neighborhood} />
-          ) : (
-            <div className="media" style={{ position: "absolute", inset: 0 }}>
-              <span className="media__fallback">{p.neighborhood}</span>
-            </div>
-          )}
+          <CardMedia images={p.images} sizes={sizes} priority={priority} label={p.neighborhood} />
           <div className="pcard__tags">
             <span className="tag tag--dark">{operationLabel[p.operation]}</span>
             {p.status === "reservada" && <span className="tag tag--clay">Reservada</span>}

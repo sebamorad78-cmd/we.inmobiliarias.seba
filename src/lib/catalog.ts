@@ -79,11 +79,14 @@ export const getPublicTeam = cache(async (): Promise<PublicAgent[]> => {
 
 export async function getNeighborhoodStats() {
   const all = await getPublishedProperties();
-  const map = new Map<string, { name: string; city: string; count: number; image: string | null }>();
+  const map = new Map<string, { name: string; city: string; count: number; image: string | null; minSaleUsd: number | null }>();
   for (const p of all) {
-    const cur = map.get(p.neighborhood) ?? { name: p.neighborhood, city: p.city, count: 0, image: null };
+    const cur = map.get(p.neighborhood) ?? { name: p.neighborhood, city: p.city, count: 0, image: null, minSaleUsd: null };
     cur.count++;
     cur.image ??= p.images[0]?.url ?? null;
+    if (p.operation === "venta" && p.currency === "USD" && p.price) {
+      cur.minSaleUsd = cur.minSaleUsd == null ? p.price : Math.min(cur.minSaleUsd, p.price);
+    }
     map.set(p.neighborhood, cur);
   }
   return [...map.values()].sort((a, b) => b.count - a.count);
