@@ -133,6 +133,7 @@ export default async function PropertyPage({ params }: Props) {
           <Link href={`/propiedades?operacion=${p.operation}&barrio=${encodeURIComponent(p.neighborhood)}`}>{p.neighborhood}</Link>
         </nav>
 
+        <div className="pdetail__top">
         <header className="pdetail__head">
           <div>
             <div className="row" style={{ flexWrap: "wrap", gap: 8, marginBottom: 14 }}>
@@ -155,6 +156,7 @@ export default async function PropertyPage({ params }: Props) {
         </header>
 
         <Gallery images={p.images} title={p.title} />
+        </div>
 
         <div className="pdetail__actions">
           <FavoriteButton id={p.id} title={p.title} variant="text" />
@@ -193,9 +195,7 @@ export default async function PropertyPage({ params }: Props) {
                 <h2 className="h3">Comodidades</h2>
                 <ul className="amenities">
                   {p.amenities.map((a) => (
-                    <li key={a}>
-                      <Icon name="check" size={16} /> {a}
-                    </li>
+                    <li key={a}>{a}</li>
                   ))}
                 </ul>
               </section>
@@ -281,7 +281,7 @@ export default async function PropertyPage({ params }: Props) {
           <p className="tiny muted">Ref. {p.code}</p>
         </div>
         <a className="btn btn--wa btn--s" href={whatsappLink(agent?.phone || site.whatsapp, `Hola, me interesa la propiedad ${p.code} (${p.title}). ${url}`)} target="_blank" rel="noopener">
-          <Icon name="whatsapp" size={18} /> WhatsApp
+          <Icon name="whatsapp" size={18} /> <span className="mbar__label">WhatsApp</span>
         </a>
         <a className="btn btn--s" href="#contacto">
           Consultar

@@ -3439,3 +3439,315 @@ a.svc__row:hover .svc__title {
     border-bottom-color: var(--line);
   }
 }
+
+/* ============================================================
+   Ficha de propiedad · formato ficha técnica
+   ============================================================ */
+
+/* Acciones: texto con ícono, sin cajas */
+.pdetail__actions {
+  gap: 4px 28px;
+  margin-top: 20px;
+  padding-bottom: 4px;
+}
+.pdetail__actions .btn {
+  min-height: 34px;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--ink-2);
+  font-size: 11px;
+}
+.pdetail__actions .btn:hover,
+.pdetail__actions .btn[aria-pressed="true"] {
+  background: none;
+  color: var(--clay);
+}
+
+/* Datos clave en una sola banda, separados por filetes */
+.keyfacts {
+  display: flex;
+  flex-wrap: wrap;
+  border-bottom: 1px solid var(--line);
+}
+.keyfacts li {
+  flex: 1 1 0;
+  min-width: 96px;
+  padding: 22px 14px 20px;
+  border-left: 1px solid var(--line);
+}
+.keyfacts li:first-child {
+  border-left: 0;
+  padding-left: 0;
+}
+@media (max-width: 640px) {
+  .keyfacts li {
+    flex: 0 0 33.333%;
+    border-left: 0;
+    padding-left: 0;
+    border-bottom: 1px solid var(--line-soft);
+  }
+}
+
+/* Secciones: título a la izquierda, contenido a la derecha */
+.pblock {
+  display: grid;
+  grid-template-columns: 170px minmax(0, 1fr);
+  column-gap: 32px;
+  align-items: start;
+}
+.pblock > .h3 {
+  grid-column: 1;
+  grid-row: 1 / span 4;
+  margin: 4px 0 0;
+  font-family: var(--font-sans);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--clay);
+}
+.pblock > :not(.h3) {
+  grid-column: 2;
+}
+@media (max-width: 760px) {
+  .pblock {
+    grid-template-columns: 1fr;
+  }
+  .pblock > .h3 {
+    grid-row: auto;
+    margin-bottom: 16px;
+  }
+  .pblock > :not(.h3) {
+    grid-column: 1;
+  }
+}
+
+/* Comodidades: lista tipográfica, sin tildes */
+.amenities {
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 0 28px;
+}
+.amenities li {
+  display: block;
+  padding: 11px 0;
+  border-bottom: 1px solid var(--line-soft);
+}
+
+/* Ficha técnica: filetes finos */
+.specs div {
+  border-bottom: 1px solid var(--line-soft);
+}
+
+/* Caja de contacto */
+.cbox__agent {
+  display: grid;
+  gap: 2px;
+}
+.cbox__label {
+  font-size: 10.5px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--clay);
+  margin-bottom: 6px;
+}
+.cbox {
+  box-shadow: none;
+  border-color: var(--line);
+}
+
+/* Galería en celular: tira deslizable */
+.gstrip {
+  display: none;
+}
+@media (max-width: 760px) {
+  .gallery {
+    display: none;
+  }
+  .gstrip {
+    display: block;
+    position: relative;
+    margin-inline: calc(var(--gutter) * -1);
+  }
+  .gstrip__track {
+    display: flex;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+  }
+  .gstrip__track::-webkit-scrollbar {
+    display: none;
+  }
+  .gstrip__item {
+    position: relative;
+    flex: 0 0 100%;
+    aspect-ratio: 4 / 3;
+    padding: 0;
+    border: 0;
+    scroll-snap-align: start;
+    background: var(--line-soft);
+  }
+  .gstrip__item .media {
+    position: absolute;
+    inset: 0;
+  }
+  .gstrip__count {
+    position: absolute;
+    right: 14px;
+    bottom: 12px;
+    padding: 4px 9px;
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    color: #fff;
+    background: rgb(20 22 19 / 0.6);
+  }
+  /* En celular, primero las fotos y después los datos */
+  .pdetail__top {
+    display: flex;
+    flex-direction: column;
+  }
+  .pdetail__top .gstrip {
+    order: -1;
+    margin-bottom: 22px;
+  }
+  .pdetail__head {
+    margin-bottom: 8px;
+  }
+  .crumbs {
+    margin-bottom: 18px;
+  }
+}
+
+/* Barra inferior en celular: precio completo siempre */
+@media (max-width: 1000px) {
+  .mbar__price {
+    font-size: 15px;
+    overflow: visible;
+    text-overflow: clip;
+  }
+  .mbar .btn {
+    padding: 0 14px;
+  }
+}
+@media (max-width: 440px) {
+  .mbar__label {
+    display: none;
+  }
+}
+
+/* ============================================================
+   Listado · filtros sobrios y sin desbordes
+   ============================================================ */
+.listing__body {
+  grid-template-columns: 300px minmax(0, 1fr);
+}
+.filters {
+  padding-right: 16px;
+}
+.fgroup legend,
+.fgroup summary {
+  font-size: 10.5px;
+  font-weight: 500;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+/* Casillas en lugar de etiquetas */
+.filters .chips {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0;
+}
+.filters fieldset:nth-of-type(1) .chips,
+.filters fieldset:nth-of-type(2) .chips,
+.filters details .chips {
+  grid-template-columns: 1fr 1fr;
+  column-gap: 12px;
+}
+.filters .chip span {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  height: auto;
+  padding: 6px 0;
+  border: 0;
+  background: none;
+  font-size: 14.5px;
+  color: var(--ink-2);
+}
+.filters .chip span::before {
+  content: "";
+  flex: none;
+  width: 14px;
+  height: 14px;
+  border: 1px solid var(--muted-2);
+  background: var(--white);
+  transition:
+    background 0.15s,
+    border-color 0.15s;
+}
+.filters .chip:hover span {
+  color: var(--ink);
+}
+.filters .chip:hover span::before {
+  border-color: var(--ink);
+}
+.filters .chip input:checked + span {
+  background: none;
+  color: var(--ink);
+}
+.filters .chip input:checked + span::before {
+  background: var(--ink)
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='8' fill='none' stroke='%23fff' stroke-width='1.6'%3E%3Cpath d='M1 4l2.5 2.5L9 1'/%3E%3C/svg%3E")
+    no-repeat center;
+  border-color: var(--ink);
+}
+
+/* Precio: moneda arriba, desde/hasta abajo (sin cortes) */
+.price-row {
+  grid-template-columns: 1fr 1fr;
+}
+.price-row .select {
+  grid-column: 1 / -1;
+}
+.price-row .input {
+  min-width: 0;
+}
+
+/* Ambientes / dormitorios / baños: sin desborde */
+.steps {
+  grid-auto-columns: minmax(0, 1fr);
+}
+.steps span {
+  height: 38px;
+  font-size: 13px;
+}
+.steps label:first-child span {
+  font-size: 11px;
+  letter-spacing: 0.06em;
+}
+
+.filters__foot .btn {
+  padding: 0 12px;
+  font-size: 11px;
+  letter-spacing: 0.12em;
+}
+
+/* Tarjetas: favoritos y comparar aparecen al pasar el mouse */
+@media (hover: hover) and (pointer: fine) {
+  .pcard__actions {
+    opacity: 0;
+    transform: translateY(-4px);
+    transition:
+      opacity 0.25s,
+      transform 0.25s var(--ease);
+  }
+  .pcard:hover .pcard__actions,
+  .pcard:focus-within .pcard__actions,
+  .pcard__actions:has([aria-pressed="true"]) {
+    opacity: 1;
+    transform: none;
+  }
+}

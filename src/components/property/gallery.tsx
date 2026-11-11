@@ -11,6 +11,8 @@ export function Gallery({ images, title }: { images: PropertyImage[]; title: str
   const [index, setIndex] = useState<number | null>(null);
   const dialogRef = useRef<HTMLDialogElement>(null);
   const touchX = useRef<number | null>(null);
+  const strip = useRef<HTMLDivElement>(null);
+  const [stripIndex, setStripIndex] = useState(0);
   const count = images.length;
 
   const open = (i: number) => setIndex(i);
@@ -54,8 +56,8 @@ export function Gallery({ images, title }: { images: PropertyImage[]; title: str
               alt={img.alt}
               fill
               priority={i === 0}
-              quality={i === 0 ? 90 : 80}
-              sizes={i === 0 ? "(max-width: 900px) 100vw, 60vw" : "(max-width: 900px) 50vw, 20vw"}
+              quality={90}
+              sizes={i === 0 ? "(max-width: 760px) 1px, 60vw" : "(max-width: 760px) 1px, 25vw"}
               label={title}
             />
           </button>
@@ -63,6 +65,28 @@ export function Gallery({ images, title }: { images: PropertyImage[]; title: str
         <button type="button" className="btn btn--light btn--s gallery__all" onClick={() => open(0)}>
           <Icon name="photos" size={16} /> Ver las {count} fotos
         </button>
+      </div>
+
+      {/* Celular: tira deslizable con todas las fotos */}
+      <div className="gstrip">
+        <div
+          className="gstrip__track"
+          ref={strip}
+          onScroll={(e) => {
+            const el = e.currentTarget;
+            const k = Math.round(el.scrollLeft / el.clientWidth);
+            if (k !== stripIndex) setStripIndex(k);
+          }}
+        >
+          {images.map((img, i) => (
+            <button key={img.url + i} type="button" className="gstrip__item" onClick={() => open(i)} aria-label={`Ampliar foto ${i + 1} de ${count}`}>
+              <Photo src={img.url} alt={img.alt} fill priority={i === 0} quality={90} sizes="(max-width: 760px) 100vw, 1px" label={title} />
+            </button>
+          ))}
+        </div>
+        <span className="gstrip__count num" aria-hidden="true">
+          {stripIndex + 1} / {count}
+        </span>
       </div>
 
       <dialog

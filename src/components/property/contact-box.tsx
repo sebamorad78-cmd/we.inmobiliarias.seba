@@ -29,17 +29,9 @@ export function ContactBox({
     <div className="cbox" id="contacto">
       {agent && (
         <div className="cbox__agent">
-          <span className="avatar" aria-hidden="true">
-            {agent.name
-              .split(" ")
-              .map((w) => w[0])
-              .slice(0, 2)
-              .join("")}
-          </span>
-          <div>
-            <p className="cbox__name">{agent.name}</p>
-            <p className="tiny muted">{agent.title}</p>
-          </div>
+          <p className="cbox__label">Asesor a cargo</p>
+          <p className="cbox__name">{agent.name}</p>
+          <p className="tiny muted">{agent.title}</p>
         </div>
       )}
 
