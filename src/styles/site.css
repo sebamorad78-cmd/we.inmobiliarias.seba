@@ -3066,8 +3066,12 @@
 }
 @media (max-width: 560px) {
   .valuer__range {
-    font-size: 8.2vw;
-    gap: 4px 12px;
+    font-size: 7vw;
+    gap: 10px;
+    flex-wrap: nowrap;
+  }
+  .valuer__caption {
+    display: none;
   }
   .valuer__dash {
     width: 18px;
