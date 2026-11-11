@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { getPublishedProperties } from "@/lib/catalog";
-import { formatPrice } from "@/lib/format";
+import { formatArea, formatPrice } from "@/lib/format";
 import { operationLabel, typeLabel } from "@/lib/labels";
 
 export const dynamic = "force-dynamic";
@@ -18,7 +18,7 @@ export async function GET() {
     op: p.operation,
     opLabel: operationLabel[p.operation],
     price: formatPrice(p),
-    area: p.coveredArea ?? p.totalArea,
+    area: formatArea(p.coveredArea ?? p.totalArea),
     rooms: p.rooms,
     image: p.images[0]?.url ?? null,
     featured: p.featured,

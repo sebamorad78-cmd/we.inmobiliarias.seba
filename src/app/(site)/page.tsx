@@ -93,7 +93,7 @@ export default async function HomePage() {
                     <span className="tag tag--dark">{lead.code}</span>
                     <h3 className="h2">{lead.title}</h3>
                     <p>
-                      {lead.neighborhood} · {lead.coveredArea ?? lead.totalArea} m² ·{" "}
+                      {lead.neighborhood} · {formatArea(lead.coveredArea ?? lead.totalArea)} ·{" "}
                       {lead.bedrooms ? `${lead.bedrooms} dormitorios` : ""}
                     </p>
                     <span className="link">

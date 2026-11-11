@@ -10,6 +10,8 @@ const img = (id: string, alt: string): PropertyImage => ({
   alt,
 });
 
+const local = (file: string, alt: string): PropertyImage => ({ url: `/img/${file}`, alt });
+
 const daysAgo = (d: number) => new Date(Date.UTC(2026, 10, 10) - d * 86400000).toISOString();
 
 type SeedInput = Omit<Property, "id" | "createdAt" | "updatedAt" | "status" | "featured" | "videoUrl" | "tourUrl" | "floor" | "orientation" | "professionalUse" | "mortgageEligible" | "showExactLocation" | "expenses"> &
@@ -37,6 +39,39 @@ function make(n: number, s: SeedInput): Property {
 
 export function seedProperties(): Property[] {
   return [
+    make(15, {
+      slug: "quinta-13-ha-frente-autovia-2-general-piran",
+      code: "RB-4010",
+      title: "Quinta de 13 ha con galpón, tinglado y silo, frente a Autovía 2",
+      operation: "venta",
+      type: "quinta",
+      featured: true,
+      price: null,
+      currency: "USD",
+      neighborhood: "General Pirán",
+      city: "Mar Chiquita",
+      address: "Frente a Autovía 2",
+      lat: -37.2814,
+      lng: -57.7718,
+      coveredArea: null,
+      totalArea: 130000,
+      rooms: null,
+      bedrooms: null,
+      bathrooms: null,
+      garages: null,
+      age: null,
+      amenities: [],
+      description:
+        "Se vende quinta de 13 hectáreas y fracción en General Pirán, con frente sobre la Autovía 2.\n\nEl campo está dividido en cuatro potreros alambrados, con molino, bebidas y manga para el manejo de hacienda.\n\nEn el sector de instalaciones hay un galpón cerrado de 12 x 20 m aprox. y un tinglado de 12 x 15 m aprox. con estructura reticulada de gran luz y piso de tierra. Se suma un silo de 40.000 kg con chimango y mezcladora.\n\nCuenta con conexión eléctrica trifásica, apta para uso productivo. Por su ubicación sobre la autovía, además del uso agropecuario sirve para depósito o logística.",
+      images: [
+        local("quinta-general-piran/quinta-02-galpon-y-tinglado.jpg", "Tinglado de 12 x 15 m y galpón de 12 x 20 m"),
+        local("quinta-general-piran/quinta-03-tinglado.jpg", "Tinglado con estructura reticulada de gran luz sobre columnas de hormigón"),
+        local("quinta-general-piran/quinta-04-manga-y-potrero.jpg", "Manga de madera y potreros alambrados, con la Autovía 2 al fondo"),
+        local("quinta-general-piran/quinta-01-arboleda.jpg", "Arboleda de sauces sobre el alambrado"),
+      ],
+      agentId: "usr_rbazzigalupi",
+      days: 0,
+    }),
     make(1, {
       slug: "casa-racionalista-con-jardin-san-isidro",
       code: "RB-1041",
@@ -562,6 +597,18 @@ export function seedUsers(): TeamUser[] {
       title: "Alquileres y administración",
       license: null,
       bio: "Gestiona alquileres residenciales, temporarios y comerciales de punta a punta.",
+    },
+    {
+      ...base,
+      // Martillera externa a cargo de la quinta de General Pirán: no se muestra en "Nosotros".
+      public: false,
+      id: "usr_rbazzigalupi",
+      name: "Rita Bazzigalupi",
+      email: "ritabazzigalupi@gmail.com",
+      phone: "5492268515648",
+      title: "Martillera y corredora pública · Ayacucho",
+      license: "Tomo III, folio 812, n.º 1468",
+      bio: "Campos, quintas y propiedades en Ayacucho y la región.",
     },
   ];
 }

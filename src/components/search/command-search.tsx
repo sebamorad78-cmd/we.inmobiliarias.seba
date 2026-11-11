@@ -15,7 +15,7 @@ type Item = {
   op: "venta" | "alquiler" | "temporario";
   opLabel: string;
   price: string;
-  area: number | null;
+  area: string | null;
   rooms: number | null;
   image: string | null;
   featured: boolean;
@@ -214,7 +214,7 @@ export function CommandSearch() {
                       <span className="cmd__title">{r.item.title}</span>
                       <span className="cmd__meta">
                         {r.item.hood} · {r.item.type} · {r.item.opLabel}
-                        {r.item.area ? ` · ${r.item.area} m²` : ""}
+                        {r.item.area ? ` · ${r.item.area}` : ""}
                       </span>
                     </span>
                     <span className="cmd__side">

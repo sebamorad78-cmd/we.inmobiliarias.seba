@@ -21,6 +21,8 @@ export function formatPrice(p: Pick<Property, "price" | "currency" | "operation"
 
 export function formatArea(m2: number | null | undefined): string | null {
   if (m2 == null) return null;
+  // Campos y quintas se leen en hectáreas.
+  if (m2 >= 10000) return `${(m2 / 10000).toLocaleString("es-AR", { maximumFractionDigits: 2 })} ha`;
   return `${numberFmt.format(m2)} m²`;
 }
 
