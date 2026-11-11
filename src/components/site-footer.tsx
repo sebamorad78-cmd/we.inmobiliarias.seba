@@ -46,7 +46,7 @@ export function SiteFooter() {
                 <br />
                 <a href={`mailto:${site.email}`}>{site.email}</a>
               </address>
-              <p className="footer__hours">{site.hours}</p>
+              {site.hours && <p className="footer__hours">{site.hours}</p>}
               <div className="footer__social">
                 {site.social.instagram && (
                   <a href={site.social.instagram} target="_blank" rel="noopener" aria-label="Instagram">
@@ -70,6 +70,7 @@ export function SiteFooter() {
             Las medidas, superficies y valores publicados son aproximados y no constituyen oferta. Sujetos a verificación y
             a variaciones sin previo aviso.
           </p>
+          <p>Sitio de demostración: algunas propiedades, asesores y valores son ejemplos.</p>
           <p>
             <Link href="/panel">Acceso equipo</Link>
           </p>

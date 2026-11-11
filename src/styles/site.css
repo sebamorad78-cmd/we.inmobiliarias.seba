@@ -3822,3 +3822,40 @@ a.svc__row:hover .svc__title {
   flex-direction: column;
   gap: 2px;
 }
+
+/* Logo con nombre largo */
+.logo {
+  gap: 10px;
+}
+.logo__mark {
+  flex: none;
+}
+.logo__name {
+  font-size: 19px;
+  letter-spacing: 0.14em;
+  margin-right: -0.14em;
+  white-space: nowrap;
+}
+.logo__tag {
+  font-size: 9px;
+  letter-spacing: 0.38em;
+  color: var(--gold);
+  opacity: 1;
+}
+.logo--light .logo__tag {
+  color: #d9b98a;
+}
+@media (max-width: 420px) {
+  .logo__name {
+    font-size: 15.5px;
+    letter-spacing: 0.08em;
+  }
+  .logo__mark {
+    width: 28px;
+    height: 28px;
+  }
+}
+.hero__title em,
+.reel__claim em {
+  color: #e2c8a0;
+}

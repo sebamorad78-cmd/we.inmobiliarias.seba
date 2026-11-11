@@ -600,15 +600,15 @@ export function seedUsers(): TeamUser[] {
     },
     {
       ...base,
-      // Martillera externa a cargo de la quinta de General Pirán: no se muestra en "Nosotros".
-      public: false,
+      // Titular de la inmobiliaria: primera en "Nosotros".
+      createdAt: daysAgo(900),
       id: "usr_rbazzigalupi",
       name: "Rita Bazzigalupi",
       email: "ritabazzigalupi@gmail.com",
       phone: "5492268515648",
-      title: "Martillera y corredora pública · Ayacucho",
+      title: "Titular · Martillera y corredora pública",
       license: "Tomo III, folio 812, n.º 1468",
-      bio: "Campos, quintas y propiedades en Ayacucho y la región.",
+      bio: "Egresada de la Universidad FASTA. Negocios inmobiliarios en Ayacucho y la región: campos, quintas, casas y lotes.",
     },
   ];
 }

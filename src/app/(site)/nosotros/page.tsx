@@ -27,10 +27,7 @@ export default async function AboutPage() {
           <h1 className="h1">{site.legalName}</h1>
         </div>
         <div className="split__text about__copy">
-          <p className="lead">
-            Trabajamos en venta, alquiler, tasación y administración de propiedades en la Ciudad de Buenos Aires y Zona
-            Norte. Cada propiedad tiene un asesor asignado que la atiende desde la tasación hasta la escritura.
-          </p>
+          <p className="lead">{site.bio}</p>
           <dl className="plainlist">
             <div>
               <dt>Oficina</dt>
@@ -38,10 +35,12 @@ export default async function AboutPage() {
                 {site.address.street}, {site.address.city}
               </dd>
             </div>
-            <div>
-              <dt>Horario</dt>
-              <dd>{site.hours}</dd>
-            </div>
+            {site.hours && (
+              <div>
+                <dt>Horario</dt>
+                <dd>{site.hours}</dd>
+              </div>
+            )}
             <div>
               <dt>Matrícula</dt>
               <dd>{site.license}</dd>

@@ -689,3 +689,14 @@ p {
     transform: none;
   }
 }
+
+/* ── Identidad Rita Bazzigalupi Propiedades: café y dorado ── */
+:root {
+  --forest: #2e2724;
+  --forest-2: #40362f;
+  --forest-ink: #f2ece4;
+  --clay: #93653a;
+  --clay-2: #7a522e;
+  --clay-soft: #efe4d6;
+  --gold: #c39a5f;
+}

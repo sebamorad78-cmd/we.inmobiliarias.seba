@@ -194,10 +194,12 @@ export default async function HomePage() {
                 <a href={`mailto:${site.email}`}>{site.email}</a>
               </dd>
             </div>
-            <div>
-              <dt>Horario</dt>
-              <dd>{site.hours}</dd>
-            </div>
+            {site.hours && (
+              <div>
+                <dt>Horario</dt>
+                <dd>{site.hours}</dd>
+              </div>
+            )}
           </dl>
         </div>
       </section>

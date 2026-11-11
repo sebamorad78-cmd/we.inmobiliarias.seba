@@ -4,31 +4,34 @@
  * encabezado, pie, SEO, botones de WhatsApp y datos estructurados.
  */
 export const site = {
-  name: "Ribera",
-  legalName: "Ribera Bienes Raíces S.R.L.",
-  tagline: "Bienes raíces",
+  name: "Rita Bazzigalupi",
+  legalName: "Rita Bazzigalupi Propiedades",
+  tagline: "Propiedades",
   description:
-    "Compra, venta y alquiler de propiedades seleccionadas en Buenos Aires. Tasaciones profesionales, asesoramiento legal y acompañamiento de principio a fin.",
+    "Rita Bazzigalupi, martillera y corredora pública en Ayacucho. Venta y alquiler de campos, quintas, casas y lotes en Ayacucho y la región. Tasaciones y negocios inmobiliarios.",
   /** Dirección pública del sitio. En producción se puede reemplazar con NEXT_PUBLIC_SITE_URL (dominio propio). */
   url:
     process.env.NEXT_PUBLIC_SITE_URL ??
     (process.env.NODE_ENV === "production" ? "https://inmobiliaria-web.sebamorad78.workers.dev" : "http://localhost:3000"),
   locale: "es-AR",
-  phone: "+54 11 4000-0000",
+  phone: "2268 515648",
   /** Solo dígitos, con código de país. Se usa para wa.me */
-  whatsapp: "5491140000000",
-  email: "hola@ribera.com.ar",
+  whatsapp: "5492268515648",
+  email: "ritabazzigalupi@gmail.com",
   address: {
-    street: "Av. del Libertador 2400, piso 3",
-    city: "Buenos Aires",
-    region: "CABA",
-    postalCode: "C1425",
+    street: "San Martín 1539",
+    city: "Ayacucho",
+    region: "Provincia de Buenos Aires",
+    postalCode: "B7150",
     country: "AR",
   },
-  geo: { lat: -34.5811, lng: -58.4022 },
-  hours: "Lunes a viernes de 9 a 19 h · Sábados de 10 a 14 h",
-  /** Matrícula del corredor responsable (obligatoria en CABA, Ley 2340). */
-  license: "Corredor responsable: Mat. CUCICBA N.º 0000",
+  geo: { lat: -37.1528, lng: -58.4883 },
+  /** Horario de atención. Vacío = no se muestra (completar cuando se confirme). */
+  hours: "",
+  /** Matrícula de la martillera responsable. */
+  license: "Martillera y corredora pública · Tomo III, folio 812, n.º 1468",
+  /** Formación y presentación (página Nosotros). */
+  bio: "Martillera y corredora pública, egresada de la Universidad FASTA. Desde Ayacucho trabaja en negocios inmobiliarios de la ciudad y la zona: campos, quintas, casas y lotes, con tasaciones y acompañamiento hasta la escritura.",
   /**
    * Valores de referencia (USD por m² cubierto, departamentos usados en buen estado)
    * para el tasador instantáneo de la portada. Actualizarlos cada trimestre.
@@ -54,10 +57,11 @@ export const site = {
     /** Amplitud del rango mostrado (±). */
     spread: 0.08,
   },
+  /** Redes: vacías no se muestran. */
   social: {
-    instagram: "https://instagram.com/",
-    linkedin: "https://linkedin.com/",
-    youtube: "",
+    instagram: "",
+    facebook: "",
+    linkedin: "",
   },
 } as const;
 

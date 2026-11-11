@@ -2475,14 +2475,6 @@ a.plist2__row:hover strong {
   .ptop {
     padding: 10px 16px;
   }
-  .ptop::before {
-    content: "";
-    width: 26px;
-    height: 26px;
-    flex: none;
-    background: no-repeat center / contain
-      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32' fill='none' stroke-width='1.6'%3E%3Cpath d='M4 27V12L16 4l12 8v15' stroke='%231a1916'/%3E%3Cpath d='M4 21c4-2.6 8-2.6 12 0s8 2.6 12 0' stroke='%23a9502c'/%3E%3Cpath d='M4 26c4-2.6 8-2.6 12 0s8 2.6 12 0' stroke='%231a1916'/%3E%3C/svg%3E");
-  }
   .pdlg,
   .pcmd {
     margin-top: 12px;

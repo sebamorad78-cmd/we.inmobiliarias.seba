@@ -17,14 +17,30 @@ const NAV = [
   { href: "/contacto", label: "Contacto" },
 ];
 
+/** Monograma de la marca: "1" dorado, "B" y el techo de la casa (redibujado en vector). */
+export function LogoMark({ size = 34 }: { size?: number }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 40 40" aria-hidden="true" className="logo__mark">
+      {/* "1" dorado */}
+      <path d="M6.5 15.5l4-2.2V33" fill="none" stroke="var(--gold)" strokeWidth="3.2" strokeLinecap="square" />
+      {/* techo con chimenea */}
+      <path d="M13.5 13.5L24.5 5l11 8.5M31 8.6V5.2" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="square" />
+      {/* B */}
+      <path
+        d="M15.5 16.5v16.5h8.2c3.2 0 5.3-1.9 5.3-4.6 0-2-1.2-3.4-3.1-3.9 1.5-.6 2.4-1.9 2.4-3.6 0-2.6-2-4.4-5-4.4z M19 19.4h3.9c1.5 0 2.4.8 2.4 2s-.9 2-2.4 2H19z M19 26.2h4.4c1.6 0 2.6.9 2.6 2.1 0 1.3-1 2.1-2.6 2.1H19z"
+        fill="currentColor"
+        fillRule="evenodd"
+      />
+      {/* paredes de la casa */}
+      <path d="M33.5 15.5V33" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="square" />
+    </svg>
+  );
+}
+
 export function Logo({ light = false }: { light?: boolean }) {
   return (
     <span className={`logo ${light ? "logo--light" : ""}`}>
-      <svg width="30" height="30" viewBox="0 0 32 32" aria-hidden="true" className="logo__mark">
-        <path d="M4 27V12L16 4l12 8v15" fill="none" stroke="currentColor" strokeWidth="1.6" />
-        <path d="M4 21c4-2.6 8-2.6 12 0s8 2.6 12 0" fill="none" stroke="var(--clay)" strokeWidth="1.6" />
-        <path d="M4 26c4-2.6 8-2.6 12 0s8 2.6 12 0" fill="none" stroke="currentColor" strokeWidth="1.6" />
-      </svg>
+      <LogoMark />
       <span className="logo__text">
         <span className="logo__name">{site.name}</span>
         <span className="logo__tag">{site.tagline}</span>

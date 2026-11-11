@@ -55,10 +55,12 @@ export default async function ContactPage({ searchParams }: { searchParams: Prom
               {site.address.street}, {site.address.city}
             </dd>
           </div>
-          <div>
-            <dt>Horario</dt>
-            <dd>{site.hours}</dd>
-          </div>
+          {site.hours && (
+            <div>
+              <dt>Horario</dt>
+              <dd>{site.hours}</dd>
+            </div>
+          )}
         </dl>
         <PropertyMap single className="pmap--contact" zoom={16} points={[{ id: "office", lat: site.geo.lat, lng: site.geo.lng, label: site.name, title: site.name, href: "#" }]} />
       </div>
