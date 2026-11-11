@@ -3751,3 +3751,52 @@ a.svc__row:hover .svc__title {
     transform: none;
   }
 }
+
+/* Ajustes finos de la ficha */
+.keyfacts__v {
+  font-size: clamp(18px, 1.5vw, 21px);
+  white-space: nowrap;
+}
+.keyfacts__l {
+  letter-spacing: 0.12em;
+  white-space: nowrap;
+}
+.keyfacts li {
+  min-width: 0;
+}
+@media (min-width: 1001px) and (max-width: 1240px) {
+  .keyfacts li {
+    flex: 0 0 25%;
+    border-left: 0;
+    padding-left: 0;
+    border-bottom: 1px solid var(--line-soft);
+  }
+}
+.pblock .calc {
+  grid-template-columns: 1fr 1fr;
+  gap: 28px;
+}
+.pblock .calc__result {
+  padding-left: 28px;
+}
+.pblock .calc__payment {
+  white-space: nowrap;
+  font-size: clamp(32px, 3vw, 44px);
+}
+.pblock .calc__dl div {
+  gap: 12px;
+}
+.pblock .calc__dl dd {
+  white-space: nowrap;
+}
+@media (max-width: 1240px) {
+  .pblock .calc {
+    grid-template-columns: 1fr;
+  }
+  .pblock .calc__result {
+    padding-left: 0;
+    border-left: 0;
+    border-top: 1px solid var(--line);
+    padding-top: 22px;
+  }
+}
