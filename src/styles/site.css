@@ -1329,11 +1329,20 @@
 .price-row {
   display: grid;
   grid-template-columns: 80px 1fr 1fr;
-  gap: 6px;
+  gap: 8px;
+}
+.price-row input[type="number"] {
+  -moz-appearance: textfield;
+  appearance: textfield;
+}
+.price-row input[type="number"]::-webkit-inner-spin-button,
+.price-row input[type="number"]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
 }
 .price-row .input,
 .price-row .select {
-  min-height: 42px;
+  min-height: 44px;
   padding: 8px 10px;
   font-size: 15px;
 }

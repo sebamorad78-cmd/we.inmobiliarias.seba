@@ -180,6 +180,7 @@ export default async function ListingPage({ searchParams }: { searchParams: Prom
             </div>
           ) : view ? (
             <div className="mapview">
+              <h2 className="sr-only">Resultados</h2>
               <ul className="mapview__list">
                 {shown.map((p, i) => (
                   <li key={p.id}>
@@ -193,6 +194,7 @@ export default async function ListingPage({ searchParams }: { searchParams: Prom
             </div>
           ) : (
             <>
+              <h2 className="sr-only">Resultados</h2>
               <ul className="grid-cards">
                 {shown.map((p, i) => (
                   <li key={p.id}>

@@ -154,7 +154,7 @@ export function HeroReel({ slides }: { slides: ReelSlide[] }) {
                 type="button"
                 role="tab"
                 aria-selected={k === i}
-                aria-label={`${k + 1}: ${sl.title}`}
+                aria-label={`${sl.hood}: ${sl.title}`}
                 className="reel__bar"
                 onClick={() => go(k)}
               >
