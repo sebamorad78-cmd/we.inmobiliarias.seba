@@ -37,7 +37,7 @@ const OPS = [
 ] as const;
 
 const PAGES = [
-  { label: "Tasar mi propiedad", hint: "Informe en 48 h", href: "/tasaciones" },
+  { label: "Tasar mi propiedad", hint: "Informe escrito y firmado", href: "/tasaciones" },
   { label: "Hablar con un asesor", hint: "Contacto", href: "/contacto" },
   { label: "Mis favoritos", hint: "Guardadas", href: "/favoritos" },
   { label: "Comparar propiedades", hint: "Hasta 4", href: "/comparar" },

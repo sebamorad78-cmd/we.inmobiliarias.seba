@@ -36,10 +36,10 @@ const schema = z
   .refine((d) => d.email || d.phone, { message: "Dejanos un email o un teléfono", path: ["phone"] });
 
 const DETAIL_FIELDS: Record<string, string> = {
-  address: "Dirección",
-  neighborhood: "Barrio",
+  address: "Ubicación",
+  neighborhood: "Zona",
   propertyType: "Tipo de propiedad",
-  area: "Superficie (m²)",
+  area: "Superficie",
   rooms: "Ambientes",
   purpose: "Objetivo",
   preferredTime: "Franja horaria",

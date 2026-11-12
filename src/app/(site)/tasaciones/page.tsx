@@ -1,30 +1,27 @@
 import type { Metadata } from "next";
 import { LeadForm } from "@/components/lead-form";
-import { PROPERTY_TYPES } from "@/lib/types";
-import { typeLabel } from "@/lib/labels";
+import { site } from "@/site.config";
+import { VALUATION_TYPES, VALUATION_ZONES } from "@/components/home/valuation-invite";
 
 export const metadata: Metadata = {
   title: "Tasación de propiedades",
-  description: "Tasación profesional sin cargo en 48 h, con comparables de operaciones cerradas. Vendé tu propiedad con un plan de comercialización completo.",
+  description: "Tasación de campos, quintas, casas y lotes en Ayacucho y la región, con informe escrito firmado por martillera y corredora pública matriculada.",
   alternates: { canonical: "/tasaciones" },
 };
 
 const STEPS = [
-  { title: "Tasación", text: "Visitamos la propiedad, revisamos la documentación y entregamos un informe escrito con comparables y un rango de precio." },
+  { title: "Tasación", text: "Visita a la propiedad, revisión de títulos y mensura, e informe escrito con comparables de la zona y un rango de precio." },
   { title: "Preparación", text: "Fotografía profesional, video, plano y, si suma, recorrido 360°. Sugerencias concretas de arreglos menores antes de publicar." },
   { title: "Publicación", text: "Aviso en los principales portales y envío directo a compradores de nuestra base con búsqueda activa en la zona." },
-  { title: "Visitas", text: "Las hace siempre un asesor. Después de cada una recibís la devolución del interesado por escrito." },
+  { title: "Visitas", text: "Siempre acompañadas. Después de cada una recibís la devolución del interesado por escrito." },
   { title: "Negociación", text: "Analizamos cada oferta con vos, con datos de operaciones cerradas recientes. Reserva con seña documentada." },
   { title: "Escritura", text: "Coordinamos escribanía, certificados, boleto y escritura hasta la entrega de llaves." },
 ];
 
-const TYPE_FROM_QUERY: Record<string, string> = { departamento: "Departamento", casa: "Casa", ph: "PH", oficina: "Oficina" };
-
-export default async function ValuationPage({ searchParams }: { searchParams: Promise<{ tipo?: string; m2?: string; barrio?: string }> }) {
+export default async function ValuationPage({ searchParams }: { searchParams: Promise<{ tipo?: string; zona?: string }> }) {
   const sp = await searchParams;
-  const preType = (sp.tipo && TYPE_FROM_QUERY[sp.tipo]) || "Departamento";
-  const preArea = sp.m2 && /^\d{1,5}$/.test(sp.m2) ? sp.m2 : "";
-  const preHood = sp.barrio?.slice(0, 60) ?? "";
+  const preType = VALUATION_TYPES.find((t) => t === sp.tipo) ?? "Campo";
+  const preZone = VALUATION_ZONES.find((z) => z === sp.zona) ?? VALUATION_ZONES[0];
   return (
     <>
       <section className="wrap page-pad split">
@@ -32,13 +29,13 @@ export default async function ValuationPage({ searchParams }: { searchParams: Pr
           <p className="eyebrow">Tasaciones</p>
           <h1 className="h1">Tasación de propiedades</h1>
           <p className="lead">
-            Un corredor matriculado visita la propiedad y en 48 horas hábiles te entrega un informe escrito con el valor
-            de mercado. La tasación no tiene costo y no te obliga a vender con nosotros.
+            {site.name} visita la propiedad y te entrega un informe escrito y firmado con el valor de mercado: campos,
+            quintas, casas y lotes en Ayacucho y la región. Pedir una tasación no te obliga a vender.
           </p>
           <dl className="plainlist">
             <div><dt>Incluye</dt><dd>Comparables de la zona, rango de precio y plazo estimado de venta</dd></div>
-            <div><dt>Plazo</dt><dd>48 horas hábiles desde la visita</dd></div>
-            <div><dt>Costo</dt><dd>Sin cargo</dd></div>
+            <div><dt>Campos</dt><dd>Aptitud del suelo, mejoras, aguadas, alambrados y accesos</dd></div>
+            <div><dt>Firma</dt><dd>Martillera y corredora pública · Mat. 1468</dd></div>
           </dl>
         </div>
         <div className="panel-card">
@@ -53,7 +50,7 @@ export default async function ValuationPage({ searchParams }: { searchParams: Pr
                   <label className="field">
                     <span>Tipo de propiedad</span>
                     <select className="select" name="propertyType" defaultValue={preType}>
-                      {PROPERTY_TYPES.map((t) => <option key={t}>{typeLabel[t]}</option>)}
+                      {VALUATION_TYPES.map((t) => <option key={t}>{t}</option>)}
                     </select>
                   </label>
                   <label className="field">
@@ -68,21 +65,23 @@ export default async function ValuationPage({ searchParams }: { searchParams: Pr
                 </div>
                 <div className="form-grid form-grid--2">
                   <label className="field">
-                    <span>Dirección</span>
-                    <input className="input" name="address" autoComplete="street-address" placeholder="Calle y altura" />
+                    <span>Dirección o ubicación</span>
+                    <input className="input" name="address" autoComplete="street-address" placeholder="Calle y altura, o ruta y km" />
                   </label>
                   <label className="field">
-                    <span>Barrio</span>
-                    <input className="input" name="neighborhood" defaultValue={preHood} />
+                    <span>Zona</span>
+                    <select className="select" name="neighborhood" defaultValue={preZone}>
+                      {VALUATION_ZONES.map((z) => <option key={z}>{z}</option>)}
+                    </select>
                   </label>
                 </div>
                 <div className="form-grid form-grid--2">
                   <label className="field">
-                    <span>Superficie aprox. (m²)</span>
-                    <input className="input" name="area" inputMode="numeric" defaultValue={preArea} />
+                    <span>Superficie aprox.</span>
+                    <input className="input" name="area" placeholder="Ej.: 45 ha o 120 m²" />
                   </label>
                   <label className="field">
-                    <span>Ambientes</span>
+                    <span>Ambientes (si es casa)</span>
                     <input className="input" name="rooms" inputMode="numeric" />
                   </label>
                 </div>

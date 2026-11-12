@@ -3,7 +3,7 @@ import { site } from "@/site.config";
 import { getFeatured, getNeighborhoodStats, getPublishedProperties } from "@/lib/catalog";
 import { HeroReel, type ReelSlide } from "@/components/home/hero-reel";
 import { HoodIndex } from "@/components/home/hood-index";
-import { InstantValuation } from "@/components/home/instant-valuation";
+import { ValuationInvite } from "@/components/home/valuation-invite";
 import { formatArea, formatMoney, formatPrice } from "@/lib/format";
 import { typeLabel } from "@/lib/labels";
 import { Photo } from "@/components/photo";
@@ -27,7 +27,7 @@ const SERVICES = [
   },
   {
     title: "Tasación",
-    text: "Visita de un corredor matriculado e informe escrito con comparables de la zona en 48 h hábiles.",
+    text: "Visita a la propiedad e informe escrito y firmado, con comparables de la zona.",
     href: "/tasaciones",
   },
   {
@@ -37,7 +37,7 @@ const SERVICES = [
   },
 ];
 
-const VALUER_IMAGE = "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=1800&q=85";
+const VALUER_IMAGE = "/img/quinta-general-piran/quinta-01-arboleda.jpg";
 
 export default async function HomePage() {
   const [featured, hoods, all] = await Promise.all([getFeatured(5), getNeighborhoodStats(), getPublishedProperties()]);
@@ -138,8 +138,8 @@ export default async function HomePage() {
         </div>
       </section>
 
-      {/* ── Tasador instantáneo ── */}
-      <InstantValuation image={VALUER_IMAGE} listingsByHood={Object.fromEntries(hoods.map((h) => [h.name, h.count]))} />
+      {/* ── Tasaciones ── */}
+      <ValuationInvite image={VALUER_IMAGE} />
 
       {/* ── Servicios ── */}
       <section className="section">
