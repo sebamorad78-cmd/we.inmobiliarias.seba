@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { cookies } from "next/headers";
 import { requireUser } from "@/lib/auth";
 import { canSee, contractAlerts, fmtAr, isOverdue } from "@/lib/crm";
 import { repo } from "@/lib/data";
@@ -20,6 +21,7 @@ const norm = (s: string) =>
 
 export default async function PanelLayout({ children }: { children: React.ReactNode }) {
   const user = await requireUser();
+  const simple = (await cookies()).get("rb_vista")?.value !== "completa";
   const [leads, contacts, properties, users, tasks, contracts] = await Promise.all([
     repo.listLeads(),
     repo.list("contacts"),
@@ -71,7 +73,7 @@ export default async function PanelLayout({ children }: { children: React.ReactN
         <Link href="/panel" className="panel__logo">
           <Logo light />
         </Link>
-        <PanelNav isAdmin={user.role === "admin"} newLeads={newLeads} overdue={overdue} alerts={alerts} />
+        <PanelNav simple={simple} isAdmin={user.role === "admin"} newLeads={newLeads} overdue={overdue} alerts={alerts} />
         <div className="panel__me">
           <div style={{ minWidth: 0 }}>
             <p className="panel__me-name">{user.name}</p>
@@ -88,7 +90,7 @@ export default async function PanelLayout({ children }: { children: React.ReactN
         <Topbar index={index} today={today.charAt(0).toUpperCase() + today.slice(1)} />
         {children}
       </div>
-      <MobileTabs newLeads={newLeads} overdue={overdue} isAdmin={user.role === "admin"} />
+      <MobileTabs simple={simple} newLeads={newLeads} overdue={overdue} isAdmin={user.role === "admin"} />
       <PanelDialogs
         me={user.id}
         contacts={myContacts.map((c) => ({ id: c.id, label: c.name, hint: c.phone }))}

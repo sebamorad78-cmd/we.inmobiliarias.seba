@@ -4,15 +4,30 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { Icon, type IconName } from "../icon";
+import { setPanelView } from "@/app/panel/actions";
 
-const MAIN: { href: string; label: string; icon: IconName; exact?: boolean }[] = [
+type Tab = { href: string; label: string; icon: IconName; exact?: boolean };
+
+const SIMPLE_MAIN: Tab[] = [
+  { href: "/panel", label: "Hoy", icon: "today", exact: true },
+  { href: "/panel/consultas", label: "Consultas", icon: "inbox" },
+  { href: "/panel/agenda", label: "Agenda", icon: "calendar" },
+  { href: "/panel/propiedades", label: "Propiedades", icon: "home" },
+];
+
+const SIMPLE_MORE: Tab[] = [
+  { href: "/panel/contactos", label: "Contactos", icon: "contact" },
+  { href: "/panel/cuenta", label: "Mi cuenta", icon: "shield" },
+];
+
+const MAIN: Tab[] = [
   { href: "/panel", label: "Hoy", icon: "today", exact: true },
   { href: "/panel/agenda", label: "Agenda", icon: "calendar" },
   { href: "/panel/contactos", label: "Contactos", icon: "contact" },
   { href: "/panel/oportunidades", label: "Negocios", icon: "kanban" },
 ];
 
-const MORE: { href: string; label: string; icon: IconName }[] = [
+const MORE: Tab[] = [
   { href: "/panel/consultas", label: "Consultas", icon: "inbox" },
   { href: "/panel/propiedades", label: "Propiedades", icon: "home" },
   { href: "/panel/alquileres", label: "Alquileres", icon: "key" },
@@ -22,19 +37,21 @@ const MORE: { href: string; label: string; icon: IconName }[] = [
 ];
 
 /** Navegación del panel en el celular: barra inferior con lo de todos los días y "Más" para el resto. */
-export function MobileTabs({ newLeads, overdue, isAdmin }: { newLeads: number; overdue: number; isAdmin: boolean }) {
+export function MobileTabs({ simple, newLeads, overdue, isAdmin }: { simple: boolean; newLeads: number; overdue: number; isAdmin: boolean }) {
   const pathname = usePathname();
+  const main = simple ? SIMPLE_MAIN : MAIN;
+  const more = simple ? SIMPLE_MORE : MORE;
   const [open, setOpen] = useState(false);
   useEffect(() => setOpen(false), [pathname]);
   const isActive = (href: string, exact?: boolean) => (exact ? pathname === href : pathname.startsWith(href));
-  const moreActive = MORE.some((m) => isActive(m.href));
+  const moreActive = more.some((m) => isActive(m.href));
 
   return (
     <>
       {open && <div className="mtabs__scrim" onClick={() => setOpen(false)} aria-hidden="true" />}
       {open && (
-        <nav className="mtabs__sheet" aria-label="Más secciones">
-          {MORE.filter((m) => isAdmin || m.href !== "/panel/equipo").map((m) => (
+        <nav className={`mtabs__sheet ${simple ? "mtabs__sheet--simple" : ""}`} aria-label="Más secciones">
+          {more.filter((m) => isAdmin || m.href !== "/panel/equipo").map((m) => (
             <Link key={m.href} href={m.href} aria-current={isActive(m.href) ? "page" : undefined}>
               <Icon name={m.icon} size={20} />
               <span>{m.label}</span>
@@ -45,14 +62,22 @@ export function MobileTabs({ newLeads, overdue, isAdmin }: { newLeads: number; o
             <Icon name="external" size={20} />
             <span>Ver sitio</span>
           </a>
+          <form action={setPanelView}>
+            <input type="hidden" name="vista" value={simple ? "completa" : "simple"} />
+            <button type="submit">
+              <Icon name={simple ? "plus" : "minus"} size={20} />
+              <span>{simple ? "Más herramientas" : "Vista simple"}</span>
+            </button>
+          </form>
         </nav>
       )}
       <nav className="mtabs" aria-label="Panel">
-        {MAIN.map((m) => (
+        {main.map((m) => (
           <Link key={m.href} href={m.href} aria-current={isActive(m.href, m.exact) ? "page" : undefined}>
             <span className="mtabs__icon">
               <Icon name={m.icon} size={21} />
               {m.href === "/panel" && overdue > 0 && <span className="mtabs__badge num">{overdue}</span>}
+              {m.href === "/panel/consultas" && newLeads > 0 && <span className="mtabs__badge num">{newLeads}</span>}
             </span>
             <span>{m.label}</span>
           </Link>
@@ -60,7 +85,7 @@ export function MobileTabs({ newLeads, overdue, isAdmin }: { newLeads: number; o
         <button type="button" aria-expanded={open} aria-current={moreActive ? "page" : undefined} onClick={() => setOpen((v) => !v)}>
           <span className="mtabs__icon">
             <Icon name="menu" size={21} />
-            {newLeads > 0 && <span className="mtabs__badge num">{newLeads}</span>}
+            {!simple && newLeads > 0 && <span className="mtabs__badge num">{newLeads}</span>}
           </span>
           <span>Más</span>
         </button>

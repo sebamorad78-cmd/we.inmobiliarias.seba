@@ -2,6 +2,7 @@
 
 import { randomUUID } from "node:crypto";
 import { revalidatePath } from "next/cache";
+import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { z } from "zod";
 import { authenticate, createSession, destroySession, hashPassword, requireUser, verifyPassword } from "@/lib/auth";
@@ -56,6 +57,20 @@ export async function login(_: ActionState, fd: FormData): Promise<ActionState> 
 export async function logout() {
   await destroySession();
   redirect("/panel/ingresar");
+}
+
+/** Vista del panel: "simple" (lo de todos los días) o "completa" (todas las herramientas). */
+export async function setPanelView(fd: FormData) {
+  await requireUser();
+  const view = fd.get("vista") === "completa" ? "completa" : "simple";
+  (await cookies()).set("rb_vista", view, {
+    path: "/",
+    maxAge: 60 * 60 * 24 * 365,
+    sameSite: "lax",
+    httpOnly: true,
+    secure: process.env.NODE_ENV === "production",
+  });
+  revalidatePath("/panel", "layout");
 }
 
 /* ───────────── Propiedades ───────────── */
