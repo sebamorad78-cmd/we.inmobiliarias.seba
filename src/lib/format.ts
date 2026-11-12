@@ -74,6 +74,7 @@ export function whatsappLink(phoneDigits: string, text: string): string {
  * las fotos propias pasan por el optimizador; las de Unsplash se piden al tamaño justo.
  */
 export function imageAt(url: string, w: 640 | 1280): string {
+  if (url.startsWith("/img/") && url.endsWith(".jpg")) return url.replace(/\.jpg$/, w === 640 ? "-640.webp" : "-1200.jpg");
   if (url.startsWith("/")) return `/_next/image?url=${encodeURIComponent(url)}&w=${w}&q=80`;
   return url.replace(/([?&])w=\d+/, `$1w=${w}`);
 }

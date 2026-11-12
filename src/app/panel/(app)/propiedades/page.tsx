@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { requireUser } from "@/lib/auth";
 import { repo } from "@/lib/data";
-import { formatPrice, formatRelative } from "@/lib/format";
+import { formatPrice, formatRelative, imageAt } from "@/lib/format";
 import { operationLabel, statusLabel, typeLabel } from "@/lib/labels";
 import { PROPERTY_STATUSES, type PropertyStatus } from "@/lib/types";
 import { Icon } from "@/components/icon";
@@ -75,7 +75,7 @@ export default async function PanelProperties({ searchParams }: { searchParams: 
                     <Link href={`/panel/propiedades/${p.id}`} className="ptable__prop">
                       {p.images[0] ? (
                         // eslint-disable-next-line @next/next/no-img-element
-                        <img src={p.images[0].url.replace("w=2400", "w=160")} alt="" width={64} height={48} loading="lazy" />
+                        <img src={imageAt(p.images[0].url, 640)} alt="" width={64} height={48} loading="lazy" />
                       ) : (
                         <span className="ptable__noimg" />
                       )}

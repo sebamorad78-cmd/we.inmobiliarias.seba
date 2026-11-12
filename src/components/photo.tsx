@@ -1,6 +1,7 @@
 "use client";
 
-import Image, { type ImageProps } from "next/image";
+import type { ImageProps } from "next/image";
+import { Img as Image } from "./img";
 import { useState } from "react";
 
 /**

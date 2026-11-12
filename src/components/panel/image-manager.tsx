@@ -1,6 +1,7 @@
 "use client";
 
 import { useRef, useState } from "react";
+import { imageAt } from "@/lib/format";
 import { uploadImages } from "@/app/panel/actions";
 import type { PropertyImage } from "@/lib/types";
 import { Icon } from "../icon";
@@ -115,7 +116,7 @@ export function ImageManager({ initial, defaultAlt, error }: { initial: Property
             >
               <div className="imgm__thumb">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src={img.url.replace("w=2400", "w=400")} alt="" loading="lazy" />
+                <img src={imageAt(img.url, 640)} alt="" loading="lazy" />
                 {i === 0 && <span className="tag tag--clay imgm__cover">Portada</span>}
               </div>
               <input

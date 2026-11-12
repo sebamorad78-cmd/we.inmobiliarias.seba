@@ -4,7 +4,7 @@ import { site } from "@/site.config";
 import { requireUser } from "@/lib/auth";
 import { canSee, contactKindLabel, dealStageLabel, fmtAr, matchesFor, waNumber } from "@/lib/crm";
 import { repo } from "@/lib/data";
-import { formatPrice, formatRelative } from "@/lib/format";
+import { formatPrice, formatRelative, imageAt } from "@/lib/format";
 import type { Activity, Task } from "@/lib/types";
 import { deleteContact } from "../../../crm-actions";
 import { ActivityComposer, WhatsAppTemplates } from "@/components/panel/activity-composer";
@@ -200,7 +200,7 @@ export default async function ContactPage({ params }: { params: Promise<{ id: st
                       <Link href={`/panel/propiedades/${p.id}`} className="mlist__row">
                         <span className="mlist__img">
                           {/* eslint-disable-next-line @next/next/no-img-element */}
-                          {p.images[0] && <img src={p.images[0].url.replace("w=2400", "w=200")} alt="" loading="lazy" />}
+                          {p.images[0] && <img src={imageAt(p.images[0].url, 640)} alt="" loading="lazy" />}
                         </span>
                         <span className="mlist__main">
                           <strong>{p.title}</strong>

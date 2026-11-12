@@ -1,6 +1,6 @@
 "use client";
 
-import Image from "next/image";
+import { Img as Image } from "@/components/img";
 import { useCallback, useEffect, useRef, useState } from "react";
 import type { PropertyImage } from "@/lib/types";
 import { Icon } from "../icon";

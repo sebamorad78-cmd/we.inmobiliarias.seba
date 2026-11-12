@@ -4,7 +4,7 @@ import { requireUser } from "@/lib/auth";
 import { canSee, fmtAr, waNumber } from "@/lib/crm";
 import { findContact } from "@/lib/crm-server";
 import { repo } from "@/lib/data";
-import { formatPrice, formatRelative } from "@/lib/format";
+import { formatPrice, formatRelative, imageAt } from "@/lib/format";
 import { leadKindLabel, leadStatusLabel } from "@/lib/labels";
 import type { Lead } from "@/lib/types";
 import { convertLead } from "../../crm-actions";
@@ -189,7 +189,7 @@ export default async function Inbox({ searchParams }: { searchParams: Promise<SP
             {property && (
               <Link href={`/panel/propiedades/${property.id}`} className="idet__prop">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
-                {property.images[0] && <img src={property.images[0].url.replace("w=2400", "w=240")} alt="" />}
+                {property.images[0] && <img src={imageAt(property.images[0].url, 640)} alt="" />}
                 <span>
                   <strong>{property.title}</strong>
                   <span>
