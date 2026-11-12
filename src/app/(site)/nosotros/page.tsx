@@ -12,19 +12,19 @@ export const metadata: Metadata = {
 const WAYS = [
   {
     title: "Atención personal",
-    text: "Cada consulta la atiende Rita, desde el primer llamado hasta la firma de la escritura. No hay intermediarios.",
+    text: "Atiendo cada consulta en persona, desde el primer llamado hasta la firma de la escritura. Sin intermediarios.",
   },
   {
     title: "La zona, de primera mano",
-    text: "Ayacucho y sus campos, y la región: Maipú, General Pirán, Rauch, Tandil y la costa.",
+    text: "Trabajo en Ayacucho y sus campos, y en la región: Maipú, General Pirán, Rauch, Tandil y la costa.",
   },
   {
     title: "Tasaciones fundadas",
-    text: "Recorre cada propiedad, revisa títulos y planos de mensura, y entrega un informe escrito firmado con su matrícula.",
+    text: "Recorro cada propiedad, reviso títulos y planos de mensura, y entrego un informe escrito firmado con mi matrícula.",
   },
   {
     title: "Acompañamiento hasta el final",
-    text: "Coordina la documentación, la reserva, el boleto y la escritura con la escribanía que elijan las partes.",
+    text: "Coordino la documentación, la reserva, el boleto y la escritura con la escribanía que elijan las partes.",
   },
 ];
 
@@ -39,7 +39,11 @@ export default function AboutPage() {
           <p className="about__role">Martillera y corredora pública</p>
         </div>
         <div className="split__text about__copy">
-          <p className="lead">{site.bio}</p>
+          <p className="lead">
+            Soy martillera y corredora pública, egresada de la Universidad FASTA. Desde Ayacucho trabajo en negocios
+            inmobiliarios de la ciudad y la zona: campos, quintas, casas y lotes, con tasaciones y acompañamiento hasta la
+            escritura.
+          </p>
           <dl className="plainlist">
             <div>
               <dt>Matrícula</dt>
