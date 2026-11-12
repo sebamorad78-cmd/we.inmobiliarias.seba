@@ -62,7 +62,7 @@ export default async function HomePage() {
   return (
     <>
       {/* ── Portada ── */}
-      <HeroReel slides={slides} />
+      <HeroReel slides={slides} zones={[...new Set(all.map((p) => p.neighborhood))].sort((a, b) => a.localeCompare(b, "es"))} />
 
       {/* ── Selección ── */}
       <section className="section">
