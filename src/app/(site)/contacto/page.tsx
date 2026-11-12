@@ -30,6 +30,7 @@ export default async function ContactPage({ searchParams }: { searchParams: Prom
       sub="Cada consulta la respondo personalmente, por WhatsApp, teléfono o email."
       image="/img/miramar/miramar-01-vista.jpg"
       position="50% 60%"
+        caption={{ label: "Departamento en Miramar", href: "/propiedades/departamento-con-terraza-y-vista-al-mar-miramar" }}
     />
     <section className="wrap page-pad split">
       <div className="split__text">

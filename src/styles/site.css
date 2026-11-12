@@ -4177,3 +4177,34 @@ body:not(:has(.panel)) .about__role {
     padding-block: 28px 30px;
   }
 }
+.phead__cap {
+  position: absolute;
+  right: max(var(--gutter), calc((100% - var(--wrap)) / 2 + var(--gutter)));
+  bottom: 16px;
+  font-size: 13px;
+  color: rgb(255 255 255 / 0.82);
+  text-shadow: 0 1px 6px rgb(0 0 0 / 0.4);
+}
+.phead__cap span {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.phead__cap:hover {
+  color: #fff;
+}
+@media (max-width: 640px) {
+  .phead__cap {
+    position: static;
+    align-self: flex-start;
+    order: 2;
+  }
+  .phead {
+    flex-direction: column;
+    justify-content: flex-end;
+    align-items: stretch;
+  }
+  .phead__cap {
+    padding: 0 20px 14px;
+    margin-top: -18px;
+  }
+}

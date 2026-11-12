@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { Img } from "@/components/img";
 
 /** Encabezado de página con una foto de propiedad de fondo y el título encima. */
@@ -6,11 +7,14 @@ export function PageHero({
   sub,
   image,
   position = "50% 50%",
+  caption,
 }: {
   title: string;
   sub?: string;
   image: string;
   position?: string;
+  /** Pie de foto: qué propiedad es y link a su ficha. */
+  caption?: { label: string; href: string };
 }) {
   return (
     <section className="phead">
@@ -30,6 +34,11 @@ export function PageHero({
         <h1 className="phead__title">{title}</h1>
         {sub && <p className="phead__sub">{sub}</p>}
       </div>
+      {caption && (
+        <Link href={caption.href} className="phead__cap">
+          {caption.label} · <span>Ver propiedad</span>
+        </Link>
+      )}
     </section>
   );
 }

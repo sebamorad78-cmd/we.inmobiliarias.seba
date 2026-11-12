@@ -38,6 +38,7 @@ export default function AboutPage() {
         sub="Martillera y corredora pública en Ayacucho"
         image="/img/quinta-general-piran/quinta-01-arboleda.jpg"
         position="50% 45%"
+        caption={{ label: "Quinta en General Pirán", href: "/propiedades/quinta-13-ha-frente-autovia-2-general-piran" }}
       />
       <section className="wrap page-pad split">
         <div className="split__text">

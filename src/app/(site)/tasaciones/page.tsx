@@ -30,6 +30,7 @@ export default async function ValuationPage({ searchParams }: { searchParams: Pr
         sub={`${site.name} visita la propiedad y te entrega un informe escrito y firmado con el valor de mercado. Pedir una tasación no te obliga a vender.`}
         image="/img/quinta-general-piran/quinta-04-manga-y-potrero.jpg"
         position="50% 55%"
+        caption={{ label: "Quinta en General Pirán", href: "/propiedades/quinta-13-ha-frente-autovia-2-general-piran" }}
       />
       <section className="wrap page-pad split">
         <div className="split__text">
