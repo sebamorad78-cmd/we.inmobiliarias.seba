@@ -65,12 +65,12 @@ export function HeroSearch({ neighborhoods }: { neighborhoods: string[] }) {
       </div>
       <div className="hsearch__fields">
         <label className="hsearch__field hsearch__field--grow">
-          <span>Ubicación</span>
+          <span>Ubicación o código</span>
           <input
             list="hs-barrios"
             value={where}
             onChange={(e) => setWhere(e.target.value)}
-            placeholder="Maipú, Miramar, General Pirán…"
+            placeholder="Palermo, Nordelta, RB-1041…"
             autoComplete="off"
           />
           <datalist id="hs-barrios">

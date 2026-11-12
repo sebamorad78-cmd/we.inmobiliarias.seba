@@ -1,15 +1,18 @@
 import Link from "next/link";
 import { site } from "@/site.config";
 import { getFeatured, getNeighborhoodStats, getPublishedProperties } from "@/lib/catalog";
-import { HeroSearch } from "@/components/home/hero-search";
-import { Img } from "@/components/img";
+import { HeroReel, type ReelSlide } from "@/components/home/hero-reel";
 import { HoodIndex } from "@/components/home/hood-index";
 import { ValuationInvite } from "@/components/home/valuation-invite";
-import { formatMoney } from "@/lib/format";
+import { formatArea, formatMoney, formatPrice } from "@/lib/format";
+import { typeLabel } from "@/lib/labels";
+import { Photo } from "@/components/photo";
 import { PropertyCard } from "@/components/property-card";
+import { Reveal } from "@/components/reveal";
 
 export const dynamic = "force-dynamic";
 
+const HERO_IMAGE = "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=2880&q=85";
 
 const SERVICES = [
   {
@@ -37,46 +40,77 @@ const SERVICES = [
 const VALUER_IMAGE = "/img/quinta-general-piran/quinta-01-arboleda.jpg";
 
 export default async function HomePage() {
-  const [featured, hoods, all] = await Promise.all([getFeatured(6), getNeighborhoodStats(), getPublishedProperties()]);
+  const [featured, hoods, all] = await Promise.all([getFeatured(5), getNeighborhoodStats(), getPublishedProperties()]);
+  // "Selección" muestra lo recién ingresado; la portada ya recorre las destacadas.
+  const shownInReel = new Set(featured.map((p) => p.id));
+  const fresh = all.filter((p) => !shownInReel.has(p.id) && p.status === "publicada");
+  const [lead, ...rest] = fresh.length >= 3 ? fresh : all;
+
+  const slides: ReelSlide[] = (featured.length ? featured : all.slice(0, 5)).map((p) => ({
+    href: `/propiedades/${p.slug}`,
+    image: p.images[0]?.url ?? HERO_IMAGE,
+    alt: p.images[0]?.alt ?? p.title,
+    title: p.title,
+    hood: p.neighborhood,
+    facts: [typeLabel[p.type], formatArea(p.coveredArea ?? p.totalArea), p.bedrooms ? `${p.bedrooms} dormitorios` : null]
+      .filter(Boolean)
+      .join(" · "),
+    price: formatPrice(p),
+    code: p.code,
+  }));
 
   return (
     <>
-      {/* ── Portada: buscador ── */}
-      <section className="phero">
-        <Img
-          src="/img/quinta-general-piran/quinta-01-arboleda.jpg"
-          alt=""
-          fill
-          preload
-          fetchPriority="high"
-          sizes="100vw"
-          quality={80}
-          className="phero__img"
-        />
-        <div className="phero__shade" />
-        <div className="wrap phero__inner">
-          <h1 className="phero__title">Encontrá tu próxima propiedad</h1>
-          <p className="phero__sub">Casas, campos, quintas y departamentos en Ayacucho y la región.</p>
-          <HeroSearch neighborhoods={[...new Set(all.map((p) => p.neighborhood))].sort((a, b) => a.localeCompare(b, "es"))} />
-        </div>
-      </section>
+      {/* ── Portada ── */}
+      <HeroReel slides={slides} />
 
-      {/* ── Destacadas ── */}
+      {/* ── Selección ── */}
       <section className="section">
         <div className="wrap">
           <div className="section-head">
-            <h2 className="h2">Propiedades destacadas</h2>
+            <div>
+              <p className="eyebrow">Propiedades</p>
+              <h2 className="h1">Recién ingresadas</h2>
+            </div>
             <Link href="/propiedades" className="link">
               Ver todas ({all.length})
             </Link>
           </div>
-          <ul className="grid-cards">
-            {[...featured, ...all.filter((p) => !featured.some((f) => f.id === p.id))].slice(0, 6).map((p, i) => (
-              <li key={p.id}>
-                <PropertyCard p={p} priority={i < 3} />
-              </li>
-            ))}
-          </ul>
+
+          {lead && (
+            <div className="feature">
+              <Reveal className="feature__lead">
+                <Link href={`/propiedades/${lead.slug}`} className="feature__lead-link">
+                  <Photo
+                    className="feature__lead-media"
+                    src={lead.images[0]?.url ?? HERO_IMAGE}
+                    alt={lead.images[0]?.alt ?? lead.title}
+                    fill
+                    sizes="(max-width: 1000px) 100vw, 60vw"
+                    quality={80}
+                  />
+                  <div className="feature__lead-info">
+                    <span className="tag tag--dark">{lead.code}</span>
+                    <h3 className="h2">{lead.title}</h3>
+                    <p>
+                      {lead.neighborhood} · {formatArea(lead.coveredArea ?? lead.totalArea)} ·{" "}
+                      {lead.bedrooms ? `${lead.bedrooms} dormitorios` : ""}
+                    </p>
+                    <span className="link">
+                      Ver propiedad
+                    </span>
+                  </div>
+                </Link>
+              </Reveal>
+              <div className="feature__grid">
+                {rest.slice(0, 4).map((p, i) => (
+                  <Reveal key={p.id} delay={i * 80}>
+                    <PropertyCard p={p} sizes="(max-width: 700px) 100vw, (max-width: 1000px) 50vw, 20vw" />
+                  </Reveal>
+                ))}
+              </div>
+            </div>
+          )}
         </div>
       </section>
 
@@ -86,7 +120,7 @@ export default async function HomePage() {
           <div className="section-head">
             <div>
               <p className="eyebrow">Zonas</p>
-              <h2 className="h2">Propiedades por zona</h2>
+              <h2 className="h1">Dónde trabajo</h2>
               <p className="lead">
                 Propiedades en cartera por zona. El valor indicado es el precio más bajo en venta publicado hoy.
               </p>
@@ -112,7 +146,7 @@ export default async function HomePage() {
         <div className="wrap svc">
           <div className="svc__head">
             <p className="eyebrow">Servicios</p>
-            <h2 className="h2">En qué te puedo ayudar</h2>
+            <h2 className="h1">En qué te puedo ayudar</h2>
           </div>
           <ul className="svc__list">
             {SERVICES.map((s) => (

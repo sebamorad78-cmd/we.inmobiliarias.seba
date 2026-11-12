@@ -51,7 +51,7 @@ export function Logo({ light = false }: { light?: boolean }) {
 
 export function SiteHeader() {
   const pathname = usePathname();
-  const overlay = false;
+  const overlay = pathname === "/";
   const [scrolled, setScrolled] = useState(false);
   const [hidden, setHidden] = useState(false);
   const [open, setOpen] = useState(false);

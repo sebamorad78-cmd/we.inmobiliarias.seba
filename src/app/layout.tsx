@@ -1,9 +1,8 @@
 import type { Metadata, Viewport } from "next";
-import { Jost, Libre_Caslon_Display, Libre_Caslon_Text, Source_Sans_3 } from "next/font/google";
+import { Jost, Libre_Caslon_Display, Libre_Caslon_Text } from "next/font/google";
 import { site } from "@/site.config";
 import "@/styles/base.css";
 import "@/styles/site.css";
-import "@/styles/portal.css";
 
 const display = Libre_Caslon_Display({
   weight: "400",
@@ -16,13 +15,6 @@ const serifText = Libre_Caslon_Text({
   weight: ["400", "700"],
   subsets: ["latin", "latin-ext"],
   variable: "--font-caslon",
-  display: "swap",
-});
-
-const portal = Source_Sans_3({
-  subsets: ["latin", "latin-ext"],
-  weight: ["400", "500", "600", "700"],
-  variable: "--font-portal",
   display: "swap",
 });
 
@@ -60,7 +52,7 @@ export const viewport: Viewport = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="es-AR" className={`${display.variable} ${serifText.variable} ${text.variable} ${portal.variable}`}>
+    <html lang="es-AR" className={`${display.variable} ${serifText.variable} ${text.variable}`}>
       <body>{children}</body>
     </html>
   );
