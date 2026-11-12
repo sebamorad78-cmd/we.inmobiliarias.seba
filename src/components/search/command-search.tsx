@@ -113,7 +113,8 @@ export function CommandSearch() {
     if (!d) return;
     if (open && !d.open) {
       d.showModal();
-      requestAnimationFrame(() => input.current?.focus());
+      // En computadora se puede escribir directo; en el celular el teclado aparece recién al tocar el campo.
+      if (window.matchMedia("(pointer: fine)").matches) requestAnimationFrame(() => input.current?.focus());
     }
     if (!open && d.open) d.close();
   }, [open]);
@@ -257,6 +258,12 @@ export function CommandSearch() {
       onClick={(e) => e.target === e.currentTarget && setOpen(false)}
     >
       <div className="cmd__panel" onKeyDown={onKeyDown}>
+        <div className="cmd__head">
+          <p className="cmd__heading">Buscar</p>
+          <button type="button" className="cmd__close" onClick={() => setOpen(false)}>
+            Cerrar
+          </button>
+        </div>
         <div className="cmd__bar">
           <Icon name="search" size={20} />
           <input
@@ -264,13 +271,14 @@ export function CommandSearch() {
             className="cmd__input"
             value={q}
             onChange={(e) => setQ(e.target.value)}
-            placeholder="Barrio, tipo de propiedad o código…"
+            placeholder="Buscá por zona, tipo o código"
             role="combobox"
             aria-expanded="true"
             aria-controls="cmd-list"
             aria-activedescendant={results.length ? `cmd-${active}` : undefined}
             autoComplete="off"
             spellCheck={false}
+            enterKeyHint="search"
           />
           <kbd className="cmd__kbd">Esc</kbd>
         </div>
@@ -289,7 +297,7 @@ export function CommandSearch() {
           ) : (
             <>
               {section(q ? "Propiedades" : "Destacadas", "prop")}
-              {section("Barrios", "hood")}
+              {section("Zonas", "hood")}
               {section("Accesos", "page")}
             </>
           )}

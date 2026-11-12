@@ -4002,3 +4002,129 @@ body:not(:has(.panel)) .about__role {
   font-size: 17px;
   color: var(--ink-2);
 }
+
+/* ── Buscador: encabezado propio y versión de pantalla completa en el celular ── */
+.cmd__head {
+  display: none;
+}
+.cmd__ops button {
+  font-size: 14px;
+}
+@media (pointer: coarse) {
+  .cmd__kbd {
+    display: none;
+  }
+}
+@media (max-width: 640px) {
+  .cmd {
+    width: 100%;
+    max-width: 100%;
+    height: 100dvh;
+    max-height: 100dvh;
+    margin: 0;
+  }
+  .cmd::backdrop {
+    backdrop-filter: none;
+  }
+  .cmd[open] .cmd__panel {
+    animation: cmdUp 0.3s var(--ease);
+  }
+  @keyframes cmdUp {
+    from {
+      opacity: 0;
+      transform: translateY(24px);
+    }
+  }
+  .cmd__panel {
+    height: 100%;
+    max-height: none;
+    border: 0;
+    box-shadow: none;
+    background: var(--paper);
+    padding-top: env(safe-area-inset-top);
+  }
+  .cmd__head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 18px 20px 10px;
+  }
+  .cmd__heading {
+    font-family: var(--font-serif);
+    font-size: 30px;
+    line-height: 1;
+  }
+  .cmd__close {
+    border: 0;
+    background: none;
+    padding: 10px 0 10px 16px;
+    font: inherit;
+    font-size: 16px;
+    font-weight: 500;
+    color: var(--ink);
+    text-decoration: underline;
+    text-underline-offset: 4px;
+    text-decoration-thickness: 1px;
+  }
+  .cmd__close:focus:not(:focus-visible) {
+    outline: none;
+  }
+  .cmd__bar {
+    margin: 8px 20px 4px;
+    padding: 0 14px;
+    gap: 10px;
+    border: 1px solid var(--line);
+    background: #fff;
+  }
+  .cmd__input {
+    height: 52px;
+    font-family: var(--font-sans);
+    font-size: 17px;
+  }
+  .cmd__ops {
+    gap: 20px;
+    border-bottom: 1px solid var(--line);
+  }
+  .cmd__ops button {
+    font-size: 15px;
+    padding: 14px 0 12px;
+  }
+  .cmd__list {
+    flex: 1;
+    padding-bottom: calc(24px + env(safe-area-inset-bottom));
+  }
+  .cmd__label {
+    padding: 18px 20px 8px;
+    font-size: 14px;
+  }
+  .cmd__row {
+    align-items: flex-start;
+    padding: 12px 20px;
+  }
+  .cmd__row[aria-selected="true"] {
+    background: none;
+    border-left-color: transparent;
+  }
+  .cmd__thumb {
+    width: 76px;
+    height: 58px;
+  }
+  .cmd__icon {
+    width: 76px;
+    height: 40px;
+  }
+  .cmd__title {
+    white-space: normal;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+    font-size: 17px;
+    line-height: 1.3;
+  }
+  .cmd__meta {
+    margin-top: 4px;
+    white-space: normal;
+    font-size: 14px;
+  }
+}
