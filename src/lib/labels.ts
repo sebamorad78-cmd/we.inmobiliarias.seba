@@ -14,6 +14,7 @@ export const typeLabel: Record<PropertyType, string> = {
   oficina: "Oficina",
   local: "Local comercial",
   quinta: "Quinta",
+  galpon: "Galpón",
 };
 
 export const typePlural: Record<PropertyType, string> = {
@@ -24,6 +25,7 @@ export const typePlural: Record<PropertyType, string> = {
   oficina: "Oficinas",
   local: "Locales",
   quinta: "Quintas",
+  galpon: "Galpones",
 };
 
 export const statusLabel: Record<PropertyStatus, string> = {

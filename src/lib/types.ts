@@ -9,6 +9,7 @@ export const PROPERTY_TYPES = [
   "oficina",
   "local",
   "quinta",
+  "galpon",
 ] as const;
 export type PropertyType = (typeof PROPERTY_TYPES)[number];
 
