@@ -10,7 +10,9 @@ import { Icon } from "@/components/icon";
 import { PropertyForm } from "@/components/panel/property-form";
 import { TaskItem } from "@/components/panel/crm-ui";
 import { DealButton, TaskButton } from "@/components/panel/shell/dialogs";
-import { arDayKey, canSee, daysBetween, interestedIn } from "@/lib/crm";
+import { arDayKey, canSee, daysBetween, interestedIn, waNumber } from "@/lib/crm";
+import { signToken } from "@/lib/auth";
+import { site } from "@/site.config";
 
 export const metadata = { title: "Editar propiedad" };
 
@@ -38,6 +40,7 @@ export default async function EditProperty({ params, searchParams }: { params: P
   const history = activities.filter((a) => a.propertyId === p.id).sort((a, b) => b.at.localeCompare(a.at)).slice(0, 6);
   const openDeals = deals.filter((d) => d.propertyId === p.id && d.stage !== "cerrada" && d.stage !== "perdida");
   const owner = p.ownerContactId ? cById.get(p.ownerContactId) : null;
+  const reportUrl = `/informe/${encodeURIComponent(signToken(p.id))}`;
   const mandateDays = p.mandate?.expires ? daysBetween(arDayKey(), p.mandate.expires) : null;
   const leadCount = leads.filter((l) => l.propertyId === p.id).length;
   const visible = p.status === "publicada" || p.status === "reservada";
@@ -86,6 +89,19 @@ export default async function EditProperty({ params, searchParams }: { params: P
           <span className="pstrip__v">{owner ? <Link href={`/panel/contactos/${owner.id}`}>{owner.name}</Link> : "Sin vincular"}</span>
         </div>
         <div className="pstrip__actions">
+          <a href={reportUrl} target="_blank" rel="noopener" className="btn btn--ghost btn--s" title="Informe de gestión para el dueño: consultas, visitas, devoluciones y precio">
+            Informe al propietario
+          </a>
+          {owner?.phone && (
+            <a
+              href={`https://wa.me/${waNumber(owner.phone)}?text=${encodeURIComponent(`Hola ${owner.name.split(" ")[0]}, te comparto el informe de gestión de tu propiedad (${p.code}): ${site.url}${reportUrl}`)}`}
+              target="_blank"
+              rel="noopener"
+              className="btn btn--wa btn--s"
+            >
+              Enviar al dueño
+            </a>
+          )}
           <TaskButton prefill={{ type: "visita", propertyId: p.id }} className="btn btn--s">
             <Icon name="calendar" size={16} /> Agendar visita
           </TaskButton>

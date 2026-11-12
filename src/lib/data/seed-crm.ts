@@ -267,3 +267,17 @@ export function seedCrm(properties: Property[]) {
 
   return { contacts, tasks, deals, activities, contracts };
 }
+
+/** Consultas de ejemplo para la bandeja, relativas a "ahora". */
+export function seedLeads(): import("../types").Lead[] {
+  const ago = (min: number) => new Date(Date.now() - min * 60000).toISOString();
+  const base = { email: "", preferredDate: null, details: {}, notes: "", source: "Web" };
+  return [
+    { ...base, id: "lead_demo_1", createdAt: ago(35), kind: "visita", status: "nuevo", name: "Martín Rossi", phone: "11 5034-7721", email: "martin.rossi@mail.com", message: "Hola, ¿se puede ver el dúplex este sábado a la mañana? Somos pareja con un hijo.", propertyId: "prop_014", assignedTo: "usr_sbenitez", preferredDate: "Sábado", details: { "Franja horaria": "Mañana (9 a 12 h)" } },
+    { ...base, id: "lead_demo_2", createdAt: ago(150), kind: "consulta", status: "nuevo", name: "Florencia Núñez", phone: "11 4456-8820", email: "flor.nunez@mail.com", message: "¿Acepta crédito hipotecario? ¿Cuánto son las expensas?", propertyId: "prop_006", assignedTo: "usr_sbenitez" },
+    { ...base, id: "lead_demo_3", createdAt: ago(310), kind: "contacto", status: "nuevo", name: "Paula Giménez", phone: "11 6611-2290", email: "", message: "Busco casa con jardín en zona norte, hasta USD 450.000. ¿Tienen algo que no esté publicado?", propertyId: null, assignedTo: null, details: { Motivo: "Quiero comprar" } },
+    { ...base, id: "lead_demo_4", createdAt: ago(60 * 26), kind: "consulta", status: "contactado", name: "Hernán Sosa", phone: "2268 44-1190", email: "hernan.sosa@campo.com.ar", message: "¿La quinta tiene trifásica conectada? ¿En qué estado está el galpón?", propertyId: "prop_015", assignedTo: "usr_rbazzigalupi", notes: "Lo llamé, coordinamos visita para el sábado." },
+    { ...base, id: "lead_demo_5", createdAt: ago(60 * 24 * 4), kind: "tasacion", status: "visita agendada", name: "Sebastián Acosta", phone: "11 3021-5547", email: "sacosta@mail.com", message: "Quiero saber cuánto vale mi departamento para venderlo.", propertyId: null, assignedTo: "usr_sbenitez", details: { "Tipo de propiedad": "Departamento", Barrio: "Núñez", "Superficie (m²)": "72", Ambientes: "3" } },
+    { ...base, id: "lead_demo_6", createdAt: ago(60 * 24 * 6), kind: "visita", status: "negociación", name: "Lucía Rivas", phone: "11 6034-1297", email: "lucia.rivas@mail.com", message: "Me interesa visitarlo, trabajo con crédito pre-aprobado.", propertyId: "prop_005", assignedTo: "usr_sbenitez" },
+  ];
+}

@@ -1,5 +1,8 @@
 import type {
+  Activity,
   Contact,
+  Deal,
+  Lead,
   ContactKind,
   ContactSearch,
   Contract,
@@ -238,3 +241,86 @@ export function waNumber(phone: string): string {
 export function isOverdue(t: Task, now = Date.now()): boolean {
   return t.status === "pendiente" && new Date(t.dueAt).getTime() < now - 15 * 60000;
 }
+
+/* ───────────── Temperatura del contacto ───────────── */
+
+
+export type Temperature = "caliente" | "tibio" | "frio";
+
+/**
+ * Temperatura 0-100 según actividad reciente, etapa del negocio y visitas.
+ * Es una guía para priorizar llamados, no un juicio sobre el cliente.
+ */
+export function temperatureOf(
+  c: Contact,
+  ctx: { deals: Deal[]; activities: Activity[]; tasks: Task[] },
+  now = Date.now(),
+): { score: number; label: Temperature } {
+  let score = 0;
+  const last = new Date(c.lastContactAt ?? c.createdAt).getTime();
+  const days = (now - last) / 86400000;
+  score += days <= 2 ? 35 : days <= 7 ? 25 : days <= 14 ? 12 : days <= 30 ? 5 : 0;
+  const active = ctx.deals.filter((d) => d.contactId === c.id && d.stage !== "cerrada" && d.stage !== "perdida");
+  const best = Math.max(0, ...active.map((d) => stageProbability[d.stage]));
+  score += Math.round(best * 40);
+  const recent = ctx.activities.filter((a) => a.contactId === c.id && now - new Date(a.at).getTime() < 14 * 86400000 && a.kind !== "sistema").length;
+  score += Math.min(15, recent * 5);
+  const visits = ctx.tasks.filter((t) => t.contactId === c.id && t.type === "visita" && t.status === "hecha").length;
+  score += Math.min(10, visits * 5);
+  if (c.search) score += 5;
+  score = Math.min(100, score);
+  return { score, label: score >= 60 ? "caliente" : score >= 30 ? "tibio" : "frio" };
+}
+
+export const temperatureLabel: Record<Temperature, string> = { caliente: "Caliente", tibio: "Tibio", frio: "Frío" };
+
+/* ───────────── Listas inteligentes ───────────── */
+
+export interface SmartContext {
+  deals: Deal[];
+  activities: Activity[];
+  tasks: Task[];
+  leads: Lead[];
+  now: number;
+}
+
+export const SMART_LISTS: { id: string; label: string; hint: string; test: (c: Contact, x: SmartContext) => boolean }[] = [
+  { id: "todos", label: "Todos", hint: "Todos los contactos", test: () => true },
+  {
+    id: "calientes",
+    label: "Calientes",
+    hint: "Actividad reciente y negocio avanzado",
+    test: (c, x) => temperatureOf(c, x, x.now).label === "caliente",
+  },
+  {
+    id: "nuevos",
+    label: "Nuevos esta semana",
+    hint: "Ingresaron en los últimos 7 días",
+    test: (c, x) => x.now - new Date(c.createdAt).getTime() < 7 * 86400000,
+  },
+  {
+    id: "sin-seguimiento",
+    label: "Sin seguimiento",
+    hint: "Con negocio abierto y sin contacto hace 7 días o más",
+    test: (c, x) =>
+      x.deals.some((d) => d.contactId === c.id && d.stage !== "cerrada" && d.stage !== "perdida") &&
+      x.now - new Date(c.lastContactAt ?? c.createdAt).getTime() >= 7 * 86400000,
+  },
+  {
+    id: "visitaron",
+    label: "Visitaron sin ofertar",
+    hint: "Hicieron una visita y su negocio no pasó a oferta",
+    test: (c, x) =>
+      x.tasks.some((t) => t.contactId === c.id && t.type === "visita" && t.status === "hecha") &&
+      !x.deals.some((d) => d.contactId === c.id && ["oferta", "reserva", "boleto", "cerrada"].includes(d.stage)),
+  },
+  { id: "compradores", label: "Buscan comprar", hint: "Con búsqueda de compra cargada", test: (c) => c.search?.operation === "venta" },
+  { id: "inquilinos", label: "Buscan alquilar", hint: "Con búsqueda de alquiler cargada", test: (c) => !!c.search && c.search.operation !== "venta" },
+  { id: "propietarios", label: "Propietarios", hint: "Dueños de propiedades y locadores", test: (c) => c.kinds.includes("propietario") },
+  {
+    id: "dormidos",
+    label: "Para reactivar",
+    hint: "Sin contacto hace más de 30 días",
+    test: (c, x) => x.now - new Date(c.lastContactAt ?? c.createdAt).getTime() > 30 * 86400000,
+  },
+];

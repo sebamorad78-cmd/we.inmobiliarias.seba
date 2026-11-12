@@ -5,7 +5,7 @@ import { randomUUID } from "node:crypto";
 import type { CrmCollection, CrmTypes, Lead, Property, TeamUser } from "../types";
 import type { Repository } from "./repository";
 import { seedProperties, seedUsers } from "./seed";
-import { seedCrm } from "./seed-crm";
+import { seedCrm, seedLeads } from "./seed-crm";
 
 type Db = {
   properties: Property[];
@@ -30,7 +30,7 @@ async function load(): Promise<Db> {
   } catch (err) {
     if ((err as NodeJS.ErrnoException).code !== "ENOENT") throw err;
     const properties = seedProperties();
-    cache = { properties, users: seedUsers(), leads: [], ...seedCrm(properties) };
+    cache = { properties, users: seedUsers(), leads: seedLeads(), ...seedCrm(properties) };
     await persist(cache);
   }
   // Bases creadas antes del CRM: se completan con datos de demostración una sola vez.

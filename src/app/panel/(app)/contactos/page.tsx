@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { requireUser } from "@/lib/auth";
-import { canSee, contactKindLabel, waNumber } from "@/lib/crm";
+import { canSee, contactKindLabel, SMART_LISTS, temperatureLabel, temperatureOf, waNumber } from "@/lib/crm";
 import { repo } from "@/lib/data";
 import { formatMoney, formatRelative } from "@/lib/format";
 import { operationLabel, typeLabel } from "@/lib/labels";
@@ -17,7 +17,7 @@ const PLURAL: Record<ContactKind, string> = {
   otro: "Otros",
 };
 
-type SP = { q?: string; tipo?: string; orden?: string };
+type SP = { q?: string; tipo?: string; orden?: string; lista?: string };
 
 const norm = (s: string) =>
   s
@@ -41,7 +41,16 @@ function searchSummary(c: Contact) {
 export default async function Contacts({ searchParams }: { searchParams: Promise<SP> }) {
   const user = await requireUser();
   const sp = await searchParams;
-  const [contacts, users, deals] = await Promise.all([repo.list("contacts"), repo.listUsers(), repo.list("deals")]);
+  const [contacts, users, deals, activities, tasks, leads] = await Promise.all([
+    repo.list("contacts"),
+    repo.listUsers(),
+    repo.list("deals"),
+    repo.list("activities"),
+    repo.list("tasks"),
+    repo.listLeads(),
+  ]);
+  const ctx = { deals, activities, tasks, leads, now: Date.now() };
+  const smart = SMART_LISTS.find((l) => l.id === sp.lista) ?? SMART_LISTS[0];
   const uById = new Map(users.map((u) => [u.id, u]));
   const tipo = (CONTACT_KINDS as readonly string[]).includes(sp.tipo ?? "") ? (sp.tipo as ContactKind) : undefined;
   const q = sp.q ? norm(sp.q.trim()) : "";
@@ -49,6 +58,7 @@ export default async function Contacts({ searchParams }: { searchParams: Promise
 
   const visible = contacts.filter((c) => canSee(user, c.assignedTo));
   const rows = visible
+    .filter((c) => smart.test(c, ctx))
     .filter((c) => !tipo || c.kinds.includes(tipo))
     .filter((c) => !q || norm(`${c.name} ${c.phone} ${c.phone.replace(/\D/g, "")} ${c.email} ${c.notes}`).includes(q))
     .sort((a, b) =>
@@ -80,6 +90,18 @@ export default async function Contacts({ searchParams }: { searchParams: Promise
         </Link>
       </header>
 
+      <div className="cwork">
+      <nav className="cwork__lists" aria-label="Listas inteligentes">
+        <p className="inbox__h">Listas inteligentes</p>
+        {SMART_LISTS.map((l) => (
+          <Link key={l.id} href={l.id === "todos" ? "/panel/contactos" : `/panel/contactos?lista=${l.id}`} aria-current={smart.id === l.id ? "page" : undefined} title={l.hint}>
+            <span>{l.label}</span>
+            <span className="num">{visible.filter((c) => l.test(c, ctx)).length}</span>
+          </Link>
+        ))}
+      </nav>
+      <div className="cwork__main">
+      <p className="cwork__hint">{smart.hint}</p>
       <div className="ptoolbar">
         <nav className="tabs" aria-label="Tipo">
           <Link href={link({ tipo: undefined })} aria-current={!tipo ? "page" : undefined}>
@@ -93,8 +115,10 @@ export default async function Contacts({ searchParams }: { searchParams: Promise
         </nav>
         <form className="ptoolbar__filters">
           {tipo && <input type="hidden" name="tipo" value={tipo} />}
+          {sp.lista && <input type="hidden" name="lista" value={sp.lista} />}
           <select className="select select--s" name="orden" defaultValue={sp.orden ?? ""} aria-label="Ordenar">
             <option value="">Contacto más reciente</option>
+            <option value="temperatura">Más calientes primero</option>
             <option value="olvidados">Sin contacto hace más tiempo</option>
             <option value="nombre">Nombre</option>
           </select>
@@ -118,11 +142,15 @@ export default async function Contacts({ searchParams }: { searchParams: Promise
             const idle = Math.floor((now - new Date(last).getTime()) / 86400000);
             const active = deals.filter((d) => d.contactId === c.id && d.stage !== "cerrada" && d.stage !== "perdida").length;
             const summary = searchSummary(c);
+            const temp = temperatureOf(c, ctx);
             return (
               <li key={c.id} className="clist__row">
                 <Link href={`/panel/contactos/${c.id}`} className="clist__main">
                   <span className="clist__who">
-                    <strong>{c.name}</strong>
+                    <strong>
+                      <span className={`temp temp--${temp.label}`} title={`${temperatureLabel[temp.label]} · ${temp.score}/100`} />
+                      {c.name}
+                    </strong>
                     <span className="clist__kinds">
                       {c.kinds.map((k) => (
                         <span key={k} className={`kchip kchip--${k}`}>
@@ -155,6 +183,8 @@ export default async function Contacts({ searchParams }: { searchParams: Promise
           })}
         </ul>
       )}
+      </div>
+      </div>
     </div>
   );
 }

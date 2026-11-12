@@ -4,6 +4,7 @@ import { promisify } from "node:util";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { repo } from "./data";
+import { site } from "@/site.config";
 import type { TeamUser } from "./types";
 
 const scrypt = promisify(scryptCb) as (pw: string, salt: Buffer, len: number) => Promise<Buffer>;
@@ -37,6 +38,20 @@ function secret(): string {
 
 const sign = (payload: string) => createHmac("sha256", secret()).update(payload).digest("base64url");
 
+/** Firma corta para links compartibles (p. ej. informe al propietario). */
+export function signToken(value: string): string {
+  return `${value}.${sign(`share:${value}`).slice(0, 22)}`;
+}
+
+export function verifyToken(token: string): string | null {
+  const i = token.lastIndexOf(".");
+  if (i <= 0) return null;
+  const value = token.slice(0, i);
+  const a = Buffer.from(signToken(value));
+  const b = Buffer.from(token);
+  return a.length === b.length && timingSafeEqual(a, b) ? value : null;
+}
+
 export async function createSession(userId: string) {
   const payload = Buffer.from(JSON.stringify({ uid: userId, exp: Date.now() + MAX_AGE * 1000 })).toString(
     "base64url",
@@ -62,11 +77,11 @@ function envAdmin(): TeamUser | null {
   if (!email || !process.env.ADMIN_PASSWORD) return null;
   return {
     id: ENV_ADMIN_ID,
-    name: "Administración",
+    name: site.name,
     email,
     phone: "",
     role: "admin",
-    title: "Administración",
+    title: "Titular",
     license: null,
     bio: "",
     active: true,
