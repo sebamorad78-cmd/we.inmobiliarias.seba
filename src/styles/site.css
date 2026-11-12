@@ -3859,3 +3859,91 @@ a.svc__row:hover .svc__title {
 .reel__claim em {
   color: #e2c8a0;
 }
+
+/* Portada sin reloj ni coordenadas */
+.reel {
+  grid-template-rows: 1fr auto;
+}
+.reel__body {
+  padding-top: calc(var(--header-h) + 40px);
+}
+
+/* ── Portada en celular: foto limpia arriba, texto legible abajo ── */
+@media (max-width: 640px) {
+  .reel {
+    display: flex;
+    flex-direction: column;
+    height: auto;
+    overflow: visible;
+    background: var(--paper);
+    color: var(--ink);
+  }
+  .reel__stage {
+    position: relative;
+    inset: auto;
+    order: 1;
+    height: 60svh;
+    min-height: 380px;
+    overflow: hidden;
+    z-index: 0;
+  }
+  .reel__shade {
+    background:
+      linear-gradient(180deg, rgb(14 16 13 / 0.55) 0%, rgb(14 16 13 / 0) 26%),
+      linear-gradient(0deg, rgb(14 16 13 / 0.25) 0%, rgb(14 16 13 / 0) 30%);
+  }
+  .reel__body {
+    display: contents;
+  }
+  .reel__card {
+    order: 2;
+    position: relative;
+    z-index: 2;
+    margin: -56px 16px 0;
+    padding: 16px 18px;
+    background: var(--surface);
+    box-shadow: 0 18px 40px -24px rgb(0 0 0 / 0.45);
+  }
+  .reel__nav {
+    order: 3;
+    padding: 16px 20px 0;
+  }
+  .reel__bar {
+    color: var(--muted);
+  }
+  .reel__bar::before {
+    background: var(--line);
+  }
+  .reel__bar-fill {
+    background: var(--ink);
+  }
+  .reel__intro {
+    order: 4;
+    padding: 30px 20px 40px;
+  }
+  .reel__kicker {
+    color: var(--clay);
+    margin-bottom: 12px;
+  }
+  .reel__claim {
+    font-size: clamp(34px, 10vw, 44px);
+    line-height: 1.05;
+    text-shadow: none;
+    color: var(--ink);
+  }
+  .reel__search {
+    margin-top: 22px;
+    background: var(--white);
+    border-color: var(--line);
+    color: var(--ink);
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+  }
+  .reel__search span {
+    color: var(--muted);
+  }
+  .reel__search:hover {
+    background: var(--white);
+    border-color: var(--ink);
+  }
+}

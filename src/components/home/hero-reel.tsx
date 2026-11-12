@@ -3,7 +3,6 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useCallback, useEffect, useRef, useState } from "react";
-import { site } from "@/site.config";
 import { Icon } from "../icon";
 import { openSearch } from "../search/command-search";
 
@@ -20,26 +19,7 @@ export interface ReelSlide {
 
 const DURATION = 7000;
 
-function toDMS(v: number, pos: string, neg: string) {
-  const a = Math.abs(v);
-  const d = Math.floor(a);
-  const m = Math.floor((a - d) * 60);
-  const s = Math.round(((a - d) * 60 - m) * 60);
-  return `${d}°${String(m).padStart(2, "0")}′${String(s).padStart(2, "0")}″${v < 0 ? neg : pos}`;
-}
 
-/** Hora de Buenos Aires: se pinta recién en el cliente para no generar diferencias de hidratación. */
-function useBaTime() {
-  const [t, setT] = useState<string | null>(null);
-  useEffect(() => {
-    const fmt = new Intl.DateTimeFormat("es-AR", { timeZone: "America/Argentina/Buenos_Aires", hour: "2-digit", minute: "2-digit", hour12: false });
-    const tick = () => setT(fmt.format(new Date()));
-    tick();
-    const id = setInterval(tick, 15000);
-    return () => clearInterval(id);
-  }, []);
-  return t;
-}
 
 /**
  * Portada: recorrido por las propiedades destacadas.
@@ -54,7 +34,6 @@ export function HeroReel({ slides }: { slides: ReelSlide[] }) {
   const progress = useRef<HTMLSpanElement[]>([]);
   const touchX = useRef<number | null>(null);
   const elapsed = useRef(0);
-  const time = useBaTime();
   const n = slides.length;
 
   const go = useCallback(
@@ -131,14 +110,6 @@ export function HeroReel({ slides }: { slides: ReelSlide[] }) {
           ) : null,
         )}
         <div className="reel__shade" />
-      </div>
-
-      <div className="wrap reel__top">
-        <p className="reel__meta">
-          <span className="reel__coord">{toDMS(site.geo.lat, "N", "S")}</span>
-          <span className="reel__coord">{toDMS(site.geo.lng, "E", "O")}</span>
-          <span suppressHydrationWarning>{time ? `Buenos Aires ${time}` : "Buenos Aires"}</span>
-        </p>
       </div>
 
       <div className="wrap reel__body">
