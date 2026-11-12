@@ -123,14 +123,10 @@ export function HeroReel({ slides }: { slides: ReelSlide[] }) {
           <button type="button" className="reel__search" onClick={openSearch}>
             <Icon name="search" size={18} />
             <span>Buscar por barrio, tipo o código</span>
-            <kbd>Ctrl K</kbd>
           </button>
         </div>
 
         <div className="reel__card" key={s.href} aria-live="polite">
-          <p className="reel__index num">
-            {String(i + 1).padStart(2, "0")} <span>/ {String(n).padStart(2, "0")}</span>
-          </p>
           <p className="reel__hood">{s.hood}</p>
           <h2 className="reel__title">
             <Link href={s.href}>{s.title}</Link>

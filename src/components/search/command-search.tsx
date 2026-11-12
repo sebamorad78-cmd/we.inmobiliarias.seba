@@ -280,7 +280,6 @@ export function CommandSearch() {
             spellCheck={false}
             enterKeyHint="search"
           />
-          <kbd className="cmd__kbd">Esc</kbd>
         </div>
         <div className="cmd__ops" role="group" aria-label="Operación">
           {OPS.map((o) => (
@@ -302,11 +301,6 @@ export function CommandSearch() {
             </>
           )}
         </ul>
-        <div className="cmd__foot">
-          <span><kbd>↑</kbd><kbd>↓</kbd> navegar</span>
-          <span><kbd>↵</kbd> abrir</span>
-          <span><kbd>Tab</kbd> operación</span>
-        </div>
       </div>
     </dialog>
   );

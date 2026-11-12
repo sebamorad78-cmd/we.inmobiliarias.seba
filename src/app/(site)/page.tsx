@@ -17,7 +17,7 @@ const HERO_IMAGE = "https://images.unsplash.com/photo-1600585154340-be6161a56a0c
 const SERVICES = [
   {
     title: "Venta",
-    text: "Tasación, fotografía, publicación en portales, visitas acompañadas, reserva, boleto y escritura.",
+    text: "Tasación, fotos, publicación en la web y en redes, visitas acompañadas, reserva, boleto y escritura.",
     href: "/tasaciones#vender",
   },
   {
@@ -120,7 +120,7 @@ export default async function HomePage() {
           <div className="section-head">
             <div>
               <p className="eyebrow">Zonas</p>
-              <h2 className="h1">Barrios</h2>
+              <h2 className="h1">Dónde trabajo</h2>
               <p className="lead">
                 Propiedades en cartera por zona. El valor indicado es el precio más bajo en venta publicado hoy.
               </p>

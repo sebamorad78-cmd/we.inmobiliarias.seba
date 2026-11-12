@@ -697,15 +697,15 @@ p {
   }
 }
 
-/* ── Identidad Rita Bazzigalupi Propiedades: café y dorado ── */
+/* ── Identidad Rita Bazzigalupi Propiedades: el bordó y el dorado de sus carteles ── */
 :root {
-  --forest: #2e2724;
-  --forest-2: #40362f;
-  --forest-ink: #f2ece4;
-  --clay: #86592f;
-  --clay-2: #6e4a28;
+  --forest: #5a1a25;
+  --forest-2: #471219;
+  --forest-ink: #f6eee6;
+  --clay: #7a2433;
+  --clay-2: #5a1a25;
   --muted: #67625b;
-  --clay-soft: #efe4d6;
+  --clay-soft: #f1e3e1;
   --gold: #c39a5f;
 }
 

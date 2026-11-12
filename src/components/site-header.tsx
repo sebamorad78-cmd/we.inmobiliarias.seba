@@ -109,7 +109,7 @@ export function SiteHeader() {
         </nav>
 
         <div className="header__tools">
-          <button type="button" className="header__search" onClick={openSearch} aria-label="Buscar (Ctrl K)">
+          <button type="button" className="header__search" onClick={openSearch} aria-label="Buscar propiedades">
             <Icon name="search" size={19} />
             <span>Buscar</span>
           </button>
