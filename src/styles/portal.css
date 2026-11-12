@@ -287,3 +287,121 @@ html:has(#contenido) .pdetail__amount {
 html:has(#contenido) .pcard__actions .icon-btn {
   background: rgb(255 255 255 / 0.95);
 }
+
+/* ── Bordes más redondeados, como los portales grandes ── */
+html:has(#contenido) .pcard {
+  border-radius: 16px;
+}
+html:has(#contenido) .btn {
+  border-radius: 10px;
+}
+html:has(#contenido) :is(.input, .select, .textarea) {
+  border-radius: 10px;
+}
+.phero .hsearch__tabs {
+  border-radius: 14px 14px 0 0;
+}
+.phero .hsearch__fields {
+  border-radius: 0 14px 14px 14px;
+}
+.phero .hsearch__submit {
+  border-radius: 10px;
+}
+
+/* ── Celular: un solo buscador, grande y redondeado ── */
+@media (max-width: 640px) {
+  .phero {
+    padding-block: 56px 48px;
+  }
+  .phero__inner {
+    text-align: center;
+  }
+  .phero__title {
+    font-size: 34px;
+  }
+  .phero__sub {
+    font-size: 17px;
+  }
+  .phero .hsearch {
+    margin-top: 26px;
+  }
+  .phero .hsearch__tabs,
+  .phero .hsearch__field:not(.hsearch__field--grow) {
+    display: none;
+  }
+  .phero .hsearch__fields {
+    display: flex;
+    align-items: stretch;
+    padding: 0;
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 16px 40px -18px rgb(0 0 0 / 0.65);
+  }
+  .phero .hsearch__field--grow {
+    flex: 1;
+    padding: 0 18px;
+    border: 0;
+    justify-content: center;
+  }
+  .phero .hsearch__field--grow > span {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+  }
+  .phero .hsearch__field--grow input {
+    height: 60px;
+    font-size: 17px;
+  }
+  .phero .hsearch__field:focus-within {
+    background: #fff;
+  }
+  .phero .hsearch__submit {
+    flex: none;
+    width: 64px;
+    min-height: 60px;
+    margin: 0;
+    padding: 0;
+    border-radius: 0;
+    font-size: 0;
+    gap: 0;
+  }
+  .phero .hsearch__submit svg {
+    width: 24px;
+    height: 24px;
+  }
+}
+
+.phero .hsearch {
+  text-align: left;
+}
+html:has(#contenido) .pcard__actions .icon-btn {
+  border-radius: 10px;
+}
+@media (max-width: 640px) {
+  html:has(#contenido) .phero .hsearch__submit {
+    font-size: 0;
+    padding: 0;
+    min-height: 60px;
+    border-radius: 0;
+  }
+  html:has(#contenido) .section-head {
+    flex-wrap: nowrap;
+    align-items: baseline;
+    gap: 16px;
+  }
+  html:has(#contenido) .section-head .link {
+    white-space: nowrap;
+  }
+}
+@media (max-width: 640px) {
+  html:has(#contenido) .phero .hsearch__field--grow {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+  html:has(#contenido) .phero .hsearch__field--grow input {
+    width: 100%;
+  }
+}

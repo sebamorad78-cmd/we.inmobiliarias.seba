@@ -70,7 +70,7 @@ export function HeroSearch({ neighborhoods }: { neighborhoods: string[] }) {
             list="hs-barrios"
             value={where}
             onChange={(e) => setWhere(e.target.value)}
-            placeholder="Maipú, Miramar, General Pirán…"
+            placeholder="¿Dónde querés mudarte?"
             autoComplete="off"
           />
           <datalist id="hs-barrios">
