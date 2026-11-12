@@ -2919,6 +2919,7 @@
 }
 .tasa__media img {
   object-fit: cover;
+  object-position: 38% 50%;
 }
 .tasa__body {
   padding: clamp(56px, 7vw, 112px) clamp(24px, 6vw, 96px);
