@@ -65,7 +65,7 @@ export async function submitLead(_prev: FormState, formData: FormData): Promise<
   // Límite por IP (solo cuenta envíos válidos: corregir un error de tipeo no penaliza).
   const ip = await clientIp();
   if (!rateLimit(`lead:${ip}`, 6, 10 * 60 * 1000)) {
-    return { ok: false, message: "Recibimos varios mensajes seguidos. Probá de nuevo en unos minutos o escribinos por WhatsApp." };
+    return { ok: false, message: "Recibimos varios mensajes seguidos. Probá de nuevo en unos minutos o escribime por WhatsApp." };
   }
 
 
@@ -98,7 +98,7 @@ export async function submitLead(_prev: FormState, formData: FormData): Promise<
     await repo.saveLead(lead);
   } catch (err) {
     console.error("[leads] error al guardar", err);
-    return { ok: false, message: "No pudimos enviar tu mensaje. Probá de nuevo o escribinos por WhatsApp." };
+    return { ok: false, message: "No pudimos enviar tu mensaje. Probá de nuevo o escribime por WhatsApp." };
   }
 
   // Entra al CRM: contacto, historial y tarea de respuesta. Un fallo acá nunca afecta al cliente.
@@ -116,6 +116,6 @@ export async function submitLead(_prev: FormState, formData: FormData): Promise<
       ? `Gracias, ${firstName}. Un tasador te va a contactar dentro de las próximas 24 h hábiles.`
       : d.kind === "visita"
         ? `Gracias, ${firstName}. Te confirmamos la visita a la brevedad.`
-        : `Gracias, ${firstName}. Te respondemos a la brevedad.`;
+        : `Gracias, ${firstName}. Te respondo a la brevedad.`;
   return { ok: true, message: reply };
 }

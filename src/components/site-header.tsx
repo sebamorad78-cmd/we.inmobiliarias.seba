@@ -13,7 +13,7 @@ const NAV = [
   { href: "/propiedades?operacion=venta", label: "Comprar", match: "venta" },
   { href: "/propiedades?operacion=alquiler", label: "Alquilar", match: "alquiler" },
   { href: "/tasaciones", label: "Tasaciones" },
-  { href: "/nosotros", label: "Nosotros" },
+  { href: "/nosotros", label: "Sobre Rita" },
   { href: "/contacto", label: "Contacto" },
 ];
 

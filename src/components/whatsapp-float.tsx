@@ -28,7 +28,7 @@ export function WhatsAppFloat() {
       href={whatsappLink(site.whatsapp, `Hola ${site.name}, quisiera hacer una consulta.`)}
       target="_blank"
       rel="noopener"
-      aria-label="Escribinos por WhatsApp"
+      aria-label="Escribime por WhatsApp"
     >
       <Icon name="whatsapp" size={26} />
     </a>

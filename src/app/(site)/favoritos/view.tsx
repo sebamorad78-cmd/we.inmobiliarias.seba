@@ -23,7 +23,7 @@ export function FavoritesView() {
       <header className="page-head">
         <p className="eyebrow">Tu selección</p>
         <h1 className="h1">Favoritos</h1>
-        <p className="lead">Las propiedades que guardaste quedan en este dispositivo. Enviánoslas y coordinamos las visitas en un solo recorrido.</p>
+        <p className="lead">Las propiedades que guardaste quedan en este dispositivo. Mandámelas y coordino las visitas en un solo recorrido.</p>
       </header>
 
       {loading ? (

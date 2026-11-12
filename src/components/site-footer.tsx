@@ -12,7 +12,7 @@ export function SiteFooter() {
           <div className="footer__brand">
             <Logo light />
             <p className="footer__claim">
-              Venta, alquiler, tasación y administración de propiedades en Buenos Aires y Zona Norte.
+              Venta, alquiler y tasación de campos, quintas, casas y lotes en Ayacucho y la región.
             </p>
           </div>
           <div className="footer__cols">
@@ -30,9 +30,9 @@ export function SiteFooter() {
               <h2 className="footer__h">Servicios</h2>
               <ul>
                 <li><Link href="/tasaciones">Tasar mi propiedad</Link></li>
-                <li><Link href="/tasaciones#vender">Vender con nosotros</Link></li>
+                <li><Link href="/tasaciones#vender">Vender una propiedad</Link></li>
                 <li><Link href="/contacto?motivo=administracion">Administración de alquileres</Link></li>
-                <li><Link href="/nosotros">Equipo</Link></li>
+                <li><Link href="/nosotros">Sobre Rita</Link></li>
               </ul>
             </div>
             <div>
@@ -70,7 +70,7 @@ export function SiteFooter() {
             Las medidas, superficies y valores publicados son aproximados y no constituyen oferta. Sujetos a verificación y
             a variaciones sin previo aviso.
           </p>
-          <p>Sitio de demostración: algunas propiedades, asesores y valores son ejemplos.</p>
+          <p>Sitio de demostración: algunas propiedades y valores son ejemplos.</p>
           <p>
             <Link href="/panel">Acceso equipo</Link>
           </p>

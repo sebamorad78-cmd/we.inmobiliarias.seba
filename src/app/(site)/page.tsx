@@ -146,7 +146,7 @@ export default async function HomePage() {
         <div className="wrap svc">
           <div className="svc__head">
             <p className="eyebrow">Servicios</p>
-            <h2 className="h1">Qué hacemos</h2>
+            <h2 className="h1">En qué te puedo ayudar</h2>
           </div>
           <ul className="svc__list">
             {SERVICES.map((s) => (

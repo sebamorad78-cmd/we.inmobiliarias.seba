@@ -3867,3 +3867,138 @@ a.svc__row:hover .svc__title {
     display: none;
   }
 }
+
+/* ── Tipografía editorial ──
+   Rótulos, botones y menús en letra normal (sin mayúsculas espaciadas):
+   se lee como una publicación cuidada y no como una plantilla.
+   El logo conserva su composición original.
+   Solo en el sitio público: el panel tiene su propio estilo. */
+body:not(:has(.panel)) .eyebrow,
+body:not(:has(.panel)) .link,
+body:not(:has(.panel)) .field > span,
+body:not(:has(.panel)) .label,
+body:not(:has(.panel)) .segmented button,
+body:not(:has(.panel)) .segmented a,
+body:not(:has(.panel)) .tag,
+body:not(:has(.panel)) .header__link,
+body:not(:has(.panel)) .header__search,
+body:not(:has(.panel)) .hsearch__tabs button,
+body:not(:has(.panel)) .hsearch__field span,
+body:not(:has(.panel)) .pcard__where,
+body:not(:has(.panel)) .stats__label,
+body:not(:has(.panel)) .footer__h,
+body:not(:has(.panel)) .viewtoggle a,
+body:not(:has(.panel)) .keyfacts__l,
+body:not(:has(.panel)) .reel__meta,
+body:not(:has(.panel)) .reel__hood,
+body:not(:has(.panel)) .reel__cta,
+body:not(:has(.panel)) .reel__bar,
+body:not(:has(.panel)) .cmd__ops button,
+body:not(:has(.panel)) .cmd__label,
+body:not(:has(.panel)) .hindex__city,
+body:not(:has(.panel)) .hindex__count,
+body:not(:has(.panel)) .hindex__from,
+body:not(:has(.panel)) .svc__more,
+body:not(:has(.panel)) .plainlist dt,
+body:not(:has(.panel)) .directory__role,
+body:not(:has(.panel)) .office__data dt,
+body:not(:has(.panel)) .reel__kicker,
+body:not(:has(.panel)) .hguide__city,
+body:not(:has(.panel)) .hguide__data dt,
+body:not(:has(.panel)) .pblock > .h3,
+body:not(:has(.panel)) .cbox__label,
+body:not(:has(.panel)) .fgroup legend,
+body:not(:has(.panel)) .fgroup summary,
+body:not(:has(.panel)) .btn {
+  text-transform: none;
+  letter-spacing: 0.005em;
+}
+
+body:not(:has(.panel)) .eyebrow {
+  font-size: 15px;
+  font-weight: 500;
+  color: var(--ink-2);
+}
+
+body:not(:has(.panel)) .section--dark .eyebrow,
+body:not(:has(.panel)) .reel .eyebrow {
+  color: inherit;
+}
+
+body:not(:has(.panel)) .btn {
+  font-size: 15px;
+  font-weight: 500;
+}
+
+body:not(:has(.panel)) .btn--s {
+  font-size: 14px;
+}
+
+body:not(:has(.panel)) .link {
+  font-size: 15px;
+  font-weight: 500;
+}
+
+body:not(:has(.panel)) .field > span,
+body:not(:has(.panel)) .label,
+body:not(:has(.panel)) .cbox__label,
+body:not(:has(.panel)) .fgroup legend,
+body:not(:has(.panel)) .fgroup summary {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--ink-2);
+}
+
+body:not(:has(.panel)) .header__link,
+body:not(:has(.panel)) .header__search {
+  font-size: 15px;
+  font-weight: 450;
+}
+
+body:not(:has(.panel)) .tag {
+  font-size: 13px;
+}
+
+body:not(:has(.panel)) .reel__kicker {
+  font-size: 17px;
+  font-weight: 450;
+}
+
+body:not(:has(.panel)) .reel__hood {
+  font-size: 15px;
+  font-weight: 500;
+}
+
+body:not(:has(.panel)) .reel__cta {
+  font-size: 15px;
+}
+
+body:not(:has(.panel)) .reel__bar {
+  font-size: 13.5px;
+}
+
+body:not(:has(.panel)) .pcard__where,
+body:not(:has(.panel)) .hindex__city,
+body:not(:has(.panel)) .hguide__city {
+  font-size: 14px;
+}
+
+body:not(:has(.panel)) .stats__label,
+body:not(:has(.panel)) .keyfacts__l,
+body:not(:has(.panel)) .plainlist dt,
+body:not(:has(.panel)) .office__data dt,
+body:not(:has(.panel)) .hguide__data dt,
+body:not(:has(.panel)) .hindex__count,
+body:not(:has(.panel)) .hindex__from,
+body:not(:has(.panel)) .directory__role,
+body:not(:has(.panel)) .footer__h,
+body:not(:has(.panel)) .svc__more,
+body:not(:has(.panel)) .cmd__label {
+  font-size: 14px;
+}
+
+body:not(:has(.panel)) .about__role {
+  margin-top: 14px;
+  font-size: 17px;
+  color: var(--ink-2);
+}

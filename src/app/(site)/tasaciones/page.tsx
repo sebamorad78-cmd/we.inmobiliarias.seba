@@ -11,11 +11,11 @@ export const metadata: Metadata = {
 
 const STEPS = [
   { title: "Tasación", text: "Visita a la propiedad, revisión de títulos y mensura, e informe escrito con comparables de la zona y un rango de precio." },
-  { title: "Preparación", text: "Fotografía profesional, video, plano y, si suma, recorrido 360°. Sugerencias concretas de arreglos menores antes de publicar." },
-  { title: "Publicación", text: "Aviso en los principales portales y envío directo a compradores de nuestra base con búsqueda activa en la zona." },
+  { title: "Preparación", text: "Fotos en alta definición y sugerencias concretas de arreglos menores antes de publicar." },
+  { title: "Publicación", text: "Publicación en la web y en redes, y aviso directo a interesados con búsqueda activa en la zona." },
   { title: "Visitas", text: "Siempre acompañadas. Después de cada una recibís la devolución del interesado por escrito." },
-  { title: "Negociación", text: "Analizamos cada oferta con vos, con datos de operaciones cerradas recientes. Reserva con seña documentada." },
-  { title: "Escritura", text: "Coordinamos escribanía, certificados, boleto y escritura hasta la entrega de llaves." },
+  { title: "Negociación", text: "Cada oferta se analiza con vos, con datos de operaciones recientes de la zona. Reserva con seña documentada." },
+  { title: "Escritura", text: "Coordinación de escribanía, certificados, boleto y escritura hasta la entrega de llaves." },
 ];
 
 export default async function ValuationPage({ searchParams }: { searchParams: Promise<{ tipo?: string; zona?: string }> }) {
@@ -94,8 +94,8 @@ export default async function ValuationPage({ searchParams }: { searchParams: Pr
       <section className="section section--surface" id="vender">
         <div className="wrap svc">
           <div className="svc__head">
-            <p className="eyebrow">Vender con nosotros</p>
-            <h2 className="h1">Cómo trabajamos una venta</h2>
+            <p className="eyebrow">Vender con Rita</p>
+            <h2 className="h1">Cómo trabajo una venta</h2>
           </div>
           <ol className="svc__list svc__list--steps">
             {STEPS.map((st, i) => (

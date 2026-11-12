@@ -37,7 +37,7 @@ export async function generateMetadata({ searchParams }: { searchParams: Promise
   const title = heading(f);
   return {
     title,
-    description: `${title}. Fichas completas con fotos, planos, ubicación y contacto directo con el asesor.`,
+    description: `${title}. Fichas completas con fotos, planos, ubicación y contacto directo con Rita.`,
     alternates: { canonical: `/propiedades${filtersToQuery({ operation: f.operation, type: f.type, neighborhood: f.neighborhood })}` },
   };
 }
@@ -227,9 +227,9 @@ export default async function ListingPage({ searchParams }: { searchParams: Prom
           <aside className="alert-box">
             <div>
               <p className="eyebrow">Búsqueda personalizada</p>
-              <h2 className="h3">¿No está lo que buscás? Te avisamos cuando entre.</h2>
+              <h2 className="h3">¿No está lo que buscás? Te aviso cuando entre.</h2>
               <p className="muted small">
-                Guardamos tu búsqueda y un asesor te escribe apenas ingresa algo que coincida, antes de publicarlo.
+                Guardo tu búsqueda y te escribo apenas ingresa algo que coincida, antes de publicarlo.
               </p>
             </div>
             <LeadForm kind="consulta" defaultMessage={`Quiero recibir novedades de: ${searchSummary}`} submitLabel="Avisarme" />

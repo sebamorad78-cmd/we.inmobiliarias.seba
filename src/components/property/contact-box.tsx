@@ -29,7 +29,7 @@ export function ContactBox({
     <div className="cbox" id="contacto">
       {agent && (
         <div className="cbox__agent">
-          <p className="cbox__label">Asesor a cargo</p>
+          <p className="cbox__label">Te atiende</p>
           <p className="cbox__name">{agent.name}</p>
           <p className="tiny muted">{agent.title}</p>
         </div>

@@ -6,7 +6,7 @@ import { PropertyMap } from "@/components/map/property-map";
 
 export const metadata: Metadata = {
   title: "Contacto",
-  description: `Escribinos, llamanos o visitanos en ${site.address.street}, ${site.address.city}.`,
+  description: `Escribime, llamame o visitame en ${site.address.street}, ${site.address.city}.`,
   alternates: { canonical: "/contacto" },
 };
 
@@ -27,7 +27,7 @@ export default async function ContactPage({ searchParams }: { searchParams: Prom
       <div className="split__text">
         <p className="eyebrow">Contacto</p>
         <h1 className="h1">Contacto</h1>
-        <p className="lead">Respondemos todas las consultas dentro del mismo día hábil.</p>
+        <p className="lead">Cada consulta la respondo personalmente, por WhatsApp, teléfono o email.</p>
         <dl className="plainlist plainlist--big">
           <div>
             <dt>WhatsApp</dt>

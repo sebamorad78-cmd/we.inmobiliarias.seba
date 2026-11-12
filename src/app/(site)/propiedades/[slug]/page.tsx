@@ -66,7 +66,7 @@ function facts(p: Property): { icon: IconName; label: string; value: string }[] 
 export default async function PropertyPage({ params }: Props) {
   const p = await getPublicProperty((await params).slug);
   if (!p) notFound();
-  const [agent, similar] = await Promise.all([getAgent(p.agentId), getSimilar(p)]);
+  const [agent, similar] = await Promise.all([getAgent(site.publicAgentId ?? p.agentId), getSimilar(p)]);
 
   const url = `${site.url}/propiedades/${p.slug}`;
   const video = youtubeEmbed(p.videoUrl);

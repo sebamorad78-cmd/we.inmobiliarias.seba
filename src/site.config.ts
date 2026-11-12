@@ -32,6 +32,11 @@ export const site = {
   license: "Martillera y corredora pública · Tomo III, folio 812, n.º 1468",
   /** Formación y presentación (página Nosotros). */
   bio: "Martillera y corredora pública, egresada de la Universidad FASTA. Desde Ayacucho trabaja en negocios inmobiliarios de la ciudad y la zona: campos, quintas, casas y lotes, con tasaciones y acompañamiento hasta la escritura.",
+  /**
+   * En el sitio público, todas las propiedades se consultan con esta persona
+   * (la titular trabaja sola). null = se muestra el asesor asignado a cada propiedad.
+   */
+  publicAgentId: "usr_rbazzigalupi" as string | null,
   /** Redes: vacías no se muestran. */
   social: {
     instagram: "",
