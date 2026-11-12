@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { LeadForm } from "@/components/lead-form";
 import { site } from "@/site.config";
+import { PageHero } from "@/components/page-hero";
 import { VALUATION_TYPES, VALUATION_ZONES } from "@/components/home/valuation-invite";
 
 export const metadata: Metadata = {
@@ -24,14 +25,15 @@ export default async function ValuationPage({ searchParams }: { searchParams: Pr
   const preZone = VALUATION_ZONES.find((z) => z === sp.zona) ?? VALUATION_ZONES[0];
   return (
     <>
+      <PageHero
+        title="Tasación de propiedades"
+        sub={`${site.name} visita la propiedad y te entrega un informe escrito y firmado con el valor de mercado. Pedir una tasación no te obliga a vender.`}
+        image="/img/quinta-general-piran/quinta-04-manga-y-potrero.jpg"
+        position="50% 55%"
+      />
       <section className="wrap page-pad split">
         <div className="split__text">
-          <p className="eyebrow">Tasaciones</p>
-          <h1 className="h1">Tasación de propiedades</h1>
-          <p className="lead">
-            {site.name} visita la propiedad y te entrega un informe escrito y firmado con el valor de mercado: campos,
-            quintas, casas y lotes en Ayacucho y la región. Pedir una tasación no te obliga a vender.
-          </p>
+          <p className="lead">Campos, quintas, casas y lotes en Ayacucho y la región.</p>
           <dl className="plainlist">
             <div><dt>Incluye</dt><dd>Comparables de la zona, rango de precio y plazo estimado de venta</dd></div>
             <div><dt>Campos</dt><dd>Aptitud del suelo, mejoras, aguadas, alambrados y accesos</dd></div>

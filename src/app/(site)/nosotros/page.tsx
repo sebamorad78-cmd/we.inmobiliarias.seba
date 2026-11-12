@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { site } from "@/site.config";
 import { whatsappLink } from "@/lib/format";
+import { PageHero } from "@/components/page-hero";
 
 export const metadata: Metadata = {
   title: "Rita Bazzigalupi",
@@ -32,11 +33,15 @@ export default function AboutPage() {
   const wa = whatsappLink(site.whatsapp, `Hola Rita, te escribo desde tu página web.`);
   return (
     <>
+      <PageHero
+        title={site.name}
+        sub="Martillera y corredora pública en Ayacucho"
+        image="/img/quinta-general-piran/quinta-01-arboleda.jpg"
+        position="50% 45%"
+      />
       <section className="wrap page-pad split">
         <div className="split__text">
-          <p className="eyebrow">Quién soy</p>
-          <h1 className="h1">{site.name}</h1>
-          <p className="about__role">Martillera y corredora pública</p>
+          <h2 className="h1">Quién soy</h2>
         </div>
         <div className="split__text about__copy">
           <p className="lead">

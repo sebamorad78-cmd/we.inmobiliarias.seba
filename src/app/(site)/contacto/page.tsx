@@ -1,3 +1,4 @@
+import { PageHero } from "@/components/page-hero";
 import type { Metadata } from "next";
 import { site } from "@/site.config";
 import { whatsappLink } from "@/lib/format";
@@ -23,11 +24,15 @@ export default async function ContactPage({ searchParams }: { searchParams: Prom
   const { motivo } = await searchParams;
   const topic = motivo && motivo in TOPICS ? TOPICS[motivo] : TOPICS.compra;
   return (
+    <>
+    <PageHero
+      title="Contacto"
+      sub="Cada consulta la respondo personalmente, por WhatsApp, teléfono o email."
+      image="/img/miramar/miramar-01-vista.jpg"
+      position="50% 60%"
+    />
     <section className="wrap page-pad split">
       <div className="split__text">
-        <p className="eyebrow">Contacto</p>
-        <h1 className="h1">Contacto</h1>
-        <p className="lead">Cada consulta la respondo personalmente, por WhatsApp, teléfono o email.</p>
         <dl className="plainlist plainlist--big">
           <div>
             <dt>WhatsApp</dt>
@@ -65,7 +70,7 @@ export default async function ContactPage({ searchParams }: { searchParams: Prom
         <PropertyMap single className="pmap--contact" zoom={16} points={[{ id: "office", lat: site.geo.lat, lng: site.geo.lng, label: site.name, title: site.name, href: "#" }]} />
       </div>
       <div className="panel-card">
-        <h2 className="h3" style={{ marginBottom: 20 }}>Envianos un mensaje</h2>
+        <h2 className="h3" style={{ marginBottom: 20 }}>Mandame un mensaje</h2>
         <LeadForm
           kind="contacto"
           extra={
@@ -79,5 +84,6 @@ export default async function ContactPage({ searchParams }: { searchParams: Prom
         />
       </div>
     </section>
+    </>
   );
 }

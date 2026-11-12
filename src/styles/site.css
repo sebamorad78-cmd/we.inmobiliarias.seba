@@ -4128,3 +4128,52 @@ body:not(:has(.panel)) .about__role {
     font-size: 14px;
   }
 }
+
+/* ── Encabezado de página con foto ── */
+.phead {
+  position: relative;
+  isolation: isolate;
+  display: flex;
+  align-items: flex-end;
+  min-height: clamp(300px, 42vh, 440px);
+  overflow: hidden;
+  color: #fff;
+  background: #2a1015;
+}
+.phead__img {
+  object-fit: cover;
+  z-index: -2;
+}
+.phead__shade {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: linear-gradient(0deg, rgb(20 12 12 / 0.72) 0%, rgb(20 12 12 / 0.25) 55%, rgb(20 12 12 / 0.15) 100%);
+}
+.phead__inner {
+  width: 100%;
+  padding-block: 40px 44px;
+}
+.phead__title {
+  font-family: var(--font-serif);
+  font-size: clamp(38px, 5vw, 64px);
+  line-height: 1.04;
+  letter-spacing: -0.01em;
+  text-wrap: balance;
+}
+.phead__sub {
+  margin-top: 14px;
+  max-width: 640px;
+  font-size: clamp(16px, 1.5vw, 19px);
+  line-height: 1.55;
+  color: rgb(255 255 255 / 0.9);
+  text-wrap: pretty;
+}
+@media (max-width: 640px) {
+  .phead {
+    min-height: 260px;
+  }
+  .phead__inner {
+    padding-block: 28px 30px;
+  }
+}
