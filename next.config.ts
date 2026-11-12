@@ -17,6 +17,8 @@ const nextConfig: NextConfig = {
   images: {
     formats: ["image/avif", "image/webp"],
     qualities: [70, 80, 90],
+    // Las URLs de imágenes no cambian de contenido (fotos subidas con nombre único): se pueden guardar un año.
+    minimumCacheTTL: 31536000,
     deviceSizes: [640, 828, 1080, 1280, 1600, 1920, 2560],
     remotePatterns: [
       { protocol: "https", hostname: "images.unsplash.com" },
@@ -27,7 +29,13 @@ const nextConfig: NextConfig = {
     serverActions: { bodySizeLimit: "12mb" },
   },
   async headers() {
-    return [{ source: "/:path*", headers: securityHeaders }];
+    const forever = [{ key: "Cache-Control", value: "public, max-age=31536000, immutable" }];
+    return [
+      { source: "/:path*", headers: securityHeaders },
+      { source: "/_next/image", headers: forever },
+      { source: "/img/:path*", headers: forever },
+      { source: "/uploads/:path*", headers: forever },
+    ];
   },
 };
 

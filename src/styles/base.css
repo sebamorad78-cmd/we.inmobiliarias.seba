@@ -672,10 +672,17 @@ p {
 /* Revelado al hacer scroll (ver components/reveal) */
 .reveal {
   opacity: 0;
-  transform: translateY(18px);
+  transform: translateY(10px);
   transition:
-    opacity 0.9s var(--ease),
-    transform 0.9s var(--ease);
+    opacity 0.6s var(--ease),
+    transform 0.6s var(--ease);
+}
+@media (prefers-reduced-motion: reduce) {
+  .reveal {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
 }
 
 .reveal.is-in {
@@ -695,8 +702,31 @@ p {
   --forest: #2e2724;
   --forest-2: #40362f;
   --forest-ink: #f2ece4;
-  --clay: #93653a;
-  --clay-2: #7a522e;
+  --clay: #86592f;
+  --clay-2: #6e4a28;
+  --muted: #67625b;
   --clay-soft: #efe4d6;
   --gold: #c39a5f;
+}
+
+/* Letras nítidas y cortes de línea prolijos en todos los navegadores */
+html {
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+}
+h1, h2, h3, .h1, .h2 {
+  text-wrap: balance;
+}
+p, li, blockquote {
+  text-wrap: pretty;
+}
+/* iPhone hace zoom al enfocar un campo con letra menor a 16 px: se evita en pantallas táctiles */
+@media (pointer: coarse) {
+  input:not([type="checkbox"]):not([type="radio"]):not([type="range"]),
+  select,
+  textarea {
+    font-size: max(16px, 1em);
+  }
 }

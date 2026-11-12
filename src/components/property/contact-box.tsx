@@ -45,10 +45,10 @@ export function ContactBox({
       </div>
 
       <div className="segmented cbox__tabs" role="tablist" aria-label="Tipo de contacto">
-        <button type="button" role="tab" aria-selected={tab === "consulta"} aria-pressed={tab === "consulta"} onClick={() => setTab("consulta")}>
+        <button type="button" role="tab" aria-selected={tab === "consulta"} onClick={() => setTab("consulta")}>
           Consultar
         </button>
-        <button type="button" role="tab" aria-selected={tab === "visita"} aria-pressed={tab === "visita"} onClick={() => setTab("visita")}>
+        <button type="button" role="tab" aria-selected={tab === "visita"} onClick={() => setTab("visita")}>
           Agendar visita
         </button>
       </div>

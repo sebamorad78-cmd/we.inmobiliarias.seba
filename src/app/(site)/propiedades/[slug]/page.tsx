@@ -3,7 +3,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { site } from "@/site.config";
 import { getAgent, getPublicProperty, getSimilar } from "@/lib/catalog";
-import { formatArea, formatMoney, formatPrice, pricePerM2, whatsappLink } from "@/lib/format";
+import { formatArea, formatMoney, formatPrice, imageAt, pricePerM2, whatsappLink } from "@/lib/format";
 import { operationLabel, typeLabel } from "@/lib/labels";
 import type { Property } from "@/lib/types";
 import { ContactBox } from "@/components/property/contact-box";
@@ -38,8 +38,9 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       title,
       description,
       type: "article",
-      images: p.images.slice(0, 1).map((i) => ({ url: i.url.replace("w=2400", "w=1200"), width: 1200, height: 800, alt: i.alt })),
+      images: p.images.slice(0, 1).map((i) => ({ url: imageAt(i.url, 1280), alt: i.alt })),
     },
+    twitter: { card: "summary_large_image", title, description, images: p.images.slice(0, 1).map((i) => imageAt(i.url, 1280)) },
   };
 }
 
@@ -280,7 +281,7 @@ export default async function PropertyPage({ params }: Props) {
           <p className="mbar__price num">{formatPrice(p)}</p>
           <p className="tiny muted">Ref. {p.code}</p>
         </div>
-        <a className="btn btn--wa btn--s" href={whatsappLink(agent?.phone || site.whatsapp, `Hola, me interesa la propiedad ${p.code} (${p.title}). ${url}`)} target="_blank" rel="noopener">
+        <a className="btn btn--wa btn--s" href={whatsappLink(agent?.phone || site.whatsapp, `Hola, me interesa la propiedad ${p.code} (${p.title}). ${url}`)} target="_blank" rel="noopener" aria-label="Consultar por WhatsApp">
           <Icon name="whatsapp" size={18} /> <span className="mbar__label">WhatsApp</span>
         </a>
         <a className="btn btn--s" href="#contacto">

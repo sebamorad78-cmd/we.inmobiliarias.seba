@@ -27,7 +27,7 @@ const text = Jost({
 export const metadata: Metadata = {
   metadataBase: new URL(site.url),
   title: {
-    default: `${site.name} · Propiedades en venta y alquiler en Buenos Aires`,
+    default: `${site.name} · Propiedades en venta, alquiler y tasaciones`,
     template: `%s · ${site.name}`,
   },
   description: site.description,
@@ -37,15 +37,17 @@ export const metadata: Metadata = {
     locale: "es_AR",
     siteName: site.name,
     url: site.url,
+    images: [{ url: "/og.jpg", width: 1200, height: 630, alt: `${site.name} · Martillera y corredora pública` }],
   },
-  twitter: { card: "summary_large_image" },
+  twitter: { card: "summary_large_image", images: ["/og.jpg"] },
   formatDetection: { telephone: false },
 };
 
 export const viewport: Viewport = {
-  themeColor: "#213a30",
+  themeColor: "#2e2724",
   width: "device-width",
   initialScale: 1,
+  viewportFit: "cover",
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

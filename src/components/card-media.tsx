@@ -41,7 +41,8 @@ export function CardMedia({ images, sizes, priority, label }: { images: Property
               alt={k === 0 ? img.alt : ""}
               fill
               sizes={sizes}
-              priority={priority && k === 0}
+              fetchPriority={priority && k === 0 ? "high" : "auto"}
+              loading={priority && k === 0 ? "eager" : "lazy"}
               quality={80}
               className={`cmedia__img ${k === i ? "is-on" : ""}`}
               onError={() => setFailed((f) => new Set(f).add(k))}

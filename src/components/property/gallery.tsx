@@ -55,8 +55,9 @@ export function Gallery({ images, title }: { images: PropertyImage[]; title: str
               src={img.url}
               alt={img.alt}
               fill
-              priority={i === 0}
-              quality={90}
+              fetchPriority={i === 0 ? "high" : "auto"}
+              loading={i === 0 ? "eager" : "lazy"}
+              quality={80}
               sizes={i === 0 ? "(max-width: 760px) 1px, 60vw" : "(max-width: 760px) 1px, 25vw"}
               label={title}
             />
@@ -80,7 +81,7 @@ export function Gallery({ images, title }: { images: PropertyImage[]; title: str
         >
           {images.map((img, i) => (
             <button key={img.url + i} type="button" className="gstrip__item" onClick={() => open(i)} aria-label={`Ampliar foto ${i + 1} de ${count}`}>
-              <Photo src={img.url} alt={img.alt} fill priority={i === 0} quality={90} sizes="(max-width: 760px) 100vw, 1px" label={title} />
+              <Photo src={img.url} alt={img.alt} fill fetchPriority={i === 0 ? "high" : "auto"} loading={i === 0 ? "eager" : "lazy"} quality={80} sizes="(max-width: 760px) 100vw, 1px" label={title} />
             </button>
           ))}
         </div>

@@ -186,17 +186,6 @@
   inset: 0;
   z-index: -2;
 }
-.hero__bg img {
-  animation: heroZoom 18s var(--ease) both;
-}
-@keyframes heroZoom {
-  from {
-    transform: scale(1.08);
-  }
-  to {
-    transform: scale(1);
-  }
-}
 .hero__shade {
   position: absolute;
   inset: 0;
@@ -2282,17 +2271,6 @@
 }
 .reel__img {
   object-fit: cover;
-  transform: scale(1.12);
-  transition: transform 9s linear;
-}
-.reel__slide.is-active .reel__img {
-  transform: scale(1.02);
-}
-@media (prefers-reduced-motion: reduce) {
-  .reel__img,
-  .reel__slide.is-active .reel__img {
-    transform: none;
-  }
 }
 .reel__shade {
   position: absolute;
@@ -2374,7 +2352,12 @@
 @keyframes reelCard {
   from {
     opacity: 0;
-    transform: translateY(14px);
+    transform: translateY(6px);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .reel__card {
+    animation: none;
   }
 }
 .reel__index {
@@ -3839,7 +3822,7 @@ a.svc__row:hover .svc__title {
 .logo__tag {
   font-size: 9px;
   letter-spacing: 0.38em;
-  color: var(--gold);
+  color: var(--clay-2);
   opacity: 1;
 }
 .logo--light .logo__tag {
@@ -3945,5 +3928,27 @@ a.svc__row:hover .svc__title {
   .reel__search:hover {
     background: var(--white);
     border-color: var(--ink);
+  }
+}
+
+/* La tarjeta de la portada mantiene siempre el mismo alto: nada de saltos al cambiar de propiedad */
+.reel__title,
+.reel__facts {
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+}
+.reel__title {
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  min-height: calc(2 * 1.25em);
+}
+.reel__facts {
+  -webkit-line-clamp: 1;
+  line-clamp: 1;
+}
+@media (pointer: coarse) {
+  .reel__search kbd {
+    display: none;
   }
 }

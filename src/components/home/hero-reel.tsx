@@ -105,7 +105,7 @@ export function HeroReel({ slides }: { slides: ReelSlide[] }) {
         {slides.map((sl, k) =>
           seen.has(k) ? (
             <div key={sl.href} className={`reel__slide ${k === i ? "is-active" : ""}`} aria-hidden={k !== i}>
-              <Image src={sl.image} alt={sl.alt} fill priority={k === 0} sizes="100vw" quality={90} className="reel__img" />
+              <Image src={sl.image} alt={sl.alt} fill preload={k === 0} fetchPriority={k === 0 ? "high" : "low"} loading={k === 0 ? "eager" : "lazy"} sizes="100vw" quality={80} className="reel__img" />
             </div>
           ) : null,
         )}

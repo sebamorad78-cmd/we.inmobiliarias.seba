@@ -20,7 +20,7 @@ export function PropertyCard({
 
   return (
     <article className="pcard" data-op={p.operation} data-type={p.type} data-hood={p.neighborhood} data-price={p.price ?? ""} data-rooms={p.rooms ?? ""}>
-      <Link href={`/propiedades/${p.slug}`} className="pcard__link" aria-label={`${p.title}, ${p.neighborhood}`}>
+      <Link href={`/propiedades/${p.slug}`} className="pcard__link">
         <div className="pcard__media">
           <CardMedia images={p.images} sizes={sizes} priority={priority} label={p.neighborhood} />
           <div className="pcard__tags">

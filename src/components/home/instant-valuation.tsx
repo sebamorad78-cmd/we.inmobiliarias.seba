@@ -63,7 +63,7 @@ export function InstantValuation({ image, listingsByHood }: { image: string; lis
   return (
     <section className="valuer" aria-labelledby="valuer-title">
       <div className="valuer__media">
-        <Image src={image} alt="" fill sizes="(max-width: 1000px) 100vw, 45vw" quality={90} />
+        <Image src={image} alt="" fill sizes="(max-width: 1000px) 100vw, 45vw" quality={80} />
         <p className="valuer__caption">Tasación profesional sin cargo · Informe en 48 h</p>
       </div>
 

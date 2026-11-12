@@ -96,7 +96,7 @@ export function SiteHeader() {
   return (
     <header className={`header ${solid ? "header--solid" : "header--overlay"} ${hidden && !open ? "is-hidden" : ""}`}>
       <div className="wrap header__inner">
-        <Link href="/" className="header__logo" aria-label={`${site.name}, inicio`}>
+        <Link href="/" className="header__logo">
           <Logo light={!solid} />
         </Link>
 

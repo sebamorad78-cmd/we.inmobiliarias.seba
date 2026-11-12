@@ -68,3 +68,12 @@ export function slugify(input: string): string {
 export function whatsappLink(phoneDigits: string, text: string): string {
   return `https://wa.me/${phoneDigits.replace(/\D/g, "")}?text=${encodeURIComponent(text)}`;
 }
+
+/**
+ * Versión liviana de una foto para vistas previas (WhatsApp, Facebook, mapas):
+ * las fotos propias pasan por el optimizador; las de Unsplash se piden al tamaño justo.
+ */
+export function imageAt(url: string, w: 640 | 1280): string {
+  if (url.startsWith("/")) return `/_next/image?url=${encodeURIComponent(url)}&w=${w}&q=80`;
+  return url.replace(/([?&])w=\d+/, `$1w=${w}`);
+}

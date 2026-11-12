@@ -2,6 +2,7 @@
 
 import { useEffect, useRef } from "react";
 import type { Map as LeafletMap } from "leaflet";
+import { imageAt } from "@/lib/format";
 import "leaflet/dist/leaflet.css";
 
 export interface MapPoint {
@@ -72,7 +73,7 @@ export function PropertyMap({
         const marker = L.marker(ll, { icon, title: p.title, riseOnHover: true }).addTo(map);
         if (!single) {
           marker.bindPopup(
-            `<a class="map-pop" href="${esc(p.href)}">${p.image ? `<img src="${esc(p.image.replace("w=2400", "w=480"))}" alt="" loading="lazy">` : ""}<strong>${esc(p.title)}</strong><span>${esc(p.label)}</span></a>`,
+            `<a class="map-pop" href="${esc(p.href)}">${p.image ? `<img src="${esc(imageAt(p.image, 640))}" alt="" loading="lazy">` : ""}<strong>${esc(p.title)}</strong><span>${esc(p.label)}</span></a>`,
             { closeButton: false, maxWidth: 260, minWidth: 220, offset: [0, -4] },
           );
         }
