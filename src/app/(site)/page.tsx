@@ -37,7 +37,7 @@ const SERVICES = [
   },
 ];
 
-const VALUER_IMAGE = "/img/quinta-general-piran/quinta-02-galpon-y-tinglado.jpg";
+const VALUER_IMAGE = "/img/quinta-general-piran/quinta-06-tinglado-de-cerca.jpg";
 
 export default async function HomePage() {
   const [featured, hoods, all] = await Promise.all([getFeatured(5), getNeighborhoodStats(), getPublishedProperties()]);

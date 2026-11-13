@@ -100,7 +100,8 @@ export function seedProperties(): Property[] {
       description:
         "Se vende casa en Maipú, sobre calle Madero 1342, en un lote de 520 m² con 170 m² edificados aprox.\n\nSe desarrolla en dos plantas, con cuatro dormitorios, baños y lavadero. Cuenta con garage para dos autos.\n\nAl fondo, quincho, pileta y patio con parque arbolado. La propiedad se encuentra en muy buen estado de conservación.",
       images: [
-        local("maipu-madero/madero-01-frente-v2.jpg", "Frente de la casa sobre calle Madero, con jardín y arbolado"),
+        local("maipu-madero/madero-05-garage.jpg", "Frente con garage de puertas de madera y reja"),
+        local("maipu-madero/madero-04-frente-y-cartel.jpg", "Frente de la casa sobre calle Madero, con jardín y vereda de laja"),
         local("maipu-madero/madero-02-pileta-y-parque.jpg", "Pileta y parque al fondo del lote"),
         local("maipu-madero/madero-03-pileta-y-casa.jpg", "Pileta y contrafrente de la casa en dos plantas"),
       ],
@@ -132,8 +133,8 @@ export function seedProperties(): Property[] {
       description:
         "Se vende quinta de 13 hectáreas y fracción en General Pirán, con frente sobre la Autovía 2.\n\nEl campo está dividido en cuatro potreros alambrados, con molino, bebidas y manga para el manejo de hacienda.\n\nEn el sector de instalaciones hay un galpón cerrado de 12 x 20 m aprox. y un tinglado de 12 x 15 m aprox. con estructura reticulada de gran luz y piso de tierra. Se suma un silo de 40.000 kg con chimango y mezcladora.\n\nCuenta con conexión eléctrica trifásica, apta para uso productivo. Por su ubicación sobre la autovía, además del uso agropecuario sirve para depósito o logística.",
       images: [
-        local("quinta-general-piran/quinta-02-galpon-y-tinglado.jpg", "Tinglado de 12 x 15 m y galpón de 12 x 20 m"),
-        local("quinta-general-piran/quinta-03-tinglado.jpg", "Tinglado con estructura reticulada de gran luz sobre columnas de hormigón"),
+        local("quinta-general-piran/quinta-05-vista-desde-la-autovia.jpg", "Vista desde la Autovía 2: galpón, silo y potreros alambrados"),
+        local("quinta-general-piran/quinta-06-tinglado-de-cerca.jpg", "Tinglado de 12 x 15 m con estructura reticulada y galpón al fondo"),
         local("quinta-general-piran/quinta-04-manga-y-potrero.jpg", "Manga de madera y potreros alambrados, con la Autovía 2 al fondo"),
         local("quinta-general-piran/quinta-01-arboleda.jpg", "Arboleda de sauces sobre el alambrado"),
       ],
