@@ -11,9 +11,11 @@ export function formatMoney(amount: number, currency: Currency): string {
   return `${currency === "USD" ? "USD" : "$"} ${numberFmt.format(amount)}`;
 }
 
-export function formatPrice(p: Pick<Property, "price" | "currency" | "operation">): string {
+export function formatPrice(p: Pick<Property, "price" | "currency" | "operation" | "pricePeriod">): string {
   if (p.price == null) return "Consultar precio";
   const base = formatMoney(p.price, p.currency);
+  if (p.pricePeriod === "dia") return `${base} por día`;
+  if (p.pricePeriod === "semana") return `${base} por semana`;
   if (p.operation === "alquiler") return `${base} /mes`;
   if (p.operation === "temporario") return `${base} /mes`;
   return base;

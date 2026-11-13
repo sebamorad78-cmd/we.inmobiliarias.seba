@@ -78,6 +78,7 @@ create index if not exists leads_created_idx on public.leads (created_at desc);
 -- Datos internos de cada propiedad (propietario y autorización de venta).
 alter table public.properties add column if not exists owner_contact_id text;
 alter table public.properties add column if not exists mandate jsonb;
+alter table public.properties add column if not exists price_period text;
 
 -- CRM: contactos, agenda, oportunidades, actividad y contratos.
 create table if not exists public.crm_records (

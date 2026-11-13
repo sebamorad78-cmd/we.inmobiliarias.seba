@@ -69,6 +69,8 @@ export interface Property {
   /** Datos internos: nunca se muestran en el sitio público. */
   ownerContactId?: string | null;
   mandate?: Mandate | null;
+  /** Período del precio en alquileres (por defecto, por mes). */
+  pricePeriod?: "dia" | "semana" | "mes" | null;
   createdAt: string;
   updatedAt: string;
 }
