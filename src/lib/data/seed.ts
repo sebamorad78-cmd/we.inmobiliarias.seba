@@ -100,7 +100,7 @@ export function seedProperties(): Property[] {
       description:
         "Se vende casa en Maipú, sobre calle Madero 1342, en un lote de 520 m² con 170 m² edificados aprox.\n\nSe desarrolla en dos plantas, con cuatro dormitorios, baños y lavadero. Cuenta con garage para dos autos.\n\nAl fondo, quincho, pileta y patio con parque arbolado. La propiedad se encuentra en muy buen estado de conservación.",
       images: [
-        local("maipu-madero/madero-01-frente.jpg", "Frente de la casa sobre calle Madero, con jardín y arbolado"),
+        local("maipu-madero/madero-01-frente-v2.jpg", "Frente de la casa sobre calle Madero, con jardín y arbolado"),
         local("maipu-madero/madero-02-pileta-y-parque.jpg", "Pileta y parque al fondo del lote"),
         local("maipu-madero/madero-03-pileta-y-casa.jpg", "Pileta y contrafrente de la casa en dos plantas"),
       ],
@@ -232,9 +232,9 @@ export function seedProperties(): Property[] {
       description:
         "Alquiler temporario para la temporada de verano en Mar del Plata, en San Luis 1440, entre 25 de Mayo y 9 de Julio, en pleno centro.\n\nMonoambiente amueblado con camas, mesa, televisión y wifi. Cuenta con heladera con freezer y microondas.\n\nValor por día: $70.000. También hay departamentos de dos y tres ambientes disponibles en la zona céntrica: consultá fechas y disponibilidad.",
       images: [
-        local("mar-del-plata/mdp-mono-01-living.jpg", "Monoambiente con camas y mesa, piso de madera y ventana con cortinas"),
-        local("mar-del-plata/mdp-mono-02-tv.jpg", "Sector de estar con televisión"),
-        local("mar-del-plata/mdp-mono-03-ambiente.jpg", "Vista general del ambiente"),
+        local("mar-del-plata/mdp-mono-01-living-v2.jpg", "Monoambiente con camas y mesa, piso de madera y ventana con cortinas"),
+        local("mar-del-plata/mdp-mono-02-tv-v2.jpg", "Sector de estar con televisión"),
+        local("mar-del-plata/mdp-mono-03-ambiente-v2.jpg", "Vista general del ambiente"),
       ],
       agentId: "usr_rbazzigalupi",
       days: 0,
@@ -264,8 +264,8 @@ export function seedProperties(): Property[] {
       description:
         "Alquiler temporario de departamentos de dos y tres ambientes en la zona céntrica de Mar del Plata, para la temporada de verano.\n\nAmbientes amueblados, con comedor y cocina equipada.\n\nConsultá fechas, disponibilidad y valores.",
       images: [
-        local("mar-del-plata/mdp-dpto-01-comedor.jpg", "Comedor con mesa para seis y ventanal"),
-        local("mar-del-plata/mdp-dpto-02-cocina-y-pasillo.jpg", "Cocina y pasillo de distribución"),
+        local("mar-del-plata/mdp-dpto-01-comedor-v2.jpg", "Comedor con mesa para seis y ventanal"),
+        local("mar-del-plata/mdp-dpto-02-cocina-y-pasillo-v2.jpg", "Cocina y pasillo de distribución"),
       ],
       agentId: "usr_rbazzigalupi",
       days: 0,
